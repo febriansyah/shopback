@@ -20,7 +20,7 @@
     <div class="inner_main">
       <div class="section_title">
         <h3>Profile</h3>
-        <a href="#" class="back_bt">< Back to dashboard</a>
+        <a href="home_dashboard.php" class="back_bt">< Back to dashboard</a>
       </div>
       
       <div class="rows">

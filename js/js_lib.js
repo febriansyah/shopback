@@ -20,6 +20,7 @@ function popupShow(){
   $(".popupShow").click(function(e) {
     e.preventDefault();
     var popupID = $(this).attr("href");
+    $(".popup_container").hide();
     $(popupID).show();
   });
   $(".close_popup").on('click', function(e){

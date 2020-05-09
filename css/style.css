@@ -207,6 +207,25 @@ button:disabled, button[disabled] {
     color: #fff;
     box-shadow: none;
 }
+.cancelBt{
+	display: inline-block;
+	text-align: center;
+	background: #cfcfcf;
+	border: 1px solid #cfcfcf;
+	box-sizing: border-box;
+	border-radius: 8px;
+	color: #fff;
+	font-size: 18px;
+	font-weight: 500;
+	padding: 10px 20px;
+}
+#editClient .group_form .cancelBt,
+#editClient .group_form .blue_bt2{
+	width: 95px;
+	height: 45px;
+	margin: 0 15px;
+	text-align: center;
+}
 /* style header
 ----------------------------------------------------------------------------------------------*/
 #mainHeader{
@@ -903,7 +922,7 @@ select {
 	z-index: 999;
 }
 .inner_abs_popup{
-	position: absolute;
+	position: fixed;
 	width: 100%;
 	text-align: center;
 	top: 18vh;
