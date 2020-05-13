@@ -29,9 +29,11 @@
             <div class="group_form">
               <label class="lab_form">Profile picture</label>
               <div class="thumb_big">
-                <div class="circle_big_thumb"><img class="object_fit" src="images/content/big_profpic.png"></div>
-                <div class="icon_cam"><img src="images/material/icon_cam.png"></div>
+                <div class="circle_big_thumb"><img class="object_fit" id="circleProfpic" src="images/content/big_profpic.png"></div>
+                <div class="icon_cam" id="trigger_upload"><img src="images/material/icon_cam.png"></div>
               </div>
+
+              <input type="file" id="profPic" style="display: none;" name="">
             </div>
             <div class="group_form">
               <label class="lab_form"> Full name </label>
@@ -51,4 +53,24 @@
   </div><!--end.mainSection-->
 </div>
 <!-- end of middle -->
+
+<script type="text/javascript">
+$("#trigger_upload").click(function() {
+    $("#profPic").click();
+})
+function readURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      $('#circleProfpic').attr('src', e.target.result);
+    }
+
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+$("#profPic").change(function() {
+  readURL(this);
+});
+</script>
 <?php include('inc_footer.php');?>

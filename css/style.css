@@ -343,6 +343,7 @@ button:disabled, button[disabled] {
 	position: absolute;
 	bottom: 0;
 	right: 0px;
+	cursor: pointer;
     transition: all 0.3s ease-in-out 0s;
 }
 .thumb_big{
@@ -351,7 +352,7 @@ button:disabled, button[disabled] {
 	position: relative;
 }
 .icon_cam:hover{
-	opacity: 0.9;
+	opacity: 0.8;
 }
 .line_form{
 	display: block;
