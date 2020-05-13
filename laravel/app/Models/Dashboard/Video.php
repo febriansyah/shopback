@@ -16,10 +16,19 @@ class Video extends Model
      * @var array
      */
     protected $fillable = [
-         'name','path', 'video', 'photo'
+         'title','description','brand','path', 'video', 'photo','target_view',
+         'background','start_publish','end_publish','status','client_id','video_name'
     ];
 
-
+    /**
+     * Get relation with same table as a parent.
+     *
+     * @return object
+     */
+    public function client()
+    {
+        return $this->belongsTo(Client::class, 'client_id', 'id');
+    }
     /**
      * Get all group data.
      *
@@ -29,7 +38,7 @@ class Video extends Model
      */
     public function getAllRecords($params = [])
     {
-        $data = $this;
+        $data = $this->with('client');
         if (isset($params['search']) && $params['search'] != '') {
             $data = $data->where(function($query) use($params) {
 

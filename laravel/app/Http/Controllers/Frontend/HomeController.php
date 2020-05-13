@@ -35,6 +35,8 @@ class HomeController extends Controller
     public function index()
     {
         //
+        $this->parse['video'] = $this->model_video->inRandomOrder()->first();
+
         return view('frontend.home', $this->parse);
     }
     public function test()
@@ -46,7 +48,7 @@ class HomeController extends Controller
         if ($request->isMethod('post') && $request->ajax()) {
            $post = $request->all();
            $param = array(
-                    'video_id'         => '1',
+                    'video_id'         => $post['video_id'],
                     'order_id'         => $post['shopbackid'],
                     'patner_name'      => $post['patner'],
                     'patner_parameter' => $post['shopbackid2'],

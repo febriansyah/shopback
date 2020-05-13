@@ -45,12 +45,32 @@ Route::prefix('cms')->namespace('Dashboard')->name('dashboard.')->group(function
             ->name('video.create');
             Route::post('list', 'VideoController@list_data')
             ->name('video.list');
-            Route::get('detail/{id?}', 'VideoController@update')
-             ->name('video.detail');
+            Route::match(['get', 'post'], 'detail/{id?}', 'VideoController@update')
+            ->name('video.detail');
              Route::get('analitik/{id?}', 'VideoController@analitik')
              ->name('video.analitik');
             Route::match(['get', 'post'], 'delete/{id?}', 'VideoController@delete')
             ->name('video.delete');
+        });
+        Route::prefix('analitik')->group(function() {
+            Route::post('list', 'AnalitikController@list_data')
+            ->name('analitik.list');
+            Route::match(['get', 'post'], '{id?}/{slug?}', 'AnalitikController@index')
+            ->name('analitik.index');
+
+
+        });
+        Route::prefix('client')->group(function() {
+            Route::get('list', 'ClientController@list_data')
+            ->name('client.list');
+            Route::get('detail/{id?}', 'ClientController@update')
+             ->name('client.detail');
+             Route::match(['get', 'post'], 'create', 'ClientController@create')
+            ->name('client.create');
+            Route::match(['get', 'post'], 'delete/{id?}', 'ClientController@delete')
+            ->name('client.delete');
+            Route::get('update/{id?}', 'ClientController@update')
+            ->name('client.update');
         });
 
     });

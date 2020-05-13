@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Master\Video;
+use App\Models\Dashboard\Video;
 use App\Models\Dashboard\Client;
 use App\Models\Dashboard\ShopeBack;
 use Illuminate\Support\Facades\Storage;
+use App\Events\VideoEvent;
 use Auth;
 use Image;
 use Validator;
@@ -126,15 +127,20 @@ class VideoController extends Controller
             $count_filtered_records    = $this->model->countAllRecords($param);
             $records                   = $this->model->getAllRecords($param);
             $return                    = [];
-           $return['recordsTotal']    = $count_all_records;
+            $return['recordsTotal']    = ceil($count_all_records/10);
             $return['recordsFiltered'] = $count_filtered_records;
             $return['data']            = [];
             foreach ($records as $row => $record) {
-                $return['data'][$row]['DT_RowId']    = $record['id'];
-                $return['data'][$row]['actions']     = '<a href="'. route($this->prefix_routes. 'update', $record['id']). '" class="btn btn-sm btn-info"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
+                $return['data'][$row]['id']    = $record['id'];
+                $return['data'][$row]['actions']     = '<a href="'. route($this->prefix_routes. 'detail', $record['id']). '" class="btn btn-sm btn-info"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
                 $return['data'][$row]['photo']        = '<img src="'.upload_url($this->destination_path.$record['photo']).'" style="width:150px;">';
-                $return['data'][$row]['name'] = $record['name'];
-                $return['data'][$row]['create_at']   = date('d-m-Y H:i', strtotime($record['created_at']));
+                $return['data'][$row]['title'] = $record['title'];
+                $return['data'][$row]['description'] = $record['description'];
+                $return['data'][$row]['status'] = ($record['status']==1)?'publish':'unpublish';
+                $return['data'][$row]['uniq_visitor'] = $record['uniq_visitor'];
+                $return['data'][$row]['target_view'] = $record['target_view'];
+                $return['data'][$row]['client'] = $record['client']['name'];
+                $return['data'][$row]['date']   = date('d-m-Y H:i', strtotime($record['created_at']));
             }
 
             return response()->json($return);
@@ -153,16 +159,31 @@ class VideoController extends Controller
             $post = $request->all();
 
 
-            $validator = Validator::make($post, $this->validation_rules);
-
+            $messages = [
+                'required' => 'Kolom :attribute ini wajib diisi.',
+                'min'      => 'Input :attribute tidak kurang dari :min karakter.',
+                'unique'   => ':attribute anda sudah terdaftar.',
+                'confirmed' => ':attribute tidak sama dengn Verify Password'
+            ];
+            $validator = Validator::make($request->all(), [
+                'title' => 'required',
+                'description' => 'required',
+                'client_id' => 'required',
+                'target_view' => 'required',
+                'start_publish' => 'required',
+                'end_publish' => 'required',
+                'video' => 'required',
+                'background' => 'required',
+                'photo' => 'required'
+            ],$messages);
             if ($validator->fails()) {
-                return redirect($this->parse['add_url'])->with('form_message', [
+                return redirect()->route('dashboard.video.create')->with('form_message', [
                         'message' => $validator->errors()->all(),
                         'status' => 'danger',
                     ])->withInput();
             }
-
-
+            $post['start_publish'] = date('Y-m-d',strtotime($post['start_publish']));
+            $post['end_publish'] = date('Y-m-d',strtotime($post['end_publish']));
             $data = $this->model->create($post);
 
             if ($request->hasFile('photo')) {
@@ -195,6 +216,36 @@ class VideoController extends Controller
                 $data->save();
             }
 
+            if ($request->hasFile('background')) {
+
+
+
+                // FatUploader::image($file, $this->destination_path, $filename, $resize = true);
+
+                    $file = $request->file('background');
+                    $filename = 'background_'. $data['id']. '_'. date('YmdHi'). '.'. $file->getClientOriginalExtension();
+                    $thumbnail_name = 'tmb_'. $filename;
+                    $max_width = config('custom.images.medium.width');
+                    $max_height =  config('custom.images.medium.height');
+
+                    if ( ! is_dir(upload_path($this->destination_path.'background/'))) {
+                        Storage::makeDirectory('/public/uploads/'.$this->destination_path.'background/');
+                    }
+                    Storage::disk("local")->putFileAs('/public/uploads/'.$this->destination_path.'background/',  $file, $filename);
+                    $source = storage_path(). '/app/public/uploads/'. $this->destination_path.'background/'.$filename;
+
+                    Image::make($source)->resize($max_width, $max_height, function($constraint) {
+                        $constraint->aspectRatio();
+                    })->save(upload_path($this->destination_path.$thumbnail_name));
+
+
+                    // $file->move($source,$filename);
+                    // insert to db
+                    $data['background'] = $filename;
+
+                $data->save();
+            }
+
             if ($request->hasFile('video')) {
 
 
@@ -202,24 +253,27 @@ class VideoController extends Controller
                 // FatUploader::image($file, $this->destination_path, $filename, $resize = true);
 
                     $file = $request->file('video');
-                    $filename = 'video_'. $data['id']. '_'. date('YmdHi'). '.'. $file->getClientOriginalExtension();
+                    $nameFle= 'video_'. $data['id']. '_'. date('YmdHi');
+                    $filename = $nameFle. '.'. $file->getClientOriginalExtension();
                     $thumbnail_name = 'tmb_'. $filename;
                     $max_width = config('custom.images.medium.width');
                     $max_height =  config('custom.images.medium.height');
 
-                    if ( ! is_dir(upload_path($this->destination_path.'/video'))) {
-                        Storage::makeDirectory('/public/uploads/'.$this->destination_path.'/video');
+                    if ( ! is_dir(upload_path($this->destination_path.'video/'))) {
+                        Storage::makeDirectory('/public/uploads/'.$this->destination_path.'video/');
                     }
-                    Storage::disk("local")->putFileAs('/public/uploads/'.$this->destination_path.'/video',  $file, $filename);
-                    $source = storage_path(). '/app/public/uploads/'. $this->destination_path.'/video'.$filename;
+                    Storage::disk("local")->putFileAs('/public/uploads/'.$this->destination_path.'video/',  $file, $filename);
+                    $source = storage_path(). '/app/public/uploads/'. $this->destination_path.'video/'.$filename;
 
 
 
                     // $file->move($source,$filename);
                     // insert to db
+                    $data['video_name'] = $nameFle;
                     $data['video'] = $filename;
                     $data['path'] =upload_url($this->destination_path.'/video');
                     $data->save();
+                    event(new VideoEvent($data));
             }
 
             // \FatLib::createLog('user_create', 'SUCCESS Create User ID: '. $data['id'], $request->except('password'));
@@ -263,23 +317,37 @@ class VideoController extends Controller
         //
         $this->parse['page_title'] = '[Edit]';
         $data = $this->model->find($id);
-         $this->parse['form_action'] = route($this->prefix_routes. 'update', $id);
+         $this->parse['form_action'] = route($this->prefix_routes. 'detail', $id);
+         $this->parse['client'] = $this->model_client->get();
         $this->parse['data'] = $data;
         $this->parse['upload_path'] = 'video/';
         if ($request->isMethod('post')) {
             $post = $request->all();
-            $getRoadshow = $this->roadshow->getModelById($post['roadshow_id']);
-            $post['roadshow_name'] = $getRoadshow['city'];
-        //   dd($post);
-            $validator = Validator::make($post, $this->validation_rules);
+
+            $messages = [
+                'required' => 'Kolom :attribute ini wajib diisi.',
+                'min'      => 'Input :attribute tidak kurang dari :min karakter.',
+                'unique'   => ':attribute anda sudah terdaftar.',
+                'confirmed' => ':attribute tidak sama dengn Verify Password'
+            ];
+            $validator = Validator::make($request->all(), [
+                'title' => 'required',
+                'description' => 'required',
+                'client_id' => 'required',
+                'target_view' => 'required',
+                'start_publish' => 'required',
+                'end_publish' => 'required'
+
+            ], $messages);
 
             if ($validator->fails()) {
-                return redirect($this->parse['form_action'])->with('form_message', [
+                return redirect()->route($this->prefix_routes. 'detail', $id)->with('form_message', [
                         'message' => $validator->errors()->all(),
                         'status' => 'danger',
                     ])->withInput();
             }
-
+            $post['start_publish'] = date('Y-m-d',strtotime($post['start_publish']));
+            $post['end_publish'] = date('Y-m-d',strtotime($post['end_publish']));
             $data->fill($post)->save();
 
             if ($request->hasFile('photo')) {
@@ -289,7 +357,7 @@ class VideoController extends Controller
                 // FatUploader::image($file, $this->destination_path, $filename, $resize = true);
 
                     $file = $request->file('photo');
-                    $filename = 'kurator_photo_'. $data['id']. '_'. date('YmdHi'). '.'. $file->getClientOriginalExtension();
+                    $filename = 'photo_'. $data['id']. '_'. date('YmdHi'). '.'. $file->getClientOriginalExtension();
                     $thumbnail_name = 'tmb_'. $filename;
                     $max_width = config('custom.images.medium.width');
                     $max_height =  config('custom.images.medium.height');
@@ -312,6 +380,35 @@ class VideoController extends Controller
                 $data->save();
             }
 
+            if ($request->hasFile('background')) {
+
+
+
+                // FatUploader::image($file, $this->destination_path, $filename, $resize = true);
+
+                    $file = $request->file('background');
+                    $filename = 'background_'. $data['id']. '_'. date('YmdHi'). '.'. $file->getClientOriginalExtension();
+                    $thumbnail_name = 'tmb_'. $filename;
+                    $max_width = config('custom.images.medium.width');
+                    $max_height =  config('custom.images.medium.height');
+
+                    if ( ! is_dir(upload_path($this->destination_path.'background/'))) {
+                        Storage::makeDirectory('/public/uploads/'.$this->destination_path.'background/');
+                    }
+                    Storage::disk("local")->putFileAs('/public/uploads/'.$this->destination_path.'background/',  $file, $filename);
+                    $source = storage_path(). '/app/public/uploads/'. $this->destination_path.'background/'.$filename;
+
+                    Image::make($source)->resize($max_width, $max_height, function($constraint) {
+                        $constraint->aspectRatio();
+                    })->save(upload_path($this->destination_path.$thumbnail_name));
+
+
+                    // $file->move($source,$filename);
+                    // insert to db
+                    $data['background'] = $filename;
+
+                $data->save();
+            }
 
             if ($request->hasFile('video')) {
 
@@ -320,24 +417,28 @@ class VideoController extends Controller
                 // FatUploader::image($file, $this->destination_path, $filename, $resize = true);
 
                     $file = $request->file('video');
-                    $filename = 'video_'. $data['id']. '_'. date('YmdHi'). '.'. $file->getClientOriginalExtension();
+                    $nameFle= 'video_'. $data['id']. '_'. date('YmdHi');
+                    $filename = $nameFle. '.'. $file->getClientOriginalExtension();
                     $thumbnail_name = 'tmb_'. $filename;
                     $max_width = config('custom.images.medium.width');
                     $max_height =  config('custom.images.medium.height');
 
-                    if ( ! is_dir(upload_path($this->destination_path.'/video'))) {
-                        Storage::makeDirectory('/public/uploads/'.$this->destination_path.'/video');
+                    if ( ! is_dir(upload_path($this->destination_path.'video/'))) {
+                        Storage::makeDirectory('/public/uploads/'.$this->destination_path.'video/');
                     }
-                    Storage::disk("local")->putFileAs('/public/uploads/'.$this->destination_path.'/video',  $file, $filename);
-                    $source = storage_path(). '/app/public/uploads/'. $this->destination_path.'/video'.$filename;
+                    Storage::disk("local")->putFileAs('/public/uploads/'.$this->destination_path.'video/',  $file, $filename);
+                    $source = storage_path(). '/app/public/uploads/'. $this->destination_path.'video/'.$filename;
 
 
 
                     // $file->move($source,$filename);
                     // insert to db
+                    $data['video_name'] = $nameFle;
                     $data['video'] = $filename;
+                    $data['status'] = '0';
                     $data['path'] =upload_url($this->destination_path.'/video');
                     $data->save();
+                    event(new VideoEvent($data));
             }
 
 
