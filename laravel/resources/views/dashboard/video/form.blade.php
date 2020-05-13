@@ -6,20 +6,30 @@
 <div id="middle-content" class="loginPage">
 	<div class="left_menu">
     <div class="menu_list">
+        @if(isset($data))
+            <a href="{{ url("cms/video")}}" class="row_menu">
+            <img class="icon_menu" src="{{ asset('dashboard/images/material/icon_back.png') }}">
+            <span>Video List</span>
+            </a>
 
-        <a href="{{ url("cms/video")}}" class="row_menu">
-        <img class="icon_menu" src="{{ asset('dashboard/images/material/icon_back.png') }}">
-          <span>Video List</span>
-        </a>
-
-        <a href="{{ url("cms/video/detail/") }}" class="row_menu active">
-          <img class="icon_menu" src="{{ asset('dashboard/images/material/icon_detail.png') }}">
-          <span>Detail</span>
-        </a>
-        <a href="{{ url("cms/video/analitik/") }}" class="row_menu">
-          <img class="icon_menu" src="{{ asset('dashboard/images/material/icon_analytic.png') }}">
-          <span>Analytics</span>
-        </a>
+            <a href="{{ url("cms/video/detail/".$data['id']) }}" class="row_menu active">
+            <img class="icon_menu" src="{{ asset('dashboard/images/material/icon_detail.png') }}">
+            <span>Detail</span>
+            </a>
+            <a href="{{ url("cms/analitik/".$data['id']) }}" class="row_menu">
+            <img class="icon_menu" src="{{ asset('dashboard/images/material/icon_analytic.png') }}">
+            <span>Analytics</span>
+            </a>
+        @else
+            <a href="{{ url("cms")}}" class="row_menu">
+                <img class="icon_menu" src="{{ asset('images/material/icon_dashboard.png') }}">
+                <span>Dashboard</span>
+            </a>
+            <a href="{{ url("cms/video")}}" class="row_menu active">
+                <img class="icon_menu" src="{{ asset('images/material/icon_video.png') }}">
+                <span>Video List</span>
+            </a>
+        @endif
     </div><!--emd.menu_list-->
   </div>
 
@@ -29,11 +39,29 @@
       <div class="section_titleSearch">
         <h3>Input Video</h3>
         <div class="right_upload">
-          <a href="#" class="blue_bt2">Publish</a>
+          <a href="#" class="blue_bt2 btn-submit-video">Publish</a>
         </div><!--end.right_upload-->
       </div>
 
       <div class="rows">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-message">
+                    @if (session('form_message'))
+                    <div class="alert alert-warning alert-rounded alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <?php
+                    $msg =session('form_message')['message'];
+                        $html = (is_array($msg)) ? implode('<br/ >', $msg) : $msg;
+                        $html .= '</div>';
+                        echo $html;
+                    ?>
+                    @endif
+                </div>
+            </div>
+        </div>
+        <form action="{{ $form_action }}" method="post" accept-charset="utf-8" id="form-data" role="form" enctype="multipart/form-data">
+            {!! csrf_field() !!}
         <div class="content_video_input">
           <div class="form_left">
             <div class="group_line">
@@ -67,15 +95,15 @@
               </label>
               <div class="inline_form">
                 <div class="custom-select">
-                  <select name="slct" id="slct">
+                  <select name="client_id" id="slct">
                     <option selected>Choose client name</option>
                     @foreach ($client as $row)
-                        <option value="{!! $row['id'] !!}">{!! $row['name'] !!}</option>
+                        <option value="{!! $row['id'] !!}"  {!! ( (old('client_id') && old('client_id') == $row['id']) ? 'selected="selected"' : (isset($data['client_id']) && $data['client_id'] == $row['id']) ? 'selected="selected"' : '') !!}>{!! $row['name'] !!}</option>
                     @endforeach
                   </select>
                 </div>
                 <span>Or</span>
-                <a href="#add_client" class="bt_white popupShow">Add Client</a>
+                <a href="#add_client" class="bt_white popupClient">Add Client</a>
               </div><!--end.inline_form-->
             </div><!--end.group_line-->
 
@@ -85,7 +113,7 @@
                 <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}">
               </label>
               <div class="inline_form">
-                <input type="file" id="video_upload" name="">
+                <input type="file" id="video_upload" name="video">
               </div><!--end.inline_form-->
             </div><!--end.group_line-->
 
@@ -95,7 +123,7 @@
                 <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title="Background size must be 360 x 640">
               </label>
               <div class="inline_form">
-                <input type="file" id="bg_upload" name="">
+                <input type="file" id="bg_upload" name="background">
               </div><!--end.inline_form-->
             </div><!--end.group_line-->
 
@@ -106,7 +134,7 @@
                 <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title="Select or upload a picture that shows what's in your video size must be 360 x 178">
               </label>
               <div class="inline_form">
-                <input type="file" id="cover_video" name="">
+                <input type="file" id="cover_video" name="photo">
               </div><!--end.inline_form-->
             </div><!--end.group_line-->
 
@@ -118,30 +146,31 @@
                 <span> Insert target views</span>
                 <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title="Insert the number that were given by your client that they spend off for this campaign ">
               </label>
-              <input type="text" id="brand" class="input_noline"  name="">
+              <input type="text" id="brand" class="input_noline" value="{{ ( old('target_view') ? old('target_view') : ( (isset($data['target_view'])) ? $data['target_view'] : '') ) }}"  name="target_view">
             </div><!--end.group_line-->
 
             <div class="group_line">
               <label class="label_line" for="brand">
                 <span> Schedule</span>
-                <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title=" Set time when your campaign will start to publish">
+                <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}"  title=" Set time when your campaign will start to publish">
               </label>
               <p>Select a date to publish your video </p>
               <div class="inline_form">
-                <input type="text" class="input_form" name="from" id="from">
+                <input type="text" class="input_form"  value="{{ ( old('start_publish') ? old('start_publish') : ( (isset($data['start_publish'])) ? date('m/d/Y', strtotime($data['start_publish'])) : '') ) }}" name="start_publish" id="from">
                 <span>s/d</span>
-                <input type="text" class="input_form" id="to" name="to">
+                <input type="text" class="input_form"  value="{{ ( old('end_publish') ? old('end_publish') : ( (isset($data['end_publish'])) ? date('m/d/Y', strtotime($data['end_publish'])) : '') ) }}" id="to" name="end_publish">
               </div><!--end.inline_form-->
             </div><!--end.group_line-->
+        </form>
           </div><!--end.form_left-->
 
           <div class="form_right">
             <div class="preview_box">
               <div class="template_img">
-                <img id="main_images" src="{{ asset('dashboard/images/material/bg_template.jpg') }}">
+                <img id="main_images" src="{{ ( (isset($data['background'])) ? upload_url('video/background/'.$data['background']) :  asset('dashboard/images/material/bg_template.jpg') )  }}">
               </div>
               <div class="cover_video">
-                <img id="img_cover" src="{{ asset('dashboard/images/material/thumb_video_dummy.jpg') }}">
+                <img id="img_cover" src="{{ ( (isset($data['photo'])) ? upload_url('video/'.$data['photo']) :  asset('dashboard/images/material/thumb_video_dummy.jpg') )  }}">
               </div>
             </div>
           </div><!--end.form_right-->
@@ -150,11 +179,147 @@
     </div><!--end.inner_main-->
   </div><!--end.mainSection-->
 </div>
+<div id="add_client" class="popup_container" style="display: none;">
+    <div class="bg_popup"></div>
+    <div class="inner_abs_popup">
+      <div class="inner_box">
+        <div class="title_popup">
+          <div class="left"><h3>Add Client Name w</h3></div>
+          <div class="right"><a href="#" class="close_popup"><img src="{{ asset('dashboard/images/material/icon_close.png') }}"></a></div>
+        </div><!--end.title_popup-->
+        <div class="inline_rows">
+          <input type="text" class="input_form client_add_name" name="client_add">
+          <button type="submit" class="blue_bt2 action_add_client">Add</button>
+        </div><!--end.inline_rows-->
+
+        <div class="title_popup">
+          <div class="left"><h3>Client name list</h3></div>
+          {{-- <div class="right">
+            <a href="#editClient" class="blueText popupShow">Edit</a>
+            <a href="#" class="blueText">Remove</a>
+          </div> --}}
+        </div><!--end.title_popup-->
+        <div class="list_clientnya">
+          <div class="row_client">
+            <label class="container">
+              <input type="checkbox">
+              <span class="checkmark"></span>
+            </label>
+            <span class="clientName">Dentsu</span>
+          </div><!--end.row_client-->
+          <div class="row_client">
+            <label class="container">
+              <input type="checkbox">
+              <span class="checkmark"></span>
+            </label>
+            <span class="clientName">KLY</span>
+          </div><!--end.row_client-->
+          <div class="row_client">
+            <label class="container">
+              <input type="checkbox">
+              <span class="checkmark"></span>
+            </label>
+            <span class="clientName">TIKET</span>
+          </div><!--end.row_client-->
+          <div class="row_client">
+            <label class="container">
+              <input type="checkbox">
+              <span class="checkmark"></span>
+            </label>
+            <span class="clientName">SemutApi</span>
+          </div><!--end.row_client-->
+          <div class="row_client">
+            <label class="container">
+              <input type="checkbox">
+              <span class="checkmark"></span>
+            </label>
+            <span class="clientName">KANA</span>
+          </div><!--end.row_client-->
+          <div class="row_client">
+            <label class="container">
+              <input type="checkbox">
+              <span class="checkmark"></span>
+            </label>
+            <span class="clientName">Redcom</span>
+          </div><!--end.row_client-->
+          <div class="row_client">
+            <label class="container">
+              <input type="checkbox">
+              <span class="checkmark"></span>
+            </label>
+            <span class="clientName">Suntory</span>
+          </div><!--end.row_client-->
+          <div class="row_client">
+            <label class="container">
+              <input type="checkbox">
+              <span class="checkmark"></span>
+            </label>
+            <span class="clientName">Maja</span>
+          </div><!--end.row_client-->
+          <div class="row_client">
+            <label class="container">
+              <input type="checkbox">
+              <span class="checkmark"></span>
+            </label>
+            <span class="clientName">KANA</span>
+          </div><!--end.row_client-->
+          <div class="row_client">
+            <label class="container">
+              <input type="checkbox">
+              <span class="checkmark"></span>
+            </label>
+            <span class="clientName">Redcom</span>
+          </div><!--end.row_client-->
+          <div class="row_client">
+            <label class="container">
+              <input type="checkbox">
+              <span class="checkmark"></span>
+            </label>
+            <span class="clientName">Suntory</span>
+          </div><!--end.row_client-->
+          <div class="row_client">
+            <label class="container">
+              <input type="checkbox">
+              <span class="checkmark"></span>
+            </label>
+            <span class="clientName">Maja</span>
+          </div><!--end.row_client-->
+
+        </div>
+
+      </div>
+    </div><!--end.inner_abs_popup-->
+  </div>
+
+  <div id="editClient" class="popup_container" style="display: none;">
+    <div class="bg_popup"></div>
+    <div class="inner_abs_popup">
+      <div class="inner_box">
+        <div class="title_popup noBorder">
+          <div class="left">
+            <h3> Edit Client Name</h3>
+          </div>
+          <div class="right"><a href="#" class="close_popup"><img src="images/material/icon_close.png"></a></div>
+        </div><!--end.title_popup-->
+        <div class="content_popup">
+          <div class="group_form">
+            <input type="text" class="input_form" name="" id="clientEdit" value="Semut Api">
+          </div>
+          <div class="group_form">
+            <a href="#add_client" class="cancelBt popupShow">Cancel</a>
+            <button type="submit" class="blue_bt2" >Save</button>
+          </div>
+        </div>
+      </div>
+    </div><!--end.inner_abs_popup-->
+  </div>
+  @include('dashboard.layouts.popup')
 @endsection
 @section('javascript')
 
 <script type="text/javascript">
-
+    var url = '{{ url('') }}';
+    var client_id = "{{ ( old('client_id') ? old('client_id') : ( (isset($data['client_id'])) ? $data['client_id'] : '') ) }}";
   $( function() {
 
     $( document ).tooltip();
@@ -221,6 +386,71 @@
   $("#bg_upload").change(function() {
   readURL(this);
   });
+  $(".popupClient").click(function(e) {
+    e.preventDefault();
+    $.ajax({
+                    type: "GET",
+                    url : url + "/cms/client/list",
+                }).done(function(response){
+                    var str='';
+
+                    $.each(response.data,function(k,v){
+                        str +=' <div class="row_client">'
+                                    // +'<label class="container">'
+                                    //     +'<input type="checkbox">'
+                                    //     +'<span class="checkmark"></span>'
+                                    //     +'</label>'
+                                        +'<span class="clientName">'+v.name+'</span>'
+                                        +'</div><!--end.row_client-->';
+
+                    });
+
+                    $('.list_clientnya').html(str);
+
+                    $('#add_client').show();
+                });
+
+  });
+  $(document).on('click','.action_add_client',function(){
+    $.ajax({
+            type: "POST",
+            url : url + "/cms/client/create",
+            data: {
+                    'name': $('.client_add_name').val()
+            },
+            dataType:'json'
+    }).done(function(response){
+        var str='';
+        var strSleect =' <option>Choose client name</option>';
+                    var selected='';
+        $.each(response.data,function(k,v){
+            str +=' <div class="row_client">'
+                    // +'<label class="container">'
+                    // +'<input type="checkbox">'
+                    // +'<span class="checkmark"></span>'
+                    // +'</label>'
+                    +'<span class="clientName">'+v.name+'</span>'
+                    +'</div><!--end.row_client-->';
+                    if(v.id==client_id){
+                            selected='selected';
+                        }else{
+                            selected ='';
+                        }
+                        strSleect +=' <option value="'+v.id+'">'+v.name+'</option>';
+
+             });
+        $('.list_clientnya').html(str);
+        $('#slct').html(strSleect);
+                    console.log( strSleect)
+                    console.log( $('#slct'))
+        $('#add_client').show();
+    });
+
+  })
+  $('.btn-submit-video').on('click',function(){
+        console.log('submit');
+        $('#form-data').trigger('submit');
+    })
 </script>
 @endsection
-@extends('dashboard.layouts.popup')
+

@@ -43,7 +43,7 @@
 			// 	}
 		}
 
-		setVideoInfo(videourl);
+		// setVideoInfo(videourl);
 
         var videonya = document.getElementById('videoXl');
         console.log(videonya);
@@ -75,7 +75,8 @@
                             'shopbackid' : qs.shopbackid,
                             'shopbackid2' : qs.shopbackid2,
                             'patner': qs.partner,
-                            'duration':currenttime_vid
+                            'duration':currenttime_vid,
+                            'video_id' : videoId,
                         }
                 }).done(function(response){
                     window.close()

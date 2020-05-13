@@ -7,11 +7,11 @@
 	<div class="left_menu">
     <div class="menu_list">
         <a href="{{ url("cms")}}" class="row_menu">
-          <img class="icon_menu" src="{{ asset('images/material/icon_dashboard.png') }}">
+          <img class="icon_menu" src="{{ asset('dashboard/images/material/icon_dashboard.png') }}">
           <span>Dashboard</span>
         </a>
         <a href="{{ url("cms/video")}}" class="row_menu active">
-          <img class="icon_menu" src="{{ asset('images/material/icon_video.png') }}">
+          <img class="icon_menu" src="{{ asset('dashboard/images/material/icon_video.png') }}">
           <span>Video List</span>
         </a>
     </div><!--emd.menu_list-->
@@ -109,7 +109,7 @@ $(document).ready(function() {
 
                     });
                 }
-                setTemplate(data).data);
+                setTemplate(data.data);
 
              });
     }
@@ -133,31 +133,31 @@ $(document).ready(function() {
                   +'</label>'
                 +'</td>'
                 +'<td>'
-                  +'<div class="img_vid"><img src="'+data.photo+'"></div>'
+                  +'<div class="img_vid">'+v.photo+'</div>'
                 +'</td>'
                 +'<td>'
-                  +'<h3 class="title_tab">'+data.title+'</h3>'
-                  +data.description
+                  +'<h3 class="title_tab">'+v.title+'</h3>'
+                  +v.description
                   +'<div class="abs_action">'
-                    +'<a href="'+base_url+'video/detail/'+data.id+'" class="action_menu"><img src="'+base_url+'dashboard/images/material/icon_detail.png" class="icon_action"> <span>Detail</span></a>'
-                    +'<a href="'+base_url+'video/detail/'+data.id+'" class="action_menu"><img src="'+base_url+'dashboard/images/material/icon_analytic.png" class="icon_action"> <span>Analytic</span></a>'
+                    +'<a href="'+base_url+'/cms/video/detail/'+v.id+'" class="action_menu"><img src="'+base_url+'/dashboard/images/material/icon_detail.png" class="icon_action"> <span>Detail</span></a>'
+                    +'<a href="'+base_url+'/cms/video/detail/'+v.id+'" class="action_menu"><img src="'+base_url+'/dashboard/images/material/icon_analytic.png" class="icon_action"> <span>Analytic</span></a>'
                   +'</div>'
                 +'</td>'
                 +'<td>'
-                  +'<p>'+data.client.name+'</p>'
+                  +'<p>'+v.client+'</p>'
                 +'</td>'
                 +'<td class="dateList">'
-                  +'<p>'+data.date+'</p>'
-                  +'<span class="grey_text">'+data.status+'</span>'
+                  +'<p>'+v.date+'</p>'
+                  +'<span class="grey_text">'+v.status+'</span>'
                 +'</td>'
                 +'<td>'
-                  +'<p>'+data.uniq_visitor+'</p>'
+                  +'<p>'+v.uniq_visitor+'</p>'
                 +'</td>'
                 +'<td>'
-                  +'<p>'+data.views+' </p>'
+                  +'<p>'+v.views+' </p>'
                 +'</td>'
                 +'<td>'
-                  +'<p>'+data.target_view+'/p>'
+                  +'<p>'+v.target_view+'</p>'
                 +'</td>'
               +'</tr>';
 

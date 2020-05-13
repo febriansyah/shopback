@@ -18,6 +18,11 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        'App\Events\VideoEvent' => [
+            'App\Listeners\Video\CutVideo',
+            'App\Listeners\Video\Risize',
+            'App\Listeners\Video\UpdateStatus',
+        ],
     ];
 
     /**
