@@ -1,0 +1,25 @@
+.modalgaleriheader{
+    margin:30px 30px 0;
+}
+.modalgaleriheader .modalgalericategory.colored{
+    background-color: #149a8f;
+}
+.modalgaleriheader .modalgalerisubcategory.colored{
+    color:#149a8f;
+}
+.modalgalerititle{
+    margin:0 30px 30px;
+    overflow:hidden;
+}
+.modalgalerititle>h3{
+    font-size:18px;
+    font-weight:700;
+}
+.modalgalerititle span strong{
+    font-weight:400;
+    font-style:italic;
+}
+.modalgalericontent{
+    margin: 0 30px 30px;
+    overflow: hidden;
+}
