@@ -112,7 +112,12 @@ class AnalitikController extends Controller
             $data = array();
             for ($i=0;$i<=7;$i++)
             {
-                $date[$i] = $nowDate->subDay($i)->toDateString();
+                if($i==0){
+                    $date[$i] = $nowDate->toDateString();
+                }else{
+                    $date[$i] = $nowDate->subDays()->toDateString();
+                }
+
                 $data[]   = $this->model_shopeback->where('video_id',$id)->whereDate('created_at',$date[$i])->count();
 
             }
@@ -165,6 +170,24 @@ class AnalitikController extends Controller
 
             $start = new DateTime($startDate->toDateString());
             $end   = new DateTime($endDate->toDateString());
+
+            $array = array('25','50','70','100');
+            $category = array();
+            $data = array();
+            for ($i=0;$i<=3;$i++)
+            {
+                $category[$i] = $array[$i].'%';
+
+                $data[]   = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $endDate->toDateString().' 00:00:00'])->where('persentase',$array[$i])->get()->count();
+
+            }
+
+            $this->parse['chartPersentase']['category'] =json_encode($category);
+            $this->parse['chartPersentase']['data'] = json_encode($data);
+            $this->parse['chartPersentase']['series'] = 'viwer';
+
+
+
             $selisih =  $end->diff($start);
             $date = array();
             $data = array();
@@ -185,20 +208,7 @@ class AnalitikController extends Controller
             $this->parse['chartViwer']['data'] = json_encode($data);
             $this->parse['chartViwer']['series'] = 'viwer';
 
-            $array = array('25','50','70','100');
-            $category = array();
-            $data = array();
-            for ($i=0;$i<=3;$i++)
-            {
-                $category[$i] = $array[$i].'%';
 
-                $data[]   = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $endDate->toDateString().' 00:00:00'])->where('persentase',$array[$i])->get()->count();
-
-            }
-
-            $this->parse['chartPersentase']['category'] =json_encode($category);
-            $this->parse['chartPersentase']['data'] = json_encode($data);
-            $this->parse['chartPersentase']['series'] = 'viwer';
 
             return response()->json($this->parse);
         }

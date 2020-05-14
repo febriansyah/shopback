@@ -140,7 +140,7 @@ $(document).ready(function() {
                   +v.description
                   +'<div class="abs_action">'
                     +'<a href="'+base_url+'/cms/video/detail/'+v.id+'" class="action_menu"><img src="'+base_url+'/dashboard/images/material/icon_detail.png" class="icon_action"> <span>Detail</span></a>'
-                    +'<a href="'+base_url+'/cms/video/detail/'+v.id+'" class="action_menu"><img src="'+base_url+'/dashboard/images/material/icon_analytic.png" class="icon_action"> <span>Analytic</span></a>'
+                    +'<a href="'+base_url+'/cms/analitik/'+v.id+'" class="action_menu"><img src="'+base_url+'/dashboard/images/material/icon_analytic.png" class="icon_action"> <span>Analytic</span></a>'
                   +'</div>'
                 +'</td>'
                 +'<td>'

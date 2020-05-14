@@ -31,7 +31,7 @@
                 <div class="box_upload">
                   <img src="{{ asset('dashboard/images/material/frame_upload.png') }}">
                   <p>Mau upload video iklan klien , yang keren banget disini tempatnya </p>
-                  <a href="#" class="blue_bt">Upload Video</a>
+                  <a href="{{ url('cms/video/create') }}" class="blue_bt">Upload Video</a>
                 </div><!--end.box_upload-->
               </div><!--emd.box_white-->
             </div><!--emd.cols3-->
@@ -75,7 +75,7 @@
                         <?php $i++;?>
                         <tr>
                             <td>{{$i}}</td>
-                            <td>{{$row['name']}}</td>
+                            <td>{{$row['title']}}</td>
                             <td>{{ date('Y-m-d',strtotime($row['created_at'])) }}</td>
                         </tr>
                     @endforeach

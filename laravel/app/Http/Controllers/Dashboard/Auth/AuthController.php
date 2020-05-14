@@ -106,8 +106,10 @@ class AuthController extends Controller
 
             ];
 
-
-            if (Auth::guard($this->guard)->attempt($param_auth)) {
+            $remember_me = $request->has('remember_me') ? true : false;
+            // if (Auth::guard($this->guard)->attempt($param_auth)) {
+            if (Auth::guard($this->guard)->attempt(['email' => $request->input('email'), 'password' => $request->input('password')], $remember_me))
+            {
                 $user = $this->model->getInfoByEmail($request['email']);
 
                 // update last login

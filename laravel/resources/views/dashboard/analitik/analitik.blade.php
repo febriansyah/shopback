@@ -84,7 +84,7 @@
                   </div><!--end.inline_row-->
                 </div>
                 <div class="right">
-                  <span class="info_update">Updated Apr 30, 2020, 2:00 PM </span>
+                <span class="info_update">Updated {{ date('F d, Y, H:i A')}} </span>
                   <div class="dropdownMenu">
                     <a href="#" class="trigger_dropdown blue_bt2">Share report  <img src="{{ asset('dashboard/images/material/arrow_bottom.png') }}"></a>
                     <div class="dropdownMenu_expand" style="display: none;">
@@ -132,9 +132,7 @@
             <div class="row-list">
               <div class="cols2">
                 <div class="box_analytic">
-                  <div class="title_box">
-                    <h3> Audience Retention</h3>
-                  </div>
+
                   <div class="content_box chart_bar" id="chart_bar">
 
                   </div><!--emd.content_box-->
@@ -157,17 +155,18 @@ $( function() {
 var date= <?php echo $chartViwer['date'] ?>;
 
 var data =  [{name: 'Viwers',data: <?php echo $chartViwer['data']?>}];
-var title ='Data Viwer';
+var title ='';
 var subtitle = '';
 var yAxis= 'total';
-var chartLine,chartBar;
+var chartLines;
+var chartBars;
 chartLine('line_chart',title,subtitle,yAxis,date,data);
 
 
 var categoryPersentase= <?php echo $chartPersentase['category'] ?>;
 
 var dataPersentase =  [{name: 'User',data: <?php echo $chartPersentase['data']?>}];
-var titlePersentase ='Data Persentase';
+var titlePersentase ='Audience Retention';
 var subtitlePersentase = '';
 var yAxisPersentase= 'User';
 chartBar('chart_bar',titlePersentase,subtitlePersentase,yAxisPersentase,categoryPersentase,dataPersentase);
@@ -224,17 +223,19 @@ function getData(){
                 date = JSON.parse(date);
                 console.log(date);
                 var data =  [{name: 'Viwers',data: JSON.parse(response.chartViwer.data)}];
-                var title ='Data Viwer';
+                var title ='';
                 var subtitle = '';
                 var yAxis= 'total';
                 chartLine('line_chart',title,subtitle,yAxis,date,data);
 
                 var categoryPersentase=response.chartPersentase.category;
+                categoryPersentase = JSON.parse(categoryPersentase);
+                var dataPersentase =  [{name: 'User',data: JSON.parse(response.chartPersentase.data)}];
 
-                var dataPersentase =  [{name: 'User',data: response.chartPersentase.data}];
-                var titlePersentase ='Data Persentase';
+                var titlePersentase ='Audience Retention';
                 var subtitlePersentase = '';
                 var yAxisPersentase= 'User';
+                console.log(dataPersentase);
                 chartBar('chart_bar',titlePersentase,subtitlePersentase,yAxisPersentase,categoryPersentase,dataPersentase);
 
 
@@ -317,7 +318,7 @@ Highcharts.exportCharts = function (charts, options) {
  */
  function chartLine(id,title,subtitle,yAxis,date,data)
 {
-    chartLine = Highcharts.chart(id, {
+    chartLines = Highcharts.chart(id, {
                     chart: {
                         type: 'line'
                     },
@@ -341,7 +342,7 @@ Highcharts.exportCharts = function (charts, options) {
                         verticalAlign: 'middle'
                     },
                     plotOptions: {
-                        bar: {
+                        line: {
                             dataLabels: {
                                 enabled: true
                             },
@@ -373,7 +374,9 @@ Highcharts.exportCharts = function (charts, options) {
                 type: 'pie'
             },
             title: {
-                text: title
+
+                text: title,
+
             },
             tooltip: {
                 pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -412,12 +415,15 @@ Highcharts.exportCharts = function (charts, options) {
         console.log(data);
         console.log('category');
         console.log(category);
-        chartBar = Highcharts.chart(id, {
+        chartBars = Highcharts.chart(id, {
             chart: {
                         type: 'bar'
                     },
                     title: {
-                        text: title
+                        text: title,
+                        floating: true,
+                        align: 'left'
+
                     },
                     subtitle: {
                         text: subtitle
@@ -426,6 +432,7 @@ Highcharts.exportCharts = function (charts, options) {
                         categories:  category
                     },
                     yAxis: {
+                        min:0,
                         allowDecimals: false,
                         title: {
                             text:yAxis

@@ -31,10 +31,10 @@
                 <input type="email" class="line_form" name="email" value="{{ old('email') }}"  placeholder="Email">
               </div>
               <div class="group_form">
-                <input type="password" class="line_form" name="password" value="{{ old('password') }} placeholder="Password">
+                <input type="password" class="line_form" name="password" value="{{ old('password') }}" placeholder="Password">
                 <div class="inner_group">
                   <div class="left checkboxLeft">
-                      <input type="checkbox" value="lsRememberMe" id="rememberMe">
+                      <input type="checkbox" value="1" name="remember_me" id="rememberMe">
                      <span for="rememberMe">Remember me</span>
                   </div>
                   <div class="right">
@@ -47,7 +47,7 @@
                 <button type="submit" class="blue_bt">Login</button>
               </div><!--emd.group_form-->
               <div class="group_form">
-                <p> Want to join the force? You can <a href="register.php" class="blue_text">register here</a></p>
+              <p> Want to join the force? You can <a href="{{ url('cms/register')}}" class="blue_text">register here</a></p>
               </div>
             </form>
           </div><!--end.login_form-->

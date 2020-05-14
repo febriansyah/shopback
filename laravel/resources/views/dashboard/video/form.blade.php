@@ -22,11 +22,11 @@
             </a>
         @else
             <a href="{{ url("cms")}}" class="row_menu">
-                <img class="icon_menu" src="{{ asset('images/material/icon_dashboard.png') }}">
+                <img class="icon_menu" src="{{ asset('dashboard/images/material/icon_dashboard.png') }}">
                 <span>Dashboard</span>
             </a>
             <a href="{{ url("cms/video")}}" class="row_menu active">
-                <img class="icon_menu" src="{{ asset('images/material/icon_video.png') }}">
+                <img class="icon_menu" src="{{ asset('dashboard/images/material/icon_video.png') }}">
                 <span>Video List</span>
             </a>
         @endif

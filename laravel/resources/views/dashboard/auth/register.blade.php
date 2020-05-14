@@ -44,7 +44,7 @@
                 <button type="submit" class="blue_bt">Register</button>
               </div><!--emd.group_form-->
               <div class="group_form">
-                <p> Already have an account? <a href="{{ url('login') }}" class="blue_text">login here</a></p>
+                <p> Already have an account? <a href="{{ url('cms/login') }}" class="blue_text">login here</a></p>
               </div>
             </form>
           </div><!--end.login_form-->
