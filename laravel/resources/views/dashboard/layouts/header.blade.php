@@ -53,7 +53,15 @@
 			<div class="profile_log">
 				<div class="profile_head" id="trigger_drop">
 					<div class="circle_thumb">
-						<img class="object_fit" src="{{ asset('dashboard/images/content/profpic_top.png') }}">
+                        @if($users->photo!='')
+
+                        <img class="object_fit" src="{{ upload_url('users/'.$users->photo) }}">
+                        @else
+                        <img class="object_fit" src="{{ asset('dashboard/images/content/profpic_top.png') }}">
+
+                        @endif
+
+
 					</div>
 					<span class="nameUser">{{$users->full_name}}</span>
 					<span class="arrow"><img src="{{ asset('dashboard/images/material/arrow_down.png') }}"></span>

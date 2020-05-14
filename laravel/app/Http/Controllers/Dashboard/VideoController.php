@@ -163,7 +163,8 @@ class VideoController extends Controller
                 'required' => 'Kolom :attribute ini wajib diisi.',
                 'min'      => 'Input :attribute tidak kurang dari :min karakter.',
                 'unique'   => ':attribute anda sudah terdaftar.',
-                'confirmed' => ':attribute tidak sama dengn Verify Password'
+                'confirmed' => ':attribute tidak sama dengn Verify Password',
+                'dimensions' => ':attribute dimensions tidak sesuai'
             ];
             $validator = Validator::make($request->all(), [
                 'title' => 'required',
@@ -173,8 +174,8 @@ class VideoController extends Controller
                 'start_publish' => 'required',
                 'end_publish' => 'required',
                 'video' => 'required',
-                'background' => 'required',
-                'photo' => 'required'
+                'background' => 'required|dimensions:width=360,height=640',
+                'photo' => 'required|dimensions:width=360,height=178'
             ],$messages);
             if ($validator->fails()) {
                 return redirect()->route('dashboard.video.create')->with('form_message', [

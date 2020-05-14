@@ -29,10 +29,10 @@
           <div class="left">
             <h3> Share Link URL</h3>
           </div>
-          <div class="right"><a href="#" class="close_popup"><img src="images/material/icon_close.png"></a></div>
+          <div class="right"><a href="#" class="close_popup"><img src="{{ asset('dashboard/images/material/icon_close.png') }}"></a></div>
         </div><!--end.title_popup-->
         <div class="content_popup">
-          <img src="images/material/icon_popup_shareLink.png" style="margin-bottom: 20px;">
+          <img src="{{ asset('dashboard/images/material/icon_popup_shareLink.png') }}" style="margin-bottom: 20px;">
           <div class="group_form">
             <input type="email" class="input_form" name="" id="emailpopup">
           </div>

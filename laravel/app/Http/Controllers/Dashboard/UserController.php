@@ -8,7 +8,6 @@ use App\Models\Dashboard\AuthUser;
 use App\Models\Dashboard\UserGroup;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
-use Intervention\Image\Facades\Image;
 use App\Models\Dashboard\LogDashboard;
 use App\Events\Dashboard\Log;
 
@@ -16,6 +15,7 @@ use Auth;
 use Validator;
 use Hash;
 use Rule;
+use Image;
 
 class UserController extends Controller
 {
@@ -155,35 +155,32 @@ class UserController extends Controller
             $data->fill($post)->save();
 
             if ($request->hasFile('photo')) {
-                if ($data['photo'] != '') {
 
-                    if (Storage::disk("local")->exists(upload_path($this->destination_path. $data['photo']))) {
-                        Storage::delete(upload_path($this->destination_path. $data['photo']));
+
+
+                // FatUploader::image($file, $this->destination_path, $filename, $resize = true);
+
+                    $file = $request->file('photo');
+                    $filename = 'photo_'. $data['id']. '_'. date('YmdHi'). '.'. $file->getClientOriginalExtension();
+                    $thumbnail_name = 'tmb_'. $filename;
+                    $max_width = config('custom.images.medium.width');
+                    $max_height =  config('custom.images.medium.height');
+
+                    if ( ! is_dir(upload_path($this->destination_path))) {
+                        Storage::makeDirectory('/public/uploads/'.$this->destination_path);
                     }
-                    if (Storage::disk("local")->exists(upload_path($this->destination_path.'tmb_'.$data['photo']))) {
-                        Storage::delete(upload_path($this->destination_path.'tmb_'.$data['photo']));
-                    }
-                }
-                $file = $request->file('photo');
-                $filename = 'user_photo_'. $data['id']. '_'. date('YmdHi'). '.'. $file->getClientOriginalExtension();
-                $thumbnail_name = 'tmb_'. $filename;
-                $max_width = config('custom.images.medium.width');
-                $max_height =  config('custom.images.medium.height');
+                    Storage::disk("local")->putFileAs('/public/uploads/'.$this->destination_path,  $file, $filename);
+                    $source = storage_path(). '/app/public/uploads/'. $this->destination_path.$filename;
 
-                if ( ! is_dir(upload_path($this->destination_path))) {
-                    Storage::makeDirectory($this->destination_path);
-                }
-                Storage::disk("local")->putFileAs($this->destination_path,  $file, $filename);
+                    Image::make($source)->resize($max_width, $max_height, function($constraint) {
+                        $constraint->aspectRatio();
+                    })->save(upload_path($this->destination_path.$thumbnail_name));
 
-                 $source = storage_path(). '/app/public/uploads/'. $this->destination_path.$filename;
 
-                 Image::make($source)->resize($max_width, $max_height, function($constraint) {
-                    $constraint->aspectRatio();
-                })->save(upload_path($this->destination_path.$thumbnail_name));
-
-                // insert to db
-                $data['photo'] = $filename;
-
+                    // $file->move($source,$filename);
+                    // insert to db
+                    $data['photo'] = $filename;
+                    // dd($data['photo']);
                 $data->save();
             }
 

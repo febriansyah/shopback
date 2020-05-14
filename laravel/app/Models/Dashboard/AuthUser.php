@@ -25,7 +25,7 @@ class AuthUser extends Model  implements Authenticatable
      */
     protected $fillable = [
         'full_name', 'password',
-        'email', 'avatar', 'phone', 'user_status', 'remember_token', 'last_login_at'
+        'email',  'phone', 'user_status','photo', 'remember_token', 'last_login_at'
     ];
 
 

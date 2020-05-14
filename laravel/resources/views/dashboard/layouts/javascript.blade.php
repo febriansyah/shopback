@@ -12,3 +12,6 @@
 <script src="{{ asset('dashboard/js/js_lib.js') }}"></script>
 <script src="{{ asset('dashboard/js/js_run.js') }}"></script>
 <script src="{{ asset('dashboard/js/pagination.js') }}"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/offline-exporting.js"></script>

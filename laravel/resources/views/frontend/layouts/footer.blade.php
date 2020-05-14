@@ -7,7 +7,7 @@
         }
     });
 	$(document).ready(function(){
-
+        var idUnix = '';
 		$(window).bind("load resize",function(){
 			$(".fit_height").height($(window).height());
 		});
@@ -31,8 +31,8 @@
 
         var duration="";
 
-		if(qs.shopbackid){
-
+		if(!qs.shopbackid){
+            $('#trigger_play').remove();
 			// user =[{"shopbackid":qs.shopbackid, "shopbackid2":qs.shopbackid2,"partner":qs.partner,"video":"0","count_Play":0}];
 			// console.log('baru masuk');
 			// console.log(user[0].video);
@@ -64,33 +64,7 @@
 			// $("#canvas_banner").remove();
 			$("#modal_popup").hide();
 			alert("waktu anda menonton video: "+currenttime_vid);
-            var current = $('#current').text();
 
-            var token="";
-                $.ajax({
-                    type: "POST",
-                    url : url + "/setData",
-                    contentType: 'application/x-www-form-urlencoded',
-                    data: {
-                            'shopbackid' : qs.shopbackid,
-                            'shopbackid2' : qs.shopbackid2,
-                            'patner': qs.partner,
-                            'duration':currenttime_vid,
-                            'video_id' : videoId,
-                        }
-                }).done(function(response){
-                    window.close()
-
-                });
-                // var answer = confirm("Do you want to close this window ?");
-                // if (answer){
-
-
-
-                // }
-                // else{
-                //     stop;
-                // }
 		});
 		$("#trigger_play").click(function(e){
 			e.preventDefault();
@@ -99,9 +73,14 @@
             var token="";
 
 		        $.ajax({
-		            type: "GET",
-		            url : url+"/checkData/"+qs.shopbackid,
-		            contentType: 'application/x-www-form-urlencoded'
+		            type: "POST",
+		            url : url+"/checkData",
+                    data: {
+                            'shopbackid' : qs.shopbackid,
+                            'shopbackid2' : qs.shopbackid2,
+                            'patner': qs.partner,
+                            'video_id':videoId
+                        }
 		        }).done(function(response){
                     var videonya = document.getElementById('videoXl');
                     if(response.status=='success'){
@@ -110,6 +89,7 @@
 						$(".video_cover").hide();
                         $("#trigger_play").hide();
                         videonya.play();
+                        $('.idUnix').val(response.id);
                     }else{
                         alert(response.message);
                     }
@@ -159,7 +139,48 @@
 
 	function onTrackedVideoFrame(currentTime, duration){
 	    $("#current").text(currentTime); //Change #current to currentTime
-	    $("#duration").text(duration)
+        $("#duration").text(duration);
+        var qs = (function(a) {
+			if (a == "") return {};
+			var b = {};
+			for (var i = 0; i < a.length; ++i)
+			{
+				var p=a[i].split('=', 2);
+				if (p.length == 1)
+					b[p[0]] = "";
+				else
+					b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+			}
+			return b;
+		})(window.location.search.substr(1).split('&'));
+        var current = $('#current').text();
+        var statusupdate = $('.statusupdate').val();
+        var idUnix = $('.idUnix').val();
+        if(statusupdate==0){
+            $.ajax({
+                type: "POST",
+                url : url + "/setData",
+                contentType: 'application/x-www-form-urlencoded',
+                data: {
+                        'shopbackid' : qs.shopbackid,
+                        'shopbackid2': qs.shopbackid2,
+                        'patner'     : qs.partner,
+                        'duration'   : currentTime,
+                        'total_duration':duration,
+                        'video_id'   : videoId,
+                        'id'         : idUnix
+                    },
+                beforeSend:function() {
+							$('.statusupdate').val('1');
+				},
+            }).done(function(response){
+                $('.statusupdate').val('0');
+
+            });
+
+        }
+
+
 	}
 
 	document.getElementById('videoXl').addEventListener('ended',myHandler,false);
@@ -172,14 +193,6 @@
 		localStorage.setItem('user'+user[0].shopbackid,   JSON.stringify(user));
 	}
 
-
-
-// window.addEventListener('beforeunload', function (e) {
-//      e.preventDefault();
-
-
-//     e.returnValue = '';
-// });
 
 
 </script>

@@ -11,7 +11,7 @@ class ShoppyBack extends Model
 
     protected $fillable = [
         'video_id','order_id', 'patner_name', 'patner_parameter',
-        'duration'
+        'duration','total_duration','persentase','uniq_id'
    ];
 
 }

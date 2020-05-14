@@ -19,4 +19,4 @@
 Route::get('index5.html', 'Frontend\HomeController@index')->name('home');
 Route::get('test.html', 'Frontend\HomeController@test')->name('test');
 Route::post('setData', 'Frontend\HomeController@saveData')->name('setdata');
-Route::get('checkData/{id?}', 'Frontend\HomeController@checkData')->name('checkData');
+Route::post('checkData', 'Frontend\HomeController@checkData')->name('checkData');

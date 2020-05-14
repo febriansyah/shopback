@@ -39,6 +39,8 @@
       <div class="form_group">
         <button type="button" id="resumeVideo" class="submit_bt" style="float: left;">Resume</button>
         <a href="#" class="close_popup trigger_close_all">Close</a>
+        <input type="hidden" name="statusupdate" value="0" class="statusupdate">
+			<input type="hidden" name="idUnix" value="0" class="idUnix">
       </div>
     </div>
   </div>

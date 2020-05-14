@@ -53,8 +53,20 @@ Route::prefix('cms')->namespace('Dashboard')->name('dashboard.')->group(function
             ->name('video.delete');
         });
         Route::prefix('analitik')->group(function() {
-            Route::post('list', 'AnalitikController@list_data')
-            ->name('analitik.list');
+            Route::post('getData', 'AnalitikController@getData')
+            ->name('analitik.getData');
+            Route::post('getViwer', 'AnalitikController@getViwer')
+            ->name('analitik.getViwer');
+            Route::post('getUniq', 'AnalitikController@getUniq')
+            ->name('analitik.getUniq');
+            Route::post('getVisitor', 'AnalitikController@getVisitor')
+            ->name('analitik.getVisitor');
+            Route::post('getAvg', 'AnalitikController@getData')
+            ->name('analitik.getAvg');
+            Route::post('getDataChart', 'AnalitikController@getDataChart')
+            ->name('analitik.getDataChart');
+            // Route::post('list', 'AnalitikController@list_data')
+            // ->name('analitik.list');
             Route::match(['get', 'post'], '{id?}/{slug?}', 'AnalitikController@index')
             ->name('analitik.index');
 
