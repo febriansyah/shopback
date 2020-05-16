@@ -809,8 +809,14 @@ select {
   text-decoration: none;
   border: 1px solid #ddd;
 }
-
-.pagination a.active {
+.pagination ul.pagination{
+	margin: 0;
+	padding: 0;
+}
+.pagination ul.pagination li{
+	display: inline-block;
+}
+.pagination a.active,.pagination ul.pagination li.active a {
   background-color: #135BBC;
   color: white;
   border: 1px solid #135BBC;

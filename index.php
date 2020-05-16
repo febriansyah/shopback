@@ -21,7 +21,7 @@
                      <span for="rememberMe">Remember me</span>
                   </div>
                   <div class="right">
-                    <a href="#" class="forgot">Forgot password? </a>
+                    <a href="forgot.php" class="forgot">Forgot password? </a>
                   </div>
                 </div><!--end.inner_group-->
               </div><!--emd.group_form-->

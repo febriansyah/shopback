@@ -460,7 +460,7 @@
             </tbody>
           </table>
           <div class="text-center">
-            <div class="pagination">
+            <div class="pagination" style="display: none;">
               <a href="#">&laquo;</a>
               <a href="#" class="active">1</a>
               <a href="#">2</a>
@@ -470,6 +470,10 @@
               <a href="#">6</a>
               <a href="#">&raquo;</a>
             </div>
+            <div class="pagination">
+
+            <ul class="pagination bootpag"><li data-lp="1" class="prev disabled"><a href="javascript:void(0);">«</a></li><li data-lp="1" class="active"><a href="javascript:void(0);">1</a></li><li data-lp="1" class="next disabled"><a href="javascript:void(0);">»</a></li></ul></div>
+
           </div>
         </div><!--end.table_video_list-->
       </div><!--end.rows-->
