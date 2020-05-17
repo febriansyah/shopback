@@ -27,6 +27,15 @@ Route::prefix('cms')->namespace('Dashboard')->name('dashboard.')->group(function
 		->name('auth.register');
         // dashboard
         // authenticated user
+
+        Route::prefix('analitikshare')->group(function() {
+            Route::post('getData', 'AnalitikShareController@getData')
+            ->name('analitikshare.getData');
+            Route::match(['get', 'post'], '{slug?}', 'AnalitikShareController@index')
+            ->name('analitikshare.index');
+
+
+        });
 	Route::middleware('auth.dashboard:dashboard')->group(function() {
         // dd('masuk ya');
         Route::get('', 'DashboardController@index')
@@ -65,6 +74,10 @@ Route::prefix('cms')->namespace('Dashboard')->name('dashboard.')->group(function
             ->name('analitik.getAvg');
             Route::post('getDataChart', 'AnalitikController@getDataChart')
             ->name('analitik.getDataChart');
+            Route::post('sendemail', 'AnalitikController@sendEmail')
+            ->name('analitik.sendemail');
+            Route::post('sharelink', 'AnalitikController@shareUrl')
+            ->name('analitik.sharelink');
             // Route::post('list', 'AnalitikController@list_data')
             // ->name('analitik.list');
             Route::match(['get', 'post'], '{id?}/{slug?}', 'AnalitikController@index')

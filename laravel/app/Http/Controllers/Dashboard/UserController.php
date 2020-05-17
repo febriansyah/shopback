@@ -16,6 +16,7 @@ use Validator;
 use Hash;
 use Rule;
 use Image;
+use Redirect;
 
 class UserController extends Controller
 {
@@ -241,12 +242,14 @@ class UserController extends Controller
                 // The passwords match...
                 $data->fill($post)->save();
 
+                Auth::guard($this->guard)->logout();
 
-                //  event(new Log($log));
-                return redirect($this->parse['form_action'])->with('form_message', [
-                        'message' => 'Success',
-                        'status'  => 'success',
-                    ]);
+                return  Redirect::to('cms/login');
+                // //  event(new Log($log));
+                // return redirect($this->parse['form_action'])->with('form_message', [
+                //         'message' => 'Success',
+                //         'status'  => 'success',
+                //     ]);
             }else{
                 return redirect($this->parse['form_action'])->with('form_message', [
                     'message' => array(

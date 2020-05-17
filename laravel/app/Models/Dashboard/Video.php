@@ -70,7 +70,7 @@ class Video extends Model
 
 
         if (isset($params['search']) && $params['search'] != '') {
-            $data = $data->where(function($query) use($params) {
+            $total_rows = $total_rows->where(function($query) use($params) {
 
                 $query->whereRaw("LCASE(title) like '%" .strtolower($params['search']). "%'");
                 $query->orwhereRaw("LCASE(brand) like '%" .strtolower($params['search']). "%'");

@@ -35,8 +35,13 @@ class HomeController extends Controller
     public function index()
     {
         //
-        $this->parse['video'] = $this->model_video->inRandomOrder()->first();
+        $this->parse['video'] = $this->model_video->->where(function($query) use($params) {
+                 $query->whereDate("LCASE({$val['data']}) like '%" .strtolower($params['search_value']). "%'");
+                  $query->orwhereDate("LCASE({$val['data']}) like '%" .strtolower($params['search_value']). "%'");
 
+
+            })->whereDate('start_publish','<',date('Y-m-d'))->whereDate('end_publish','>',date('Y-m-d'))->inRandomOrder()->first();
+        // dd( $this->parse['video']);
         return view('frontend.home', $this->parse);
     }
     public function test()

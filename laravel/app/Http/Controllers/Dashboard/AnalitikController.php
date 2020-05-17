@@ -7,9 +7,15 @@ use Illuminate\Http\Request;
 use App\Models\Dashboard\UserMenu;
 use App\Models\Dashboard\ShopeBack;
 use App\Models\Dashboard\Video;
+use App\Models\Dashboard\ShareUrl;
 use Illuminate\Support\Carbon;
 use Auth;
 use DateTime;
+use Hash;
+use Analytics;
+use Spatie\Analytics\Period;
+use Mail;
+
 class AnalitikController extends Controller
 {
     //
@@ -78,6 +84,8 @@ class AnalitikController extends Controller
     {
         $this->model_video     = new Video;
         $this->model_shopeback = new ShopeBack;
+        $this->model_shareurl  = new ShareUrl;
+
 
         $this->auth_user = Auth::guard(backend_guard())->user();
 
@@ -139,6 +147,45 @@ class AnalitikController extends Controller
             $this->parse['chartPersentase']['category'] =json_encode($category);
             $this->parse['chartPersentase']['data'] = json_encode($data);
             $this->parse['chartPersentase']['series'] = 'viwer';
+
+            $city = Analytics::performQuery(
+                Period::years(1),
+                'ga:sessions',
+                [
+                    'metrics' => 'ga:sessions',
+                    'dimensions' => 'ga:city'
+                ]
+            );
+            $gaCity= collect($city['rows'] ?? [])->map(function (array $dateRow) {
+                return [
+                    $dateRow[0],
+                    (int) $dateRow[1],
+                ];
+            });
+            $this->parse['chartGACity']['data'] = json_encode($gaCity);
+            $this->parse['chartGACity']['series'] = 'viwer';
+
+            $gender = Analytics::performQuery(
+                Period::years(1),
+                'ga:sessions',
+                [
+                    'metrics' => 'ga:sessions',
+                    'dimensions' => 'ga:userGender'
+                ]
+            );
+            $gaGender= collect($gender['rows'] ?? [])->map(function (array $dateRow) {
+                return [
+                    $dateRow[0],
+                    (int) $dateRow[1],
+                ];
+            });
+            $this->parse['chartGACity']['data'] = json_encode($gaCity);
+            $this->parse['chartGACity']['series'] = 'viwer';
+
+            $this->parse['chartGAGender']['data'] = json_encode($gaGender);
+            $this->parse['chartGAGender']['series'] = 'viwer';
+            // dd(json_encode($gaCity));
+
             // dd($this->parse);
             return view('dashboard.analitik.analitik', $this->parse);
         }
@@ -186,6 +233,40 @@ class AnalitikController extends Controller
             $this->parse['chartPersentase']['data'] = json_encode($data);
             $this->parse['chartPersentase']['series'] = 'viwer';
 
+            $city = Analytics::performQuery(
+                Period::create($startDate, $endDate),
+                'ga:sessions',
+                [
+                    'metrics' => 'ga:sessions',
+                    'dimensions' => 'ga:city'
+                ]
+            );
+            $gaCity= collect($city['rows'] ?? [])->map(function (array $dateRow) {
+                return [
+                    $dateRow[0],
+                    (int) $dateRow[1],
+                ];
+            });
+            $this->parse['chartGACity']['data'] = json_encode($gaCity);
+            $this->parse['chartGACity']['series'] = 'viwer';
+
+
+            $gender = Analytics::performQuery(
+                Period::create($startDate, $endDate),
+                'ga:sessions',
+                [
+                    'metrics' => 'ga:sessions',
+                    'dimensions' => 'ga:userGender'
+                ]
+            );
+            $gaGender= collect($gender['rows'] ?? [])->map(function (array $dateRow) {
+                return [
+                    $dateRow[0],
+                    (int) $dateRow[1],
+                ];
+            });
+            $this->parse['chartGAGender']['data'] = json_encode($gaGender);
+            $this->parse['chartGAGender']['series'] = 'viwer';
 
 
             $selisih =  $end->diff($start);
@@ -342,6 +423,67 @@ class AnalitikController extends Controller
             $this->parse['chartViwer']['series'] = 'viwer';
 
             return response()->json($this->parse);
+        }
+        return redirect()->route($this->prefix_routes. 'index');
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sendEmail(Request $request)
+    {
+        $post = $request->post();
+        $ajax = $request->ajax();
+
+        if ($post && $ajax) {
+            $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $permitted_chars = str_shuffle($permitted_chars);
+            $current = Carbon::now();
+            $param['timeout'] = $current->addHours(2);
+            $param['email'] = $post['email'];
+            $param['video_id'] = $post['video_id'];
+            $data = $this->model_shareurl->create($param);
+            $data->link_id = $permitted_chars.$data->id;
+            $data->save();
+
+            Mail::send('emails.sendurl', compact('data'), function($message)  use ($data) {
+                $message->to($data['email'])->subject
+                   ('Link Dashboard Shoopy Back');
+                $message->from('aloysiuswahyudwo@gmail.com','CEO Okedeht');
+             });
+            return response()->json([
+                'message' => 'Success',
+                'status'  => 'success',
+                'data'    => $data,
+            ]);
+        }
+
+    }
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function shareUrl(Request $request)
+    {
+        $post = $request->post();
+        $ajax = $request->ajax();
+        if ($post && $ajax) {
+            $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $permitted_chars = str_shuffle($permitted_chars);
+            $current = Carbon::now();
+            $param['timeout'] = $current->addHours(2);
+            $data = $this->model_shareurl->create($param);
+            $data->link_id = $permitted_chars+$data->id;
+            $data->save();
+            return response()->json([
+                'message' => 'Success',
+                'status'  => 'success',
+                'data'    => $data,
+            ]);
         }
         return redirect()->route($this->prefix_routes. 'index');
 

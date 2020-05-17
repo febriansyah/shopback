@@ -113,7 +113,8 @@
                 <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}">
               </label>
               <div class="inline_form">
-                <input type="file" id="video_upload" name="video">
+                <input type="file" id="video_upload"  name="video">
+
               </div><!--end.inline_form-->
             </div><!--end.group_line-->
 
@@ -450,6 +451,7 @@
   $('.btn-submit-video').on('click',function(){
         console.log('submit');
         $('#form-data').trigger('submit');
+        $(this).prop('disabled', true);
     })
 </script>
 @endsection

@@ -31,7 +31,7 @@
 
         var duration="";
 
-		if(!qs.shopbackid){
+		if(!qs.shopbackid || !qs.shopbackid2 || !qs.partner){
             $('#trigger_play').remove();
 			// user =[{"shopbackid":qs.shopbackid, "shopbackid2":qs.shopbackid2,"partner":qs.partner,"video":"0","count_Play":0}];
 			// console.log('baru masuk');

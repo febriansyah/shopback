@@ -6,25 +6,8 @@
 	<div class="left_menu">
     <div class="menu_list">
 
-        <a href="{{ url('cms/video')}}" class="row_menu">
-          <img class="icon_menu" src="{{ asset('dashboard/images/material/icon_back.png') }}">
-          <span>Video List</span>
-        </a>
-        <div class="row_vid_info">
-          <div class="thumb_video">
-            <img src="{{ upload_url('video/'.$video->photo)}}">
-          </div>
-          <div class="caption_video">
-            <h3>Video</h3>
-            <p>{{ $video->title}}</p>
-          </div>
-        </div>
 
-        <a href="{{ url('cms/video/detail/'.$video->id)}}" class="row_menu">
-          <img class="icon_menu" src="{{ asset('dashboard/images/material/icon_detail.png') }}">
-          <span>Detail</span>
-        </a>
-        <a href="{{ url('cms/analitik/'.$video->id)}}" class="row_menu active">
+        <a href="{{ url('cms/analitik/uniq_clnt?'.$link_id)}}" class="row_menu active">
           <img class="icon_menu" src="{{ asset('dashboard/images/material/icon_analytic.png') }}">
           <span>Analytics</span>
         </a>
@@ -172,6 +155,7 @@
 <script>
 var base_url = '{{ url("") }}';
 var id = '{{ $video->id }}';
+var link_id = '{{ $link_id }}';
 $( function() {
 var date= <?php echo $chartViwer['date'] ?>;
 
@@ -244,58 +228,63 @@ function getData(){
     var endDate = $("#to").val();
     if(startDate !='' && endDate !=''){
         $.ajax({
-                url:base_url+'/cms/analitik/getData',
+                url:base_url+'/cms/analitikshare/getData',
                 type:'post',
                 data: {
                             'startDate': startDate,
                             'endDate':endDate,
-                            'id':id
+                            'id':id,
+                            'link_id':link_id
                 },
                 dataType:'json'
             }).
             done(function(response) {
-                var date= response.chartViwer.date;
-                date = JSON.parse(date);
-                console.log(date);
-                var data =  [{name: 'Viwers',data: JSON.parse(response.chartViwer.data)}];
-                var title ='';
-                var subtitle = '';
-                var yAxis= 'total';
-                chartLines = chartLine('line_chart',title,subtitle,yAxis,date,data);
+                if(response.status!='error'){
+                    var date= response.chartViwer.date;
+                    date = JSON.parse(date);
+                    console.log(date);
+                    var data =  [{name: 'Viwers',data: JSON.parse(response.chartViwer.data)}];
+                    var title ='';
+                    var subtitle = '';
+                    var yAxis= 'total';
+                    chartLines = chartLine('line_chart',title,subtitle,yAxis,date,data);
 
-                var categoryPersentase=response.chartPersentase.category;
-                categoryPersentase = JSON.parse(categoryPersentase);
-                var dataPersentase =  [{name: 'User',data: JSON.parse(response.chartPersentase.data)}];
+                    var categoryPersentase=response.chartPersentase.category;
+                    categoryPersentase = JSON.parse(categoryPersentase);
+                    var dataPersentase =  [{name: 'User',data: JSON.parse(response.chartPersentase.data)}];
 
-                var titlePersentase ='Audience Retention';
-                var subtitlePersentase = '';
-                var yAxisPersentase= 'User';
-                console.log(dataPersentase);
-                chartBars = chartBar('chart_bar',titlePersentase,subtitlePersentase,yAxisPersentase,categoryPersentase,dataPersentase);
+                    var titlePersentase ='Audience Retention';
+                    var subtitlePersentase = '';
+                    var yAxisPersentase= 'User';
+                    console.log(dataPersentase);
+                    chartBars = chartBar('chart_bar',titlePersentase,subtitlePersentase,yAxisPersentase,categoryPersentase,dataPersentase);
 
 
 
-                var dataGACity = JSON.parse(response.chartGACity.data);
-                var titleGACity = 'Geography';
-                var subtitleGACity='';
-                var chartDounat = chartDonat('chart_dounat',titleGACity,subtitleGACity,'City',dataGACity);
+                    var dataGACity = JSON.parse(response.chartGACity.data);
+                    var titleGACity = 'Geography';
+                    var subtitleGACity='';
+                    var chartDounat = chartDonat('chart_dounat',titleGACity,subtitleGACity,'City',dataGACity);
 
-                var dataGAGender = JSON.parse(response.chartGAGender.data);
+                    var dataGAGender = JSON.parse(response.chartGAGender.data);
                     var titleGAGender = 'View by genders';
                     var subtitleGAGender='';
                     var chartDounatGender = chartDonat('chart_dounat_gender',titleGAGender,subtitleGAGender,'Gender',dataGAGender);
 
+                    console.log($('.totalView'));
+                    $('.totalView').html(response.total_view);
+                    $('.uniqUser').html(response.uniq_visitor);
+                    var avs = Math.floor(response.avg/3600);
+                    if(avs == 0)
+                    {
+                        $('.avgWatch').html(response.avg+' Second');
+                    }else{
+                        $('.avgWatch').html(Math.floor(response.avg/3600)+' Hours');
+                    }
+                }else{
+                    alert(response.message);
+                }
 
-                console.log($('.totalView'));
-                $('.totalView').html(response.total_view);
-                 $('.uniqUser').html(response.uniq_visitor);
-                 var avs = Math.floor(response.avg/3600);
-                 if(avs == 0)
-                 {
-                    $('.avgWatch').html(response.avg+' Second');
-                 }else{
-                    $('.avgWatch').html(Math.floor(response.avg/3600)+' Hours');
-                 }
 
 
 
@@ -535,13 +524,13 @@ Highcharts.exportCharts = function (charts, options) {
     $(document).on('click','.submit-shareurl',function(){
 
         var email = $('.emailsendurl').val();
-        console.log(base_url+'/cms/analitik/sendemail')
+
         $.ajax({
-                url:base_url+'/cms/analitik/sendemail',
+                url:base_url+'/cms/analitikshare/sendemail',
                 type:'post',
                 data: {
                         'email': email,
-                        'video_id':id
+                        'link_id':link_id
                 },
                 dataType:'json'
             }).

@@ -14,6 +14,7 @@ use Validator;
 use Auth;
 use Hash;
 
+
 class AuthController extends Controller
 {
      /*

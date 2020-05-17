@@ -10,7 +10,7 @@
             <div class="abs_videos">
                 <div style="position: relative;">
                     <div class="video_wrapper">
-                    <video id="videoXl" src="{{ upload_url('video/video/640_'.$video->video_name.'.mp4') }}" type="video/mp4" width="100%" height="300px" align="middle"
+                    <video id="videoXl" src="{{ upload_url('video/video/adaptive_'.$video->video_name.'250.m3u8') }}"  type="application/x-mpegURL" width="100%" height="300px" align="middle"
                         preload="auto"  playsinline>
                         </video>
                     </div>
