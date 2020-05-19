@@ -1,4 +1,4 @@
-/*=============================================================================================	
+/*=============================================================================================
 	Author : Muhammad Febriansyah
 	Date       : Mei 2017
 ==============================================================================================*/
@@ -175,6 +175,19 @@ section {
 	font-weight: 500;
 	padding: 10px 20px;
 }
+.cancel_bt{
+	display: inline-block;
+	text-align: center;
+	background: #fff;
+	border: 1px solid #EB5757;
+	box-sizing: border-box;
+	border-radius: 8px;
+	color: #EB5757;
+	font-size: 18px;
+	font-weight: 500;
+	padding: 10px 20px;
+	margin-right: 20px;
+}
 .bt_white{
 	display: inline-block;
 	text-align: center;
@@ -187,7 +200,7 @@ section {
 	font-weight: 400;
 	padding: 10px 20px;
 }
-.blue_bt:hover,.blue_text:hover,.blue_bt2:hover,.bt_white:hover{
+.blue_bt:hover,.blue_text:hover,.blue_bt2:hover,.bt_white:hover,.cancel_bt:hover{
 	opacity: 0.8;
 }
 .back_bt{
@@ -295,7 +308,7 @@ button:disabled, button[disabled] {
 .loginPage{
 	width: 100%;
 	height: 100vh;
-	background: url(../images/material/bg_login.png) no-repeat center center fixed; 
+	background: url(../images/material/bg_login.png) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -343,7 +356,6 @@ button:disabled, button[disabled] {
 	position: absolute;
 	bottom: 0;
 	right: 0px;
-	cursor: pointer;
     transition: all 0.3s ease-in-out 0s;
 }
 .thumb_big{
@@ -352,7 +364,7 @@ button:disabled, button[disabled] {
 	position: relative;
 }
 .icon_cam:hover{
-	opacity: 0.8;
+	opacity: 0.9;
 }
 .line_form{
 	display: block;
@@ -528,7 +540,7 @@ button:disabled, button[disabled] {
 	color: #F44336;
 }
 .list_ads_report h3{
-	font-size: 46px; 
+	font-size: 46px;
 	color: #000000;
 	display: inline-block;
 	vertical-align: middle;
@@ -809,14 +821,8 @@ select {
   text-decoration: none;
   border: 1px solid #ddd;
 }
-.pagination ul.pagination{
-	margin: 0;
-	padding: 0;
-}
-.pagination ul.pagination li{
-	display: inline-block;
-}
-.pagination a.active,.pagination ul.pagination li.active a {
+
+.pagination a.active {
   background-color: #135BBC;
   color: white;
   border: 1px solid #135BBC;
@@ -982,6 +988,9 @@ select {
 	color: #00508C;
 	vertical-align: middle;
 }
+#confirmRemove h3{
+	font-size: 22px;
+}
 .list_clientnya{
 	max-height: 300px;
 	overflow: auto;
@@ -1020,8 +1029,21 @@ select {
 	margin: 0;
 	color: #000000;
 }
+.period{
+	padding-right: 50px;
+}
 .period .inline_form{
 	margin-top: 0;
+}
+.date_rangenya{
+	font-size: 14px;
+	display: block;
+	text-align: left;
+	color: #135BBC;
+	margin-bottom: 10px;
+}
+.period .custom-select{
+	width: 10em;
 }
 .box_analytic{
 	border: 1px solid #E0E0E0;
@@ -1083,7 +1105,8 @@ select {
 	box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
 	border-radius: 8px;
 	left: 0;
-	top: 50px;
+    top: 50px;
+    z-index: 99999;
 }
 .dropdownMenu_header{
 	position: absolute;
@@ -1123,6 +1146,87 @@ select {
 	margin: 0;
 	font-size: 18px;
 }
+.text_help{
+	font-size: 16px;
+	text-align: center;
+	color: #000000;
+}
+.dz-max-files-reached {
+      pointer-events: none;
+      cursor: default;
+}
+#video_upload_popup{
+	height: 100%;
+    width: 100%;
+    position: absolute;
+    display: block;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    opacity: 0.000001;
+}
+.icon_relative_upload{
+	display: inline-block;
+	position: relative;
+}
+.prgoressBar {
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 20px;
+    overflow: hidden;
+    display: none;
+    margin-top: 3px;
+}
+.myBar {
+    width: 1%;
+    height: 10px;
+    background-color: #731719;
+    border-radius: 20px;
+}
+.trash_icon {
+    display: none;
+    margin-left: 10px;
+    cursor: pointer;
+}
+.file-text-info{
+	font-size: 18px;
+    color: #000000;
+    display: none;
+}
+.file-text-info.file-text-info.activated,.trash_icon.activated,.prgoressBar.activated{
+	display: inline-block;
+}
+.hide{
+	display: none;
+}
+.upload_bg_abs{
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	left: 0;
+	bottom: 100px;
+	padding: 0 20px;
+	z-index: 3;
+}
+.upload_bg_abs span{
+	display: block;
+	font-size: 13px;
+	margin-top: 10px;
+}
+.grey_bt{
+	background: #F2F2F2;
+	display: inline-block;
+	text-align: center;padding: 10px 20px;
+	border-radius: 
+	font-size: 14px;
+	text-align: center;
+	letter-spacing: 0.5px;
+	border: 1px solid #333333;
+	border-radius: 8px;
+	font-weight: 600;
+	color: #333333;
+}
+
 /* ==========================================================================
    Media Queries
    ========================================================================== */

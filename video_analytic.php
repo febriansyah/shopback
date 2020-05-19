@@ -37,13 +37,15 @@
         <h3> Video Analytic </h3>
         <div class="right">
           <div class="period">
-            <div class="inline_form">
-              <span>Periode:</span>
-              <input type="text" class="input_form" name="from" id="from">
-              <span>s/d</span>
-              <input type="text" class="input_form" id="to" name="to">
-              <a href="#" class="blue_bt2">Submit</a>
-            </div><!--end.inline_form-->
+            <span class="date_rangenya">24 - 30 April, 2020</span>
+            <div class="custom-select">
+              <select name="slct" id="slct">
+                <option selected value="0"> Last 7 days</option>
+                <option value="1"> Last 30 days</option>
+                <option value="2"> Last 90 days</option>
+                <option value="2"> Last 365 days</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>

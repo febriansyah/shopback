@@ -27,6 +27,8 @@
       <div class="section_titleSearch">
         <h3>Input Video</h3>
         <div class="right_upload">
+
+          <a href="#" class="cancel_bt">Cancel</a>
           <a href="#" class="blue_bt2">Publish</a>
         </div><!--end.right_upload-->
       </div>
@@ -53,9 +55,9 @@
             <div class="group_line">
               <label class="label_line" for="brand">
                 <span> Brand</span>
-                <img src="images/material/icon_tanya.png">
+                <img src="images/material/icon_tanya.png" title="Brand is to give an information about what brand is on this ads campaign, by giving this information it will make your report clear and easy to find">
               </label>
-              <input type="text" id="brand" class="input_noline"  name="" title="Brand is to give an information about what brand is on this ads campaign, by giving this information it will make your report clear and easy to find">
+              <input type="text" id="brand" class="input_noline"  name="" >
             </div><!--end.group_line-->
 
             <div class="group_line">
@@ -76,40 +78,27 @@
               </div><!--end.inline_form-->
             </div><!--end.group_line-->
 
-            <div class="group_line">
-              <label class="label_line" for="brand">
-                <span> Upload Video </span>
-                <img src="images/material/icon_tanya.png">
-              </label>
-              <div class="inline_form">
-                <input type="file" id="video_upload" name="">
-              </div><!--end.inline_form-->
-            </div><!--end.group_line-->
 
-            <div class="group_line">
+            <div class="group_line" style="display: none;">
               <label class="label_line" for="brand">
                 <span> Upload Background Template </span>
                 <img src="images/material/icon_tanya.png" title="Background size must be 360 x 640">
               </label>
               <div class="inline_form">
-                <input type="file" id="bg_upload" name="">
+                <input type="file" id="bg_upload" name="" accept="image/*">
               </div><!--end.inline_form-->
             </div><!--end.group_line-->
 
 
             <div class="group_line">
               <label class="label_line" for="brand">
-                <span> Upload Cover Video </span>
+                <span> Upload Thumbnail Video </span>
                 <img src="images/material/icon_tanya.png" title="Select or upload a picture that shows what's in your video size must be 360 x 178">
               </label>
               <div class="inline_form">
-                <input type="file" id="cover_video" name="">
+                <input type="file" id="cover_video" name="" accept="image/*">
               </div><!--end.inline_form-->
             </div><!--end.group_line-->
-
-
-            
-
             <div class="group_line">
               <label class="label_line" for="brand">
                 <span> Insert target views</span>
@@ -135,10 +124,14 @@
           <div class="form_right">
             <div class="preview_box">
               <div class="template_img">
-                <img id="main_images" src="images/material/bg_template.jpg">
+                <img id="main_images" src="">
               </div>
               <div class="cover_video">
                 <img id="img_cover" src="images/material/thumb_video_dummy.jpg">
+              </div>
+              <div class="upload_bg_abs">
+                <button type="button" class="grey_bt" id="trigger_add_bg">Add Background </button>
+                <span>Background size must be 360 x 640</span>
               </div>
             </div>
           </div><!--end.form_right-->
@@ -154,12 +147,27 @@
 
     $( document ).tooltip();
 
+    var dateToday = new Date();
+    var dates = $("#from, #to").datepicker({
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 3,
+        minDate: dateToday,
+        onSelect: function(selectedDate) {
+            var option = this.id == "from" ? "minDate" : "maxDate",
+                instance = $(this).data("datepicker"),
+                date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+            dates.not(this).datepicker("option", option, date);
+        }
+    });
+    /*var dateToday = new Date();
     var dateFormat = "dd/mm/yy",
       from = $( "#from" )
         .datepicker({
           defaultDate: "+1w",
           changeMonth: true,
-          numberOfMonths: 3
+          numberOfMonths: 3,
+          minDate: dateToday,
         })
         .on( "change", function() {
           to.datepicker( "option", "minDate", getDate( this ) );
@@ -182,9 +190,12 @@
       }
  
       return date;
-    }
+    }*/
   } );
 
+  $("#trigger_add_bg").click(function() {
+      $("#bg_upload").click();
+  })
   function readURL(input) {
 
     if (input.files && input.files[0]) {
@@ -219,4 +230,3 @@
 </script>
 <!-- end of middle -->
 <?php include('inc_footer.php');?>
-<?php include('popup.php');?>

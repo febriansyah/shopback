@@ -38,7 +38,7 @@
             </div>
           </div>
           <div class="right_upload">
-            <a href="video_input.php" class="blue_bt2">+ UPLOAD VIDEO</a>
+            <a href="#upload_video" class="blue_bt2 popupShow">+ UPLOAD VIDEO</a>
           </div><!--end.right_upload-->
         </div><!--end.content_video_list-->
         <div class="table_video_list">
@@ -76,8 +76,8 @@
                   <h3 class="title_tab">Good mood - Tajir melintir</h3>
                   <p>Mau tajir melintir dapatkan bonus uang cash dari good mood caranya lihat disini, kapan lagi </p>
                   <div class="abs_action">
-                    <a href="#" class="action_menu"><img src="images/material/icon_detail.png" class="icon_action"> <span>Detail</span></a>
-                    <a href="#" class="action_menu"><img src="images/material/icon_analytic.png" class="icon_action"> <span>Analytic</span></a>
+                    <a href="video_input.php" class="action_menu"><img src="images/material/icon_detail.png" class="icon_action"> <span>Detail</span></a>
+                    <a href="video_analytic.php" class="action_menu"><img src="images/material/icon_analytic.png" class="icon_action"> <span>Analytic</span></a>
                   </div>
                 </td>
                 <td>
@@ -112,8 +112,8 @@
                   <h3 class="title_tab">Good mood - Tajir melintir</h3>
                   <p>Mau tajir melintir dapatkan bonus uang cash dari good mood caranya lihat disini, kapan lagi </p>
                   <div class="abs_action">
-                    <a href="#" class="action_menu"><img src="images/material/icon_detail.png" class="icon_action"> <span>Detail</span></a>
-                    <a href="#" class="action_menu"><img src="images/material/icon_analytic.png" class="icon_action"> <span>Analytic</span></a>
+                    <a href="video_input.php" class="action_menu"><img src="images/material/icon_detail.png" class="icon_action"> <span>Detail</span></a>
+                    <a href="video_analytic.php" class="action_menu"><img src="images/material/icon_analytic.png" class="icon_action"> <span>Analytic</span></a>
                   </div>
                 </td>
                 <td>
@@ -148,8 +148,8 @@
                   <h3 class="title_tab">Good mood - Tajir melintir</h3>
                   <p>Mau tajir melintir dapatkan bonus uang cash dari good mood caranya lihat disini, kapan lagi </p>
                   <div class="abs_action">
-                    <a href="#" class="action_menu"><img src="images/material/icon_detail.png" class="icon_action"> <span>Detail</span></a>
-                    <a href="#" class="action_menu"><img src="images/material/icon_analytic.png" class="icon_action"> <span>Analytic</span></a>
+                    <a href="video_input.php" class="action_menu"><img src="images/material/icon_detail.png" class="icon_action"> <span>Detail</span></a>
+                    <a href="video_analytic.php" class="action_menu"><img src="images/material/icon_analytic.png" class="icon_action"> <span>Analytic</span></a>
                   </div>
                 </td>
                 <td>

@@ -24,6 +24,8 @@
 <link rel="stylesheet" href="css/owl.carousel.css">
 <!--link rel="stylesheet" href="css/jquery.bxslider.min.css"-->
 <link rel="stylesheet" href="css/animate.css">
+<link rel="stylesheet" href="css/animate.css">
+<link rel="stylesheet" href="css/dropzone.css">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" type="text/css" href="css/media1024.css"/>
 <link rel="stylesheet" type="text/css" href="css/media768.css"/>
@@ -40,7 +42,7 @@
 <script src="js/owl.carousel.min.js"></script>
 <!--CDN link for  TweenMax-->
 <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"></script>
-<script src="js/wow.min.js"></script>
+<script src="js/dropzone.js"></script>
 <script src="js/js_lib.js"></script>
 <script src="js/js_run.js"></script>
 </head>
