@@ -99,7 +99,7 @@ class Client extends Model
      */
     public function getModelById($id)
     {
-        $data = $this->with('roadshow');
+        $data = $this;
         if (is_array($id)) {
             return $data->whereIn($this->getKeyName(), $id)->get();
         }

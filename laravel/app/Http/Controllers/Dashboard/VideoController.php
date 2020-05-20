@@ -307,6 +307,61 @@ class VideoController extends Controller
         return view($this->prefix_routes. 'form', $this->parse);
     }
 
+     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function upload(Request $request)
+    {
+        //
+        if ($request->isMethod('post')) {
+            $post = $request->all();
+
+
+            $messages = [
+                'required' => 'Kolom :attribute ini wajib diisi.',
+                'min'      => 'Input :attribute tidak kurang dari :min karakter.',
+                'unique'   => ':attribute anda sudah terdaftar.',
+                'confirmed' => ':attribute tidak sama dengn Verify Password',
+                'dimensions' => ':attribute dimensions tidak sesuai',
+                'mimes' => 'format :attribute salah'
+            ];
+            $validator = Validator::make($request->all(), [
+                'video' => 'required|mimes:mp4,avi',
+            ], $messages);
+
+            if ($request->hasFile('video')) {
+
+
+
+                // FatUploader::image($file, $this->destination_path, $filename, $resize = true);
+
+                    $file = $request->file('video');
+                    $nameFle= 'video_'. $file->getClientOriginalName(). '_'. date('YmdHi');
+                    $filename = $nameFle. '.'. $file->getClientOriginalExtension();
+                    if ( ! is_dir(upload_path($this->destination_path.'video/'))) {
+                        Storage::makeDirectory('/public/uploads/'.$this->destination_path.'video/');
+                    }
+                    Storage::disk("local")->putFileAs('/public/uploads/'.$this->destination_path.'video/',  $file, $filename);
+                    // $file->move($source,$filename);
+                    // insert to db
+                    $paramvideo['video_name'] = $nameFle;
+                    $paramvideo['video'] = $filename;
+                    $paramvideo['status'] = '0';
+                    $paramvideo['path'] =upload_url($this->destination_path.'/video');
+
+                    $data = $this->model->create($paramvideo);
+
+                    // event(new VideoEvent($data));
+
+            }
+
+            $urlUpdate =  route($this->prefix_routes. 'detail', $data['id']);
+            return redirect($urlUpdate);
+        }
+        return redirect()->route($this->prefix_routes. 'index');
+    }
 
     /**
      * Update the specified resource in storage.
@@ -325,6 +380,7 @@ class VideoController extends Controller
         $this->parse['data'] = $data;
         $this->parse['upload_path'] = 'video/';
         if ($request->isMethod('post')) {
+
             $post = $request->all();
 
 
@@ -356,6 +412,7 @@ class VideoController extends Controller
             }
             $post['start_publish'] = date('Y-m-d',strtotime($post['start_publish']));
             $post['end_publish'] = date('Y-m-d',strtotime($post['end_publish']));
+            $post['status'] ='1';
             $data->fill($post)->save();
 
             if ($request->hasFile('photo')) {

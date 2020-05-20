@@ -40,7 +40,7 @@
             </div>
           </div>
           <div class="right_upload">
-            <a href="{{url('cms/video/create')}}" class="blue_bt2">+ UPLOAD VIDEO</a>
+            <a href="#upload_video" class="blue_bt2 videoPopup">+ UPLOAD VIDEO</a>
           </div><!--end.right_upload-->
         </div><!--end.content_video_list-->
         <div class="table_video_list">
@@ -75,6 +75,7 @@
     </div><!--end.inner_main-->
   </div><!--end.mainSection-->
 </div>
+@include('dashboard.layouts.popup')
 @endsection
 @section('javascript')
 <script>

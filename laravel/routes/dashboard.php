@@ -54,6 +54,8 @@ Route::prefix('cms')->namespace('Dashboard')->name('dashboard.')->group(function
             ->name('video.create');
             Route::post('list', 'VideoController@list_data')
             ->name('video.list');
+            Route::post('upload', 'VideoController@upload')
+            ->name('video.upload');
             Route::match(['get', 'post'], 'detail/{id?}', 'VideoController@update')
             ->name('video.detail');
              Route::get('analitik/{id?}', 'VideoController@analitik')
@@ -92,9 +94,9 @@ Route::prefix('cms')->namespace('Dashboard')->name('dashboard.')->group(function
              ->name('client.detail');
              Route::match(['get', 'post'], 'create', 'ClientController@create')
             ->name('client.create');
-            Route::match(['get', 'post'], 'delete/{id?}', 'ClientController@delete')
+            Route::match(['get', 'post'], 'delete', 'ClientController@delete')
             ->name('client.delete');
-            Route::get('update/{id?}', 'ClientController@update')
+            Route::post('update', 'ClientController@update')
             ->name('client.update');
         });
 

@@ -11,7 +11,17 @@
             <img class="icon_menu" src="{{ asset('dashboard/images/material/icon_back.png') }}">
             <span>Video List</span>
             </a>
-
+            @if($data['photo'] !='' )
+            <div class="row_vid_info">
+                <div class="thumb_video">
+                  <img src="{{ upload_url('video/'.$data['photo'])}}">
+                </div>
+                <div class="caption_video">
+                  <h3>Video</h3>
+                  <p>{{ $data['title'] }}</p>
+                </div>
+              </div>
+            @endif
             <a href="{{ url("cms/video/detail/".$data['id']) }}" class="row_menu active">
             <img class="icon_menu" src="{{ asset('dashboard/images/material/icon_detail.png') }}">
             <span>Detail</span>
@@ -107,18 +117,9 @@
               </div><!--end.inline_form-->
             </div><!--end.group_line-->
 
-            <div class="group_line">
-              <label class="label_line" for="brand">
-                <span> Upload Video </span>
-                <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}">
-              </label>
-              <div class="inline_form">
-                <input type="file" id="video_upload"  name="video">
 
-              </div><!--end.inline_form-->
-            </div><!--end.group_line-->
 
-            <div class="group_line">
+            <div class="group_line"  style="display: none;">
               <label class="label_line" for="brand">
                 <span> Upload Background Template </span>
                 <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title="Background size must be 360 x 640">
@@ -131,7 +132,7 @@
 
             <div class="group_line">
               <label class="label_line" for="brand">
-                <span> Upload Cover Video </span>
+                <span> Upload Thumbnail Video </span>
                 <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title="Select or upload a picture that shows what's in your video size must be 360 x 178">
               </label>
               <div class="inline_form">
@@ -165,13 +166,18 @@
         </form>
           </div><!--end.form_left-->
 
+
           <div class="form_right">
             <div class="preview_box">
               <div class="template_img">
-                <img id="main_images" src="{{ ( (isset($data['background'])) ? upload_url('video/background/'.$data['background']) :  asset('dashboard/images/material/bg_template.jpg') )  }}">
+                <img id="main_images" src="{{ ( (isset($data['background'])) ? upload_url('video/background/'.$data['background']) : '' )  }}">
               </div>
               <div class="cover_video">
                 <img id="img_cover" src="{{ ( (isset($data['photo'])) ? upload_url('video/'.$data['photo']) :  asset('dashboard/images/material/thumb_video_dummy.jpg') )  }}">
+              </div>
+              <div class="upload_bg_abs">
+                <button type="button" class="grey_bt" id="trigger_add_bg">Add Background </button>
+                <span>Background size must be 360 x 640</span>
               </div>
             </div>
           </div><!--end.form_right-->
@@ -195,10 +201,10 @@
 
         <div class="title_popup">
           <div class="left"><h3>Client name list</h3></div>
-          {{-- <div class="right">
-            <a href="#editClient" class="blueText popupShow">Edit</a>
-            <a href="#" class="blueText">Remove</a>
-          </div> --}}
+          <div class="right">
+            <a href="#editClient" id="popupEdit" class="blueText popupEditClient hide">Edit</a>
+            <a href="#confirmRemove" class="blueText hide action_remove_client" id="popupRemove">Remove</a>
+          </div>
         </div><!--end.title_popup-->
         <div class="list_clientnya">
           <div class="row_client">
@@ -305,10 +311,11 @@
         <div class="content_popup">
           <div class="group_form">
             <input type="text" class="input_form" name="" id="clientEdit" value="Semut Api">
+            <input type="hidden" class="input_form" name="" id="idclientEdit" value="Semut Api">
           </div>
           <div class="group_form">
             <a href="#add_client" class="cancelBt popupShow">Cancel</a>
-            <button type="submit" class="blue_bt2" >Save</button>
+            <button type="submit" class="blue_bt2 action_edit_client" >Save</button>
           </div>
         </div>
       </div>
@@ -320,139 +327,234 @@
 
 <script type="text/javascript">
     var url = '{{ url('') }}';
+    var actionClient = '';
     var client_id = "{{ ( old('client_id') ? old('client_id') : ( (isset($data['client_id'])) ? $data['client_id'] : '') ) }}";
   $( function() {
 
     $( document ).tooltip();
 
-    var dateFormat = "dd/mm/yy",
-      from = $( "#from" )
-        .datepicker({
-          defaultDate: "+1w",
-          changeMonth: true,
-          numberOfMonths: 3
-        })
-        .on( "change", function() {
-          to.datepicker( "option", "minDate", getDate( this ) );
-        }),
-      to = $( "#to" ).datepicker({
+    var dateToday = new Date();
+    var dates = $("#from, #to").datepicker({
         defaultDate: "+1w",
         changeMonth: true,
-        numberOfMonths: 3
-      })
-      .on( "change", function() {
-        from.datepicker( "option", "maxDate", getDate( this ) );
-      });
-
-    function getDate( element ) {
-      var date;
-      try {
-        date = $.datepicker.parseDate( dateFormat, element.value );
-      } catch( error ) {
-        date = null;
-      }
-
-      return date;
-    }
-  } );
-
-  function readURL(input) {
-
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
-
-      reader.onload = function(e) {
-        $('#main_images').attr('src', e.target.result);
-      }
-
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-
-  function uploadCover(input) {
-
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
-
-      reader.onload = function(e) {
-        $('#img_cover').attr('src', e.target.result);
-      }
-
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-  $("#cover_video").change(function() {
-  uploadCover(this);
-  });
-  $("#bg_upload").change(function() {
-  readURL(this);
-  });
-  $(".popupClient").click(function(e) {
-    e.preventDefault();
-    $.ajax({
-                    type: "GET",
-                    url : url + "/cms/client/list",
-                }).done(function(response){
-                    var str='';
-
-                    $.each(response.data,function(k,v){
-                        str +=' <div class="row_client">'
-                                    // +'<label class="container">'
-                                    //     +'<input type="checkbox">'
-                                    //     +'<span class="checkmark"></span>'
-                                    //     +'</label>'
-                                        +'<span class="clientName">'+v.name+'</span>'
-                                        +'</div><!--end.row_client-->';
-
-                    });
-
-                    $('.list_clientnya').html(str);
-
-                    $('#add_client').show();
-                });
-
-  });
-  $(document).on('click','.action_add_client',function(){
-    $.ajax({
-            type: "POST",
-            url : url + "/cms/client/create",
-            data: {
-                    'name': $('.client_add_name').val()
-            },
-            dataType:'json'
-    }).done(function(response){
-        var str='';
-        var strSleect =' <option>Choose client name</option>';
-                    var selected='';
-        $.each(response.data,function(k,v){
-            str +=' <div class="row_client">'
-                    // +'<label class="container">'
-                    // +'<input type="checkbox">'
-                    // +'<span class="checkmark"></span>'
-                    // +'</label>'
-                    +'<span class="clientName">'+v.name+'</span>'
-                    +'</div><!--end.row_client-->';
-                    if(v.id==client_id){
-                            selected='selected';
-                        }else{
-                            selected ='';
-                        }
-                        strSleect +=' <option value="'+v.id+'">'+v.name+'</option>';
-
-             });
-        $('.list_clientnya').html(str);
-        $('#slct').html(strSleect);
-                    console.log( strSleect)
-                    console.log( $('#slct'))
-        $('#add_client').show();
+        numberOfMonths: 3,
+        minDate: dateToday,
+        onSelect: function(selectedDate) {
+            var option = this.id == "from" ? "minDate" : "maxDate",
+                instance = $(this).data("datepicker"),
+                date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+            dates.not(this).datepicker("option", option, date);
+        }
     });
 
-  })
-  $('.btn-submit-video').on('click',function(){
-        console.log('submit');
-        $('#form-data').trigger('submit');
-        $(this).prop('disabled', true);
+
+    $("#trigger_add_bg").click(function() {
+        $("#bg_upload").click();
     })
+
+    function readURL(input) {
+
+        if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            $('#main_images').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function uploadCover(input) {
+
+        if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            $('#img_cover').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#cover_video").change(function() {
+         uploadCover(this);
+    });
+    $("#bg_upload").change(function() {
+        readURL(this);
+    });
+    $(".popupClient").click(function(e) {
+        e.preventDefault();
+        $.ajax({
+                        type: "GET",
+                        url : url + "/cms/client/list",
+                    }).done(function(response){
+                        var str='';
+
+                        $.each(response.data,function(k,v){
+                            str +=' <div class="row_client">'
+                                        +'<label class="container">'
+                                            +'<input type="checkbox"  value="'+v.id+'"  data-name="'+v.name+'" class="checkClient">'
+                                            +'<span class="checkmark"></span>'
+                                            +'</label>'
+                                            +'<span class="clientName">'+v.name+'</span>'
+                                            +'</div><!--end.row_client-->';
+
+                        });
+
+                        $('.list_clientnya').html(str);
+
+                        $('#add_client').show();
+                    });
+
+    });
+    $(document).on('click','.action_add_client',function(){
+        $.ajax({
+                type: "POST",
+                url : url + "/cms/client/create",
+                data: {
+                        'name': $('.client_add_name').val()
+                },
+                dataType:'json'
+        }).done(function(response){
+            var str='';
+            var strSleect =' <option>Choose client name</option>';
+                        var selected='';
+            $.each(response.data,function(k,v){
+                str +=' <div class="row_client">'
+                        +'<label class="container">'
+                        +'<input type="checkbox" value="'+v.id+'"  data-name="'+v.name+'" class="checkClient">'
+                        +'<span class="checkmark"></span>'
+                        +'</label>'
+                        +'<span class="clientName">'+v.name+'</span>'
+                        +'</div><!--end.row_client-->';
+                if(v.id==client_id){
+                    selected='selected';
+                }else{
+                    selected ='';
+                }
+                strSleect +=' <option value="'+v.id+'">'+v.name+'</option>';
+
+            });
+            $('.list_clientnya').html(str);
+            $('#slct').html(strSleect);
+                        console.log( strSleect)
+                        console.log( $('#slct'))
+            $('#add_client').show();
+        });
+
+    })
+    $(document).on('click','.action_edit_client',function(){
+        $.ajax({
+                type: "POST",
+                url : url + "/cms/client/update",
+                data: {
+                        'id': $('#idclientEdit').val(),
+                        'name': $('#clientEdit').val()
+                },
+                dataType:'json'
+        }).done(function(response){
+            var str='';
+            var strSleect =' <option>Choose client name</option>';
+                        var selected='';
+            $.each(response.data,function(k,v){
+                str +=' <div class="row_client">'
+                        +'<label class="container">'
+                        +'<input type="checkbox" value="'+v.id+'"  data-name="'+v.name+'" class="checkClient">'
+                        +'<span class="checkmark"></span>'
+                        +'</label>'
+                        +'<span class="clientName">'+v.name+'</span>'
+                        +'</div><!--end.row_client-->';
+                if(v.id==client_id){
+                    selected='selected';
+                }else{
+                    selected ='';
+                }
+                strSleect +=' <option value="'+v.id+'">'+v.name+'</option>';
+
+            });
+            $('.list_clientnya').html(str);
+            $('#slct').html(strSleect);
+            $(".popup_container").hide();
+            $('#add_client').show();
+        });
+
+    });
+    $(document).on('click','.action_remove_client',function(){
+
+        var selected = new Array();
+        var chks = $('.checkClient');
+        for (var i = 0; i < chks.length; i++) {
+            if (chks[i].checked) {
+                selected.push(chks[i].value);
+            }
+        }
+        $.ajax({
+                type: "POST",
+                url : url + "/cms/client/delete",
+                data: {
+                        'id': selected
+
+                },
+                dataType:'json'
+        }).done(function(response){
+            var str='';
+            var strSleect =' <option>Choose client name</option>';
+                        var selected='';
+            $.each(response.data,function(k,v){
+                str +=' <div class="row_client">'
+                        +'<label class="container">'
+                        +'<input type="checkbox" value="'+v.id+'"  data-name="'+v.name+'" class="checkClient">'
+                        +'<span class="checkmark"></span>'
+                        +'</label>'
+                        +'<span class="clientName">'+v.name+'</span>'
+                        +'</div><!--end.row_client-->';
+                if(v.id==client_id){
+                    selected='selected';
+                }else{
+                    selected ='';
+                }
+                strSleect +=' <option value="'+v.id+'">'+v.name+'</option>';
+
+            });
+            $('.list_clientnya').html(str);
+            $('#slct').html(strSleect);
+            $(".popup_container").hide();
+            $('#add_client').show();
+        });
+
+    });
+    $('.btn-submit-video').on('click',function(){
+            console.log('submit');
+            $('#form-data').trigger('submit');
+            $(this).prop('disabled', true);
+    })
+    $(document).on('click','input[class="checkClient"]', function(){
+        actionClient = $(this);
+        var checkedNum = $('input[class="checkClient"]:checked').length;
+          if(checkedNum == 1){
+            $("#popupEdit").removeClass("hide");
+            $("#popupRemove").removeClass("hide");
+          }
+          else if(checkedNum > 1){
+            $("#popupEdit").addClass("hide");
+            $("#popupRemove").removeClass("hide");
+          }
+          else{
+            $("#popupEdit").addClass("hide");
+            $("#popupRemove").addClass("hide");
+          }
+
+      });
+      $(document).on('click','.popupEditClient', function(){
+        $(".popup_container").hide();
+         $('#editClient').show();
+        $('#clientEdit').val(actionClient.attr('data-name'));
+        $('#idclientEdit').val(actionClient.val());
+
+    });
+
+  });
 </script>
 @endsection
 

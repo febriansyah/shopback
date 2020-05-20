@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head>
+<!--[if gte mso 9]><xml>
+<o:OfficeDocumentSettings>
+<o:AllowPNG/>
+<o:PixelsPerInch>96</o:PixelsPerInch>
+</o:OfficeDocumentSettings>
+</xml><![endif]-->
+<title>Shopback</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0 ">
+<meta name="format-detection" content="telephone=no">
+<!--[if !mso]><!-->
+<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+<!--<![endif]-->
+<style type="text/css">
+body {
+	margin: 0 !important;
+	padding: 0 !important;
+	-webkit-text-size-adjust: 100% !important;
+	-ms-text-size-adjust: 100% !important;
+	-webkit-font-smoothing: antialiased !important;
+}
+img {
+	border: 0 !important;
+	outline: none !important;
+}
+p {
+	Margin: 0px !important;
+	Padding: 0px !important;
+}
+table {
+	border-collapse: collapse;
+	mso-table-lspace: 0px;
+	mso-table-rspace: 0px;
+}
+td, a, span {
+	border-collapse: collapse;
+	mso-line-height-rule: exactly;
+}
+.ExternalClass * {
+	line-height: 100%;
+}
+.em_defaultlink a {
+	color: inherit !important;
+	text-decoration: none !important;
+}
+span.MsoHyperlink {
+	mso-style-priority: 99;
+	color: inherit;
+}
+span.MsoHyperlinkFollowed {
+	mso-style-priority: 99;
+	color: inherit;
+}
+ @media only screen and (min-width:481px) and (max-width:699px) {
+.em_main_table {
+	width: 100% !important;
+}
+.em_wrapper {
+	width: 100% !important;
+}
+.em_hide {
+	display: none !important;
+}
+.em_img {
+	width: 100% !important;
+	height: auto !important;
+}
+.em_h20 {
+	height: 20px !important;
+}
+.em_padd {
+	padding: 20px 10px !important;
+}
+}
+@media screen and (max-width: 480px) {
+.em_main_table {
+	width: 100% !important;
+}
+.em_wrapper {
+	width: 100% !important;
+}
+.em_hide {
+	display: none !important;
+}
+.em_img {
+	width: 100% !important;
+	height: auto !important;
+}
+.em_h20 {
+	height: 20px !important;
+}
+.em_padd {
+	padding: 20px 10px !important;
+}
+.em_text1 {
+	font-size: 16px !important;
+	line-height: 24px !important;
+}
+u + .em_body .em_full_wrap {
+	width: 100% !important;
+	width: 100vw !important;
+}
+}
+</style>
+</head>
+
+<body class="em_body" style="margin:0px; padding:0px;" bgcolor="#fff">
+<table class="em_full_wrap" valign="top" width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#efefef" align="center">
+  <tbody>
+  	<tr>
+    <td valign="top" align="center"><table class="em_main_table" style="width:600px;" width="600" cellspacing="0" cellpadding="0" border="0" align="center">
+        <!--Header section-->
+        <tbody>
+        <!--//Header section-->
+        <!--Banner section-->
+        <tr>
+          <td valign="top" align="center"><table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+              <tbody><tr>
+                <td valign="top" align="left" bgcolor="#fff"  style="padding: 10px;margin-bottom: 15px; border-bottom: 1px solid #ccc"><img class="em_img" alt="" style="display:block; font-family:Arial, sans-serif; font-size:30px; line-height:34px; color:#000000; max-width:200px;" src="logo_shopback.png" width="200" border="0" height="auto"></td>
+              </tr>
+            </tbody></table></td>
+        </tr>
+        <!--//Banner section-->
+        <!--Content Text Section-->
+        <tr>
+          <td style="padding:0px 50px 30px;" class="em_padd" valign="top" bgcolor="#fff" align="center"><table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+              <tbody><tr>
+                <td style="font-family: 'Nunito', sans-serif; font-size:20px;font-weight: bold; line-height:30px; color:#2a2a2a; padding: 20px 10vh;" valign="top" align="center">Hi, there is a good news arriving from shopback sales team</td>
+              </tr>
+              <tr>
+                <td style="font-family:'Nunito', sans-serif; font-size:15px; line-height:22px; color:#731719;; padding-bottom:12px;" valign="top" align="center"><img src="vector_icon.png" style="width: 200px;"></td>
+              </tr>
+              <tr>
+                <td style="font-size:0px; line-height:0px; height:5px;" height="5">&nbsp;</td>
+				<!--—this is space of 15px to separate two paragraphs ---->
+              </tr>
+              <tr>
+                <td style="font-family:'Nunito', sans-serif; font-size:17px; line-height:22px; color:#464646; padding-bottom:12px; " valign="top" align="center"> We sent your video advertising report from this link bellow. Thank you for choosing Shopback for your advertising partner</td>
+              </tr>
+
+              <tr>
+                <td style="font-family:'Nunito', sans-serif; font-size:28px;font-weight: 800; line-height:1.24; color:#464646;padding-bottom:12px;" valign="top" align="center">
+                  <div style="width: 400px; display: block;text-align: center;padding: 20px;background: #F2F2F2;border-radius: 10px;">
+                    <p style="font-size: 12px;color: #333333;">Your link report: </p>
+                    <a href="https://www.shopback.com/client/xyz" style="font-size: 14px;font-weight: bold;color: #2F80ED;">www.shopback.com/client/xyz</a>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td style="font-family:'Nunito', sans-serif; font-size:14px; line-height:22px; color:#000;padding-bottom:12px;" valign="top" align="center">This e-mail is generated automatically. Please do not send replies to this email. If you have questions, please contacti <strong>sales@shopback.com</strong></td>
+              </tr>
+
+              <tr>
+                <td style="font-family:'Nunito', sans-serif; font-size:15px; line-height:22px; color:#731719;padding-bottom:12px;" valign="top" align="center">
+                  <div style="float: left; text-align: left;">
+                    <p style="font-size: 12px;color: #333333;">Download aplikasi shopback</p>
+                    <a href="https://play.google.com/store/apps/details?id=com.shopback.app&hl=en"><img src="g_play.png"></a>
+                    <a href="https://apps.apple.com/id/app/shopback-cashback-coupons/id1086505626"><img src="playstore.png"></a>
+                  </div>
+                  <div style="right: left; text-align: right;">
+                    <p style="font-size: 12px;color: #333333;"> Follow us On</p>
+                    <a href="#"><img src="icon_tw.png"></a>
+                    <a href="#"><img src="icon_ig.png"></a>
+                    <a href="#"><img src="icon_fb.png"></a>
+                  </div>
+                </td>
+              </tr>
+            </tbody></table></td>
+        </tr>
+
+        <!--//Content Text Section-->
+
+        <tr>
+          <td class="em_hide" style="line-height:1px;min-width:600px;background-color:#ffffff;"><img alt="" src="images/spacer.gif" style="max-height:1px; min-height:1px; display:block; width:600px; min-width:600px;" width="600" border="0" height="1"></td>
+        </tr>
+      </tbody></table></td>
+  </tr>
+</tbody></table>
+
+<div class="em_hide" style="white-space: nowrap; display: none; font-size:0px; line-height:0px;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</div>
+
+
+</body>
+
+</html>

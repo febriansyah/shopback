@@ -37,16 +37,18 @@
       <div class="section_titleSearch" style="border-bottom: none;">
         <h3> Video Analytic </h3>
         <div class="right">
-          <div class="period">
-            <div class="inline_form">
-              <span>Periode:</span>
-              <input type="text" class="input_form" name="from" id="from">
-              <span>s/d</span>
-              <input type="text" class="input_form" id="to" name="to">
-              <a href="#" class="blue_bt2 submit-date">Submit</a>
-            </div><!--end.inline_form-->
+            <div class="period">
+              <span class="date_rangenya">24 - 30 April, 2020</span>
+              <div class="custom-select">
+                <select name="slct" id="slct" class="range_date">
+                  <option selected value="7"> Last 7 days</option>
+                  <option value="30"> Last 30 days</option>
+                  <option value="90"> Last 90 days</option>
+                  <option value="365"> Last 365 days</option>
+                </select>
+              </div>
+            </div>
           </div>
-        </div>
       </div>
 
       <div class="rows">
@@ -225,7 +227,7 @@ var dateFormat = "dd/mm/yy",
     from.datepicker( "option", "maxDate", getDate( this ) );
 
   });
-  $( ".submit-date" ).click(function(){
+  $( ".range_date" ).change(function(){
       getData();
 
   });
@@ -240,15 +242,14 @@ function getDate( element ) {
   return date;
 }
 function getData(){
-    var startDate = $("#from").val();
-    var endDate = $("#to").val();
-    if(startDate !='' && endDate !=''){
+    var rangeDate = $(".range_date").val();
+
+    if(rangeDate !='' ){
         $.ajax({
                 url:base_url+'/cms/analitik/getData',
                 type:'post',
                 data: {
-                            'startDate': startDate,
-                            'endDate':endDate,
+                            'rangeDate': rangeDate,
                             'id':id
                 },
                 dataType:'json'
@@ -256,11 +257,15 @@ function getData(){
             done(function(response) {
                 var date= response.chartViwer.date;
                 date = JSON.parse(date);
-                console.log(date);
+
                 var data =  [{name: 'Viwers',data: JSON.parse(response.chartViwer.data)}];
                 var title ='';
                 var subtitle = '';
                 var yAxis= 'total';
+                console.log('tanggal');
+                console.log(date);
+                console.log('data');
+                console.log(data);
                 chartLines = chartLine('line_chart',title,subtitle,yAxis,date,data);
 
                 var categoryPersentase=response.chartPersentase.category;

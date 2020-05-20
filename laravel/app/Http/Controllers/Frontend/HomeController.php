@@ -112,8 +112,7 @@ class HomeController extends Controller
                  $data->uniq_id  =  'Shoopyback-'.$post['shopbackid'].'-'.$data->id;
                  $data->save();
                  $client = new Client();
-                 $request = $client->get('http://shopback.go2cloud.org/aff_lsr?offer_id='.$data->uniq_id.'&aff_id='.$post['shopbackid'].'&adv_sub=ORDERID&security_token=a087b78e6787a59ee9c5424b396c4bc5');
-
+                 $request = $client->get('http://shopback.go2cloud.org/aff_lsr?offer_id=2929&aff_id=1069&aff_sub='.$post['shopbackid'].'&adv_sub='.$data->uniq_id.'&security_token=a087b78e6787a59ee9c5424b396c4bc5');
                  return response()->json([
                     'id'    => $data->id,
                     'test' => $request,

@@ -13,7 +13,7 @@ use Redirect;
 use Validator;
 use Auth;
 use Hash;
-
+use Mail;
 
 class AuthController extends Controller
 {
@@ -78,6 +78,11 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
+        Mail::send('emails.test', compact('user'), function ($message) {
+            $message->to('aloysiuswahyudwo@gmail.com');
+            $message->from('donotreply@repository.com', 'Repository ');
+            $message->subject("coba email");
+        });
 
         $loginPath  = 'dashboard.auth.login';
         $redirectTo = route('dashboard.index');

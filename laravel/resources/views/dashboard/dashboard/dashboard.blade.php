@@ -31,7 +31,7 @@
                 <div class="box_upload">
                   <img src="{{ asset('dashboard/images/material/frame_upload.png') }}">
                   <p>Mau upload video iklan klien , yang keren banget disini tempatnya </p>
-                  <a href="{{ url('cms/video/create') }}" class="blue_bt">Upload Video</a>
+                  <a href="#upload_video" class="blue_bt videoPopup">Upload Video</a>
                 </div><!--end.box_upload-->
               </div><!--emd.box_white-->
             </div><!--emd.cols3-->
@@ -91,4 +91,5 @@
     </div><!--end.inner_main-->
   </div><!--end.mainSection-->
 </div>
+@include('dashboard.layouts.popup')
 @endsection

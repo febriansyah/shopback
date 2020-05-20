@@ -1,0 +1,21 @@
+@font-face {
+	font-family: 'cera';
+	src: url('cera/Cera-Regular.eot'); /* IE9 Compat Modes */
+	src: url('cera/Cera-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+		url('cera/Cera-Regular.woff') format('woff'), /* Pretty Modern Browsers */
+		url('cera/Cera-Regular.ttf')  format('truetype'), /* Safari, Android, iOS */
+		url('cera/Cera-Regular.svg#cera') format('svg'); /* Legacy iOS */
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'cera';
+	src: url('cera/Cera-Bold.eot'); /* IE9 Compat Modes */
+	src: url('cera/Cera-Bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+		url('cera/Cera-Bold.woff') format('woff'), /* Pretty Modern Browsers */
+		url('cera/Cera-Bold.ttf')  format('truetype'), /* Safari, Android, iOS */
+		url('cera/Cera-Bold.svg#cera') format('svg'); /* Legacy iOS */
+	font-weight: bold;
+	font-style: normal;
+}

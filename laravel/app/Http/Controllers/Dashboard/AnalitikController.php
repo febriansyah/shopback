@@ -204,15 +204,19 @@ class AnalitikController extends Controller
         $ajax = $request->ajax();
         if ($post && $ajax) {
 
-            $startDate = date('Y-m-d', strtotime($post['startDate']));
-            $startDate = Carbon::parse($startDate);
-            $endDate = date('Y-m-d', strtotime($post['endDate']));
-            $endDate = Carbon::parse($endDate);
+            // $startDate = date('Y-m-d', strtotime($post['startDate']));
+            // $startDate = Carbon::parse($startDate);
+            // $endDate = date('Y-m-d', strtotime($post['endDate']));
+            // $endDate = Carbon::parse($endDate);
+            $rangeDate = $post['rangeDate'];
+            $endDate = Carbon::now();
+            $nowDate = Carbon::now();
+            $startDate = $endDate->subDays($rangeDate );
             $id = $post['id'];
 
-            $this->parse['total_view']  = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $endDate->toDateString().' 00:00:00'])->count();
-            $this->parse['uniq_visitor']  = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $endDate->toDateString().' 00:00:00'])->groupBy('order_id')->get()->count();
-            $this->parse['avg']  = (int) $this->model_shopeback ->selectRaw('AVG(TIME_TO_SEC(duration)) as avg')->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $endDate->toDateString().' 00:00:00'])->get()[0]['avg'];
+            $this->parse['total_view']  = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->count();
+            $this->parse['uniq_visitor']  = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->groupBy('order_id')->get()->count();
+            $this->parse['avg']  = (int) $this->model_shopeback ->selectRaw('AVG(TIME_TO_SEC(duration)) as avg')->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->get()[0]['avg'];
 
 
             $start = new DateTime($startDate->toDateString());
@@ -221,11 +225,12 @@ class AnalitikController extends Controller
             $array = array('25','50','70','100');
             $category = array();
             $data = array();
+
             for ($i=0;$i<=3;$i++)
             {
                 $category[$i] = $array[$i].'%';
 
-                $data[]   = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $endDate->toDateString().' 00:00:00'])->where('persentase',$array[$i])->get()->count();
+                $data[]   = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->where('persentase',$array[$i])->get()->count();
 
             }
 
@@ -234,7 +239,7 @@ class AnalitikController extends Controller
             $this->parse['chartPersentase']['series'] = 'viwer';
 
             $city = Analytics::performQuery(
-                Period::create($startDate, $endDate),
+                Period::create($startDate, $nowDate),
                 'ga:sessions',
                 [
                     'metrics' => 'ga:sessions',
@@ -269,11 +274,9 @@ class AnalitikController extends Controller
             $this->parse['chartGAGender']['series'] = 'viwer';
 
 
-            $selisih =  $end->diff($start);
-            $date = array();
             $data = array();
-
-            for ($i=0;$i<=$selisih->days;$i++)
+            $date = array();
+            for ($i=0;$i<= $rangeDate;$i++)
             {
                 if($i==0){
                     $date[$i] = $startDate->toDateString();
@@ -285,6 +288,7 @@ class AnalitikController extends Controller
                 $data[]   = $this->model_shopeback->where('video_id',$id)->whereDate('created_at',$date[$i])->count();
 
             }
+
             $this->parse['chartViwer']['date'] = json_encode($date);
             $this->parse['chartViwer']['data'] = json_encode($data);
             $this->parse['chartViwer']['series'] = 'viwer';

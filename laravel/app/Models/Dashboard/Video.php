@@ -53,7 +53,7 @@ class Video extends Model
         }
 
 
-        $data = $data->orderBy('id',$params['sort'] )->get();
+        $data = $data->where('status','1')->orderBy('id',$params['sort'] )->get();
 
         return $data;
     }
@@ -79,7 +79,7 @@ class Video extends Model
         }
 
 
-        $total_rows = $total_rows->count();
+        $total_rows = $total_rows->where('status','1')->count();
 
         return $total_rows;
     }

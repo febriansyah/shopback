@@ -149,14 +149,15 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //
 
         if ($request->isMethod('post')) {
-            $data = $this->model->find($id);
             $post = $request->all();
+            $data = $this->model->find($post['id']);
 
+            // dd($data);
 
             $messages = [
                 'required' => 'Kolom :attribute ini wajib diisi.',
@@ -181,10 +182,11 @@ class ClientController extends Controller
 
             $data->fill($post)->save();
 
-
+            $getData   = $this->model->where('status', '1')->get();
             return response()->json([
                     'message' => 'Success',
                     'status'  => 'success',
+                    'data' => $getData
             ]);
         }
         $error_message = 'anda tidak punya akses';
@@ -206,10 +208,11 @@ class ClientController extends Controller
      *
      * @return json|array return
      */
-    public function delete(Request $request,$id)
+    public function delete(Request $request)
     {
-        if ($request->isMethod('delete') && $request->ajax()) {
-            $id = $request->id;
+        if ($request->isMethod('post') && $request->ajax()) {
+            $post = $request->all();
+            $id = $post['id'];
             $data = $this->model->getModelById($id);
             if (! $id ||  ! $data) {
                 return response()->json([
@@ -220,10 +223,11 @@ class ClientController extends Controller
             $this->model->deleteModelById($id);
 
             // \FatLib::createLog('user_delete', 'SUCCESS Delete User', $id);
-
+            $getData   = $this->model->where('status', '1')->get();
             return response()->json([
-                'status' => 'success',
-                'message' => 'Data has been deleted.'
+                    'message' => 'Success',
+                    'status'  => 'success',
+                    'data' => $getData
             ]);
         }
         $error_message = 'anda tidak punya akses';

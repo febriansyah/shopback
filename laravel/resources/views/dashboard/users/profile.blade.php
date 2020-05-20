@@ -49,9 +49,9 @@
                 <div class="circle_big_thumb">
                     @if($data->photo!='')
 
-                    <img class="object_fit" src="{{ upload_url('users/'.$data->photo) }}">
+                    <img class="object_fit"  id="circleProfpic" src="{{ upload_url('users/'.$data->photo) }}">
                     @else
-                    <img class="object_fit" src="{{ asset('dashboard/images/content/big_profpic.png') }}">
+                    <img class="object_fit"  id="circleProfpic" src="{{ asset('dashboard/images/content/big_profpic.png') }}">
 
                     @endif
 
@@ -83,23 +83,23 @@
 <!-- end of middle -->
 @endsection
 @section('javascript')
-<script>
+<script type="text/javascript">
     $("#trigger_upload").click(function() {
-    $("#profPic").click();
-})
-function readURL(input) {
-  if (input.files && input.files[0]) {
-    var reader = new FileReader();
+        $("#profPic").click();
+    })
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
 
-    reader.onload = function(e) {
-      $('#circleProfpic').attr('src', e.target.result);
+        reader.onload = function(e) {
+          $('#circleProfpic').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+      }
     }
-
-    reader.readAsDataURL(input.files[0]);
-  }
-}
-$("#profPic").change(function() {
-  readURL(this);
-});
+    $("#profPic").change(function() {
+      readURL(this);
+    });
     </script>
 @endsection
