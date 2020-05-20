@@ -30,7 +30,7 @@
                 <div class="box_upload">
                   <img src="images/material/frame_upload.png">
                   <p>Mau upload video iklan klien , yang keren banget disini tempatnya </p>
-                  <a href="#" class="blue_bt">Upload Video</a>
+                  <a href="#upload_video" class="blue_bt popupShow">Upload Video</a>
                 </div><!--end.box_upload-->
               </div><!--emd.box_white-->
             </div><!--emd.cols3-->

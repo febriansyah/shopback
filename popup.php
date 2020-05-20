@@ -176,7 +176,7 @@
           </div>
           <p class="text_help">Drag and drop video files to upload </p>
           <div class="group_form">
-            <button type="button" class="blue_bt2 trigger-upload" id="trigger_upload_video" data-inputId="video_upload">Select File</button>
+            <button type="button" class="blue_bt2 trigger-upload" id="trigger_upload_video" data-inputId="video_upload_popup">Select File</button>
             <button type="submit" class="blue_bt2 submit_upload hide" id="trigger_next_upload">Submit</button>
           </div>
         </form>
