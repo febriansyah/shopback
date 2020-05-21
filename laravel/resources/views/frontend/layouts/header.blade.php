@@ -18,8 +18,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic);
+<style>@import url(https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic);	
 body{
 	text-align:center;
 	font-family: 'Roboto', sans-serif;
@@ -77,7 +76,7 @@ img {
 	text-align: center;
 	cursor: pointer;
 	-webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
-    -webkit-user-select: none;
+    -webkit-user-select: none; 
     text-transform: uppercase;
     color: #fff;
     font-size: 18px;
@@ -218,6 +217,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcb14b', end
 	padding: 40px;
 	top: 25vh;
 	left: 0;
+	z-index: 3;
 }
 .video_wrapper{
 	position: relative;
@@ -234,6 +234,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcb14b', end
 .img_background{
 	display: block;
 	width: 100%;
+	position: relative;
+	z-index: 1;
 }
 .img_background img{
 	width: 100%;
@@ -265,6 +267,21 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcb14b', end
 	z-index: 3;
 	left: 0;
 	top: 0;
+}
+.icon_fullscreen{
+	position: absolute;
+	width: 100%;
+	bottom: 0;
+	left: 0;
+	padding: 5px;
+	text-align: right;
+}
+.fullscreen{
+	display: inline-block;
+	width: 20px;
+	padding: 2px;
+	background: #000;
+	border:none;
 }
 </style>
 
