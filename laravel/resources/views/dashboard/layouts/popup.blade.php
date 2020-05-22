@@ -39,6 +39,7 @@
             <div class="icon_relative_upload">
               <img src="{{ asset('dashboard/images/material/icon_upload.png') }}" style="margin-bottom: 20px;">
               <input type="file" id="video_upload_popup" name="video" accept="video/*">
+              <video controls width="500px" id="vidcheck" src="" style="display: none"></video>
             </div>
             <div class="after_upload">
               <div class="prgoressBar">

@@ -1,15 +1,13 @@
 <!doctype html>
 <html>
 <head>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-166080091-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-166080091-1');
-</script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-MN4XF8P');</script>
+    <!-- End Google Tag Manager -->
 
 <meta charset="UTF-8">
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -18,7 +16,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>@import url(https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic);	
+<style>@import url(https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic);
 body{
 	text-align:center;
 	font-family: 'Roboto', sans-serif;
@@ -76,7 +74,7 @@ img {
 	text-align: center;
 	cursor: pointer;
 	-webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
-    -webkit-user-select: none; 
+    -webkit-user-select: none;
     text-transform: uppercase;
     color: #fff;
     font-size: 18px;

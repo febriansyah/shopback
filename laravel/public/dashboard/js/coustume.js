@@ -2,9 +2,10 @@
 
     $(".trigger-upload").click(function () {
       var inputId = $(this).attr("data-inputId");
-      console.log(inputId)
-      $("#"+inputId).click();
-      $("#"+inputId).change(function () {
+        $("#"+inputId).trigger('click');
+
+    })
+    $("#video_upload_popup").change(function (e) {
         var parentRow = $(this).closest(".content_popup");
         var progressbar = $(parentRow).find(".myBar");
         if($(this).val()==''){
@@ -30,35 +31,64 @@
                     }
                 }
 
+
                 if (!blnValid) {
                     $('.info-msg').html('format video salah (".avi atau .mp4")');
                     $(this).val("");
                     return false;
                 }else{
-                    $(parentRow).find(".text_help").addClass("hide");
-                    $(parentRow).find(".prgoressBar").addClass("activated");
-                    $(parentRow).find(".file-text-info").html($(this).val());
-                    $(parentRow).find('.icon_relative_upload').addClass("hide");
-                    $(parentRow).find(".submit_upload").removeClass("hide");
-                    $(parentRow).find(".trigger-upload").addClass("hide");
 
-                    var id = setInterval(frame, 10);
-                    var percentBar = 1;
-                    function frame() {
-                        if (percentBar >= 100) {
-                            clearInterval(id);
-                            $(parentRow).find(".prgoressBar").removeClass("activated");
-                            $(parentRow).find(".trash_icon").addClass("activated");
-                            $(parentRow).find(".file-text-info").addClass("activated");
+                    var file = e.currentTarget.files[0];
 
-                        } else {
-                            percentBar++;
-                            //progressbar.style.width = width + '%';
-                            $(progressbar).css({width : percentBar +"%"});
-                                $(parentRow).find(".file-text-info").removeClass("activated");
-                                $(parentRow).find(".trash_icon").removeClass("activated");
-                        }
+                    objectUrl = URL.createObjectURL(file);
+
+                    $("#vidcheck").attr("src", objectUrl);
+                    var seconds="";
+                    var filesize = file.size/1024/1024;
+                    if(filesize > 3){
+                        $('.info-msg').html('maksimal size 3 MB');
+                        $(this).val("");
+                        return false;
+                    }else{
+                        setTimeout(function(){
+                            var seconds = $("#vidcheck")[0].duration;
+                            console.log($("#vidcheck")[0].duration);
+                            if (seconds > 6){
+                                $('.info-msg').html('maksimal durasi 30 detik');
+                                $(this).val("");
+                                return false;
+                            } else{
+                                $(parentRow).find(".text_help").addClass("hide");
+                                $(parentRow).find(".prgoressBar").addClass("activated");
+                                $(parentRow).find(".file-text-info").html($("#video_upload_popup").val());
+                                $(parentRow).find('.icon_relative_upload').addClass("hide");
+                                $(parentRow).find(".submit_upload").removeClass("hide");
+                                $(parentRow).find(".trigger-upload").addClass("hide");
+
+                                var id = setInterval(frame, 10);
+                                var percentBar = 1;
+                                function frame() {
+                                    if (percentBar >= 100) {
+                                        clearInterval(id);
+                                        $(parentRow).find(".prgoressBar").removeClass("activated");
+                                        $(parentRow).find(".trash_icon").addClass("activated");
+                                        $(parentRow).find(".file-text-info").addClass("activated");
+
+                                    } else {
+                                        percentBar++;
+                                        //progressbar.style.width = width + '%';
+                                        $(progressbar).css({width : percentBar +"%"});
+                                            $(parentRow).find(".file-text-info").removeClass("activated");
+                                            $(parentRow).find(".trash_icon").removeClass("activated");
+                                    }
+                                }
+                            }
+                         }, 300);
                     }
+
+
+
+
                 }
             }
 
@@ -69,7 +99,6 @@
         }
         //console.log($(this).parent());
       });
-    })
     $(".trash_icon").click(function () {
         var inputId = $(this).attr("data-idFile");
         $("#"+inputId).val('');

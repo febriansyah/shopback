@@ -6,9 +6,11 @@ namespace App\Http\Controllers\Dashboard\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+use Illuminate\Foundation\Auth\ResetsPasswords;
 use App\Models\Dashboard\AuthUser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Auth\Events\PasswordReset;
 use Redirect;
 use Validator;
 use Auth;
@@ -78,11 +80,11 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        Mail::send('emails.test', compact('user'), function ($message) {
-            $message->to('aloysiuswahyudwo@gmail.com');
-            $message->from('donotreply@repository.com', 'Repository ');
-            $message->subject("coba email");
-        });
+        // Mail::send('emails.test', compact('user'), function ($message) {
+        //     $message->to('wahyu_bunyu_jogja@yahoo.co.id');
+        //     $message->from('donotreply@repository.com', 'Repository ');
+        //     $message->subject("coba email");
+        // });
 
         $loginPath  = 'dashboard.auth.login';
         $redirectTo = route('dashboard.index');
@@ -207,5 +209,152 @@ class AuthController extends Controller
         Auth::guard($this->guard)->logout();
 
         return  Redirect::to('cms/login');
+    }
+     /**
+     * Logout url.
+     *
+     * @return redirect
+     */
+    public function forgetpassword(Request $request)
+    {
+        $redirectTo = route('cms');
+        if ($request->isMethod('post')) {
+            $post = $request->all();
+            $messages = [
+                'email'    => 'Silakan masukkan format email yang benar.',
+                'required' => 'Kolom :attribute ini wajib diisi.',
+                'min'      => 'Input :attribute tidak kurang dari :min karakter.',
+                'unique'   => ':attribute anda sudah terdaftar.',
+                'confirmed' => ':attribute tidak sama dengn Verify Password'
+            ];
+            $validator = Validator::make($request->all(), [
+                'email'      => 'required|email',
+
+            ],$messages);
+            if ($validator->fails()) {
+                if ($request->ajax()) {
+                    return response()->json([
+                        'status'  => 'failed',
+                        'message' => array(
+                                            'email'   => $validator->errors()->first('email'),
+
+                        )
+                    ]);
+                }
+            }
+            $user = $this->model->getInfoByEmail($post['email']);
+
+            if($user){
+                //  event(new ForgetPassword($user));
+                $response = $this->broker()->sendResetLink(
+                    $request->only('email')
+                );
+                $response == Password::RESET_LINK_SENT;
+                if ($request->ajax()) {
+                    return response()->json([
+                        'status'        => 'success',
+                        'redirect_auth' => $redirectTo
+                    ]);
+                }else{
+                    return redirect($redirectTo);
+                }
+            }else{
+                return response()->json([
+                        'status'  => 'failed',
+                        'message' => array(
+                                            'email'   => 'Email Tidak Terdaftar',
+
+                        )
+                    ]);
+            }
+
+        }
+        return redirect()->route(frontend_path('.home'));
+    }
+    /**
+     * Password broker for selected auth provider
+     *
+     * @return void
+     */
+    public function broker()
+    {
+        return Password::broker('users');
+    }
+
+    /**
+     * Index page.
+     *
+     * @param Request $request
+     *
+     * @return void
+     */
+    public function reset(Request $request, $token = null)
+    {
+        if ($request->isMethod('post')) {
+            $validator = Validator::make($request->all(), [
+                'token'    => 'required',
+                'password' => 'required|confirmed|min:6',
+                'email'    => 'required|email|exists:' . $this->model->getConnectionName() . '.' . $this->model->getTable(),
+            ]);
+            if ($validator->fails()) {
+                if ($request->ajax()) {
+                    return response()->json([
+                        'status' => 'failed',
+                        'message' => alert_box($validator->errors()->all(), 'danger')
+                    ]);
+                }
+                return redirect()->back()
+                    ->withInput($request->only('email'))
+                    ->withErrors($validator);
+            }
+
+            // Here we will attempt to reset the user's password. If it is successful we
+            // will update the password on an actual user model and persist it to the
+            // database. Otherwise we will parse the error and return the response.
+            $response = $this->broker()->reset(
+                $this->credentials($request),
+                function ($user, $password) {
+
+                    $this->resetPassword($user, $password);
+                }
+            );
+
+            // If the password was successfully reset, we will redirect the user back to
+            // the application's home authenticated view. If there is an error we can
+            // redirect them back to where they came from with their error message.
+            return $response == Password::PASSWORD_RESET
+                ? $this->sendResetResponse($request, $response)
+                : $this->sendResetFailedResponse($request, $response);
+
+        }
+
+        $this->parse['token'] = $token;
+
+        return view($this->prefix_routes . 'reset', $this->parse);
+    }
+    public function redirectPath(){
+        return route('frontend.home');
+    }
+    /**
+     * Reset the given user's password.
+     *
+     * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
+     * @param  string  $password
+     * @return void
+     */
+    protected function resetPassword($user, $password)
+    {
+
+        $users = $this->model->getInfoByEmail($user['email']);
+
+        $users->password = Hash::make($password);
+
+        // $user->setRememberToken(Str::random(60));
+
+        $users->save();
+
+        event(new PasswordReset($users));
+
+        Auth::guard('web')->login($user);
     }
 }

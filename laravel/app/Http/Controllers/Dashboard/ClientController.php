@@ -118,7 +118,7 @@ class ClientController extends Controller
             ],$messages);
             if ($validator->fails()) {
                 return response()->json([
-                    'message' => $validator->errors()->all(),
+                    'message' => $validator->errors()->first('name'),
                     'status' => 'danger',
                 ]);
             }

@@ -56,7 +56,9 @@
                 <th>Video</th>
                 <th>Title</th>
                 <th>Client</th>
-                <th class="dateList">Date</th>
+                <th class="dateList">Created Date</th>
+                <th class="dateList">Start Date</th>
+                <th class="dateList">End Date</th>
                 <th>Views</th>
                 <th>Unique Visitor</th>
                 <th>Target View</th>
@@ -150,6 +152,12 @@ $(document).ready(function() {
                 +'<td class="dateList">'
                   +'<p>'+v.date+'</p>'
                   +'<span class="grey_text">'+v.status+'</span>'
+                +'</td>'
+                +'<td>'
+                  +'<p>'+v.start_publish+'</p>'
+                +'</td>'
+                +'<td>'
+                  +'<p>'+v.end_publish+'</p>'
                 +'</td>'
                 +'<td>'
                   +'<p>'+v.total_view+'</p>'

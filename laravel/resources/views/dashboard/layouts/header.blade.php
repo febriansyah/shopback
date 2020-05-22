@@ -43,13 +43,13 @@
 <header id="mainHeader" @if($login==false) class="h_dashboard" @endif>
 	<div id="login_header" @if($login==false) class="hidden" @endif>
 		<div class="wrapper">
-			<div class="logo"><img src="{{ asset('dashboard/images/material/logo.png') }}"></div>
+        <a href="{{ url('cms')}}"><div class="logo"><img src="{{ asset('dashboard/images/material/logo.png') }}"></div></a>
 		</div><!--end.wrapper-->
 	</div>
     @if($login === false)
 	<div id="dashboard_header" @if($login==true) class="hidden" @endif >
 		<div class="wrapper">
-			<div class="logo"><img src="{{ asset('dashboard/images/material/logo.png') }}"></div>
+			<a href="{{ url('cms')}}"><div class="logo"><img src="{{ asset('dashboard/images/material/logo.png') }}"></div></a>
 			<div class="profile_log">
 				<div class="profile_head" id="trigger_drop">
 					<div class="circle_thumb">

@@ -4,12 +4,19 @@ namespace App\Models\Dashboard;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use App\Notifications\User\ResetPasswordNotification;
+
 use Hash;
 use DB;
 
-class AuthUser extends Model  implements Authenticatable
+class AuthUser extends Model  implements AuthenticatableContract,CanResetPasswordContract
 {
+    use Authenticatable, CanResetPassword, Notifiable;
     //
      /**
      * Implement soft delete method.
@@ -58,7 +65,17 @@ class AuthUser extends Model  implements Authenticatable
     {
         return $this->getKeyName();
     }
-
+     /**
+     * Send resetp password notification.
+     *
+     * @param string $token
+     *
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
+    }
     /**
      * Get the unique identifier for the user.
      *

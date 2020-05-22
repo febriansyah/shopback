@@ -54,9 +54,11 @@ class DashboardController extends Controller
         $this->auth_user  = Auth::guard('dashboard')->user();
         // dd($this->auth_user);
         $this->parse['client'] = $this->model_client->count();
-        $this->parse['ads'] = $this->model_video->count();
-        $this->parse['recent'] = $this->model_video->count();
-        $this->parse['video'] = $this->model_video->orderBy('created_at','desc')->take(10)->get();
+        $this->parse['ads'] = $this->model_video->where('status',1)->count();
+        $this->parse['recent'] = $this->model_video->where(function($query) {
+                 $query->whereDate('end_publish','>',date('Y-m-d'));
+            })->where('status',1)->count();
+        $this->parse['video'] = $this->model_video->where('status',1)->orderBy('created_at','desc')->take(10)->get();
 
         return view('dashboard.dashboard.dashboard', $this->parse);
     }

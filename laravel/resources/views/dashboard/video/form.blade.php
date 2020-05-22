@@ -203,7 +203,7 @@
           <div class="left"><h3>Client name list</h3></div>
           <div class="right">
             <a href="#editClient" id="popupEdit" class="blueText popupEditClient hide">Edit</a>
-            <a href="#confirmRemove" class="blueText hide action_remove_client" id="popupRemove">Remove</a>
+            <a href="#confirmRemove" class="blueText hide popupRemoveClient" id="popupRemove">Remove</a>
           </div>
         </div><!--end.title_popup-->
         <div class="list_clientnya">
@@ -321,6 +321,38 @@
       </div>
     </div><!--end.inner_abs_popup-->
   </div>
+  <div id="confirmRemove" class="popup_container" style="display: none;">
+    <div class="bg_popup"></div>
+    <div class="inner_abs_popup">
+      <div class="inner_box">
+        <div class="content_popup">
+          <div class="group_form">
+            <h3 class="notif-remove">Apakah Anda yakin untuk menghapus 2 nama client ini?</h3>
+          </div>
+          <div class="group_form">
+            <a href="#add_client" class="cancel_bt popupShow">Tidak</a>
+            <a href="#add_client" class="blue_bt2 popupShow action_remove_client" >Ya</a>
+          </div>
+        </div>
+      </div>
+    </div><!--end.inner_abs_popup-->
+  </div>
+  <div id="confirmSucsess" class="popup_container" style="display: none;">
+    <div class="bg_popup"></div>
+    <div class="inner_abs_popup">
+      <div class="inner_box">
+        <div class="content_popup">
+          <div class="group_form">
+            <h3 class="notif-confirm">Client Anda Berhasil Di Tambahkan?</h3>
+          </div>
+          <div class="group_form">
+            <a href="#add_client" class="cancel_bt popupShow">Close</a>
+
+          </div>
+        </div>
+      </div>
+    </div><!--end.inner_abs_popup-->
+  </div>
   @include('dashboard.layouts.popup')
 @endsection
 @section('javascript')
@@ -417,30 +449,41 @@
                 },
                 dataType:'json'
         }).done(function(response){
-            var str='';
-            var strSleect =' <option>Choose client name</option>';
-                        var selected='';
-            $.each(response.data,function(k,v){
-                str +=' <div class="row_client">'
-                        +'<label class="container">'
-                        +'<input type="checkbox" value="'+v.id+'"  data-name="'+v.name+'" class="checkClient">'
-                        +'<span class="checkmark"></span>'
-                        +'</label>'
-                        +'<span class="clientName">'+v.name+'</span>'
-                        +'</div><!--end.row_client-->';
-                if(v.id==client_id){
-                    selected='selected';
-                }else{
-                    selected ='';
-                }
-                strSleect +=' <option value="'+v.id+'">'+v.name+'</option>';
+            if(response.status=='success')
+            {
+                var str='';
+                var strSleect =' <option>Choose client name</option>';
+                            var selected='';
+                $.each(response.data,function(k,v){
+                    str +=' <div class="row_client">'
+                            +'<label class="container">'
+                            +'<input type="checkbox" value="'+v.id+'"  data-name="'+v.name+'" class="checkClient">'
+                            +'<span class="checkmark"></span>'
+                            +'</label>'
+                            +'<span class="clientName">'+v.name+'</span>'
+                            +'</div><!--end.row_client-->';
+                    if(v.id==client_id){
+                        selected='selected';
+                    }else{
+                        selected ='';
+                    }
+                    strSleect +=' <option value="'+v.id+'">'+v.name+'</option>';
 
-            });
-            $('.list_clientnya').html(str);
-            $('#slct').html(strSleect);
-                        console.log( strSleect)
-                        console.log( $('#slct'))
-            $('#add_client').show();
+                });
+                $('.list_clientnya').html(str);
+                $('#slct').html(strSleect);
+                $('.client_add_name').val('');
+                $('.notif-confirm').html('Client Anda Berhasil Di Tambahkan?');
+                $(".popup_container").hide();
+                $('#confirmSucsess').show();
+            }else{
+                $('.client_add_name').val('');
+                $('.notif-confirm').html(response.message);
+                $(".popup_container").hide();
+                $('#confirmSucsess').show();
+            }
+
+            // $('#add_client').show();
         });
 
     })
@@ -475,8 +518,9 @@
             });
             $('.list_clientnya').html(str);
             $('#slct').html(strSleect);
+            $('.notif-confirm').html('Client Anda Berhasil Di edit?');
             $(".popup_container").hide();
-            $('#add_client').show();
+            $('#confirmSucsess').show();
         });
 
     });
@@ -551,6 +595,20 @@
          $('#editClient').show();
         $('#clientEdit').val(actionClient.attr('data-name'));
         $('#idclientEdit').val(actionClient.val());
+
+    });
+    $(document).on('click','.popupRemoveClient', function(){
+        $(".popup_container").hide();
+         $('#confirmRemove').show();
+         var selected = new Array();
+        var chks = $('.checkClient');
+        for (var i = 0; i < chks.length; i++) {
+            if (chks[i].checked) {
+                selected.push(chks[i].value);
+            }
+        }
+
+        $('.notif-remove').html('Apakah Anda yakin untuk menghapus '+selected.length+' nama client ini?')
 
     });
 

@@ -142,6 +142,8 @@ class VideoController extends Controller
                 $return['data'][$row]['client'] = $record['client']['name'];
                 $return['data'][$row]['total_view'] = $this->model_shopeback->where('video_id',$record['id'])->get()->count();
                 $return['data'][$row]['date']   = date('d-m-Y H:i', strtotime($record['created_at']));
+                $return['data'][$row]['start_publish']   = date('d-m-Y', strtotime($record['start_publish']));
+                $return['data'][$row]['end_publish']   = date('d-m-Y', strtotime($record['end_publish']));
             }
 
             return response()->json($return);
@@ -392,17 +394,32 @@ class VideoController extends Controller
                 'dimensions' => ':attribute dimensions tidak sesuai',
                 'mimes' => 'format :attribute salah'
             ];
-            $validator = Validator::make($request->all(), [
-                'title' => 'required',
-                'description' => 'required',
-                'client_id' => 'required',
-                'target_view' => 'required',
-                'start_publish' => 'required',
-                'end_publish' => 'required',
-                'video' => 'mimes:mp4,avi',
-                'background' => 'dimensions:width=360,height=640|mimes:jpeg,jpg,png',
-                'photo' => 'dimensions:width=360,height=178|mimes:jpeg,jpg,png'
-            ],$messages);
+            if ($data->photo =='' ||  $data->background =='') {
+                $validator = Validator::make($request->all(), [
+                    'title' => 'required',
+                    'description' => 'required',
+                    'client_id' => 'required',
+                    'target_view' => 'required',
+                    'start_publish' => 'required',
+                    'end_publish' => 'required',
+                    'video' => 'mimes:mp4,avi',
+                    'background' => 'required|dimensions:width=360,height=640|mimes:jpeg,jpg,png',
+                    'photo' => 'required|dimensions:width=360,height=178|mimes:jpeg,jpg,png'
+                ],$messages);
+            }else{
+                $validator = Validator::make($request->all(), [
+                    'title' => 'required',
+                    'description' => 'required',
+                    'client_id' => 'required',
+                    'target_view' => 'required',
+                    'start_publish' => 'required',
+                    'end_publish' => 'required',
+                    'video' => 'mimes:mp4,avi',
+                    'background' => 'dimensions:width=360,height=640|mimes:jpeg,jpg,png',
+                    'photo' => 'dimensions:width=360,height=178|mimes:jpeg,jpg,png'
+                ],$messages);
+            }
+
 
             if ($validator->fails()) {
                 return redirect()->route($this->prefix_routes. 'detail', $id)->with('form_message', [
