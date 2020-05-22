@@ -101,8 +101,23 @@
             </div><!--end.group_line-->
             <div class="group_line">
               <label class="label_line" for="brand">
+                <span> Insert URL background landing page</span>
+                <img src="images/material/icon_tanya.png" title="Insert the URL landing page for client ">
+              </label>
+              <input type="text" id="brand" class="input_noline"  name="">
+            </div><!--end.group_line-->
+            <div class="group_line">
+              <label class="label_line" for="brand">
                 <span> Insert target views</span>
                 <img src="images/material/icon_tanya.png" title="Insert the number that were given by your client that they spend off for this campaign ">
+              </label>
+              <input type="text" id="brand" class="input_noline"  name="">
+            </div><!--end.group_line-->
+
+            <div class="group_line">
+              <label class="label_line" for="brand">
+                <span> Insert target views per day</span>
+                <img src="images/material/icon_tanya.png" title="Insert the number that were given by your client that they spend off for this campaign each day of campaign ">
               </label>
               <input type="text" id="brand" class="input_noline"  name="">
             </div><!--end.group_line-->
