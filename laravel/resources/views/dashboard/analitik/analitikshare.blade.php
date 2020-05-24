@@ -7,7 +7,16 @@
     <div class="menu_list">
 
 
-        <a href="{{ url('cms/analitik/uniq_clnt?'.$link_id)}}" class="row_menu active">
+        <div class="row_vid_info">
+          <div class="thumb_video">
+            <img src="{{ upload_url('video/'.$video->photo)}}">
+          </div>
+          <div class="caption_video">
+            <h3>Video</h3>
+            <p>{{ $video->title}}</p>
+          </div>
+        </div>
+        <a href="{{ url('cms/analitikshare/'.$link_id)}}" class="row_menu active">
           <img class="icon_menu" src="{{ asset('dashboard/images/material/icon_analytic.png') }}">
           <span>Analytics</span>
         </a>
@@ -20,16 +29,18 @@
       <div class="section_titleSearch" style="border-bottom: none;">
         <h3> Video Analytic </h3>
         <div class="right">
-          <div class="period">
-            <div class="inline_form">
-              <span>Periode:</span>
-              <input type="text" class="input_form" name="from" id="from">
-              <span>s/d</span>
-              <input type="text" class="input_form" id="to" name="to">
-              <a href="#" class="blue_bt2 submit-date">Submit</a>
-            </div><!--end.inline_form-->
+            <div class="period">
+              <span class="date_rangenya">24 - 30 April, 2020</span>
+              <div class="custom-select">
+                <select name="slct" id="slct" class="range_date">
+                  <option selected value="7"> Last 7 days</option>
+                  <option value="30"> Last 30 days</option>
+                  <option value="90"> Last 90 days</option>
+                  <option value="365"> Last 365 days</option>
+                </select>
+              </div>
+            </div>
           </div>
-        </div>
       </div>
 
       <div class="rows">
@@ -155,6 +166,7 @@
 <script>
 var base_url = '{{ url("") }}';
 var id = '{{ $video->id }}';
+
 var link_id = '{{ $link_id }}';
 $( function() {
 var date= <?php echo $chartViwer['date'] ?>;
@@ -209,7 +221,7 @@ var dateFormat = "dd/mm/yy",
     from.datepicker( "option", "maxDate", getDate( this ) );
 
   });
-  $( ".submit-date" ).click(function(){
+  $( ".range_date" ).change(function(){
       getData();
 
   });
@@ -224,67 +236,66 @@ function getDate( element ) {
   return date;
 }
 function getData(){
-    var startDate = $("#from").val();
-    var endDate = $("#to").val();
-    if(startDate !='' && endDate !=''){
+    var rangeDate = $(".range_date").val();
+
+    if(rangeDate !='' ){
         $.ajax({
                 url:base_url+'/cms/analitikshare/getData',
                 type:'post',
                 data: {
-                            'startDate': startDate,
-                            'endDate':endDate,
+                            'rangeDate': rangeDate,
                             'id':id,
                             'link_id':link_id
                 },
                 dataType:'json'
             }).
             done(function(response) {
-                if(response.status!='error'){
-                    var date= response.chartViwer.date;
-                    date = JSON.parse(date);
-                    console.log(date);
-                    var data =  [{name: 'Viwers',data: JSON.parse(response.chartViwer.data)}];
-                    var title ='';
-                    var subtitle = '';
-                    var yAxis= 'total';
-                    chartLines = chartLine('line_chart',title,subtitle,yAxis,date,data);
+                var date= response.chartViwer.date;
+                date = JSON.parse(date);
 
-                    var categoryPersentase=response.chartPersentase.category;
-                    categoryPersentase = JSON.parse(categoryPersentase);
-                    var dataPersentase =  [{name: 'User',data: JSON.parse(response.chartPersentase.data)}];
+                var data =  [{name: 'Viwers',data: JSON.parse(response.chartViwer.data)}];
+                var title ='';
+                var subtitle = '';
+                var yAxis= 'total';
+                console.log('tanggal');
+                console.log(date);
+                console.log('data');
+                console.log(data);
+                chartLines = chartLine('line_chart',title,subtitle,yAxis,date,data);
 
-                    var titlePersentase ='Audience Retention';
-                    var subtitlePersentase = '';
-                    var yAxisPersentase= 'User';
-                    console.log(dataPersentase);
-                    chartBars = chartBar('chart_bar',titlePersentase,subtitlePersentase,yAxisPersentase,categoryPersentase,dataPersentase);
+                var categoryPersentase=response.chartPersentase.category;
+                categoryPersentase = JSON.parse(categoryPersentase);
+                var dataPersentase =  [{name: 'User',data: JSON.parse(response.chartPersentase.data)}];
+
+                var titlePersentase ='Audience Retention';
+                var subtitlePersentase = '';
+                var yAxisPersentase= 'User';
+                console.log(dataPersentase);
+                chartBars = chartBar('chart_bar',titlePersentase,subtitlePersentase,yAxisPersentase,categoryPersentase,dataPersentase);
 
 
 
-                    var dataGACity = JSON.parse(response.chartGACity.data);
-                    var titleGACity = 'Geography';
-                    var subtitleGACity='';
-                    var chartDounat = chartDonat('chart_dounat',titleGACity,subtitleGACity,'City',dataGACity);
+                var dataGACity = JSON.parse(response.chartGACity.data);
+                var titleGACity = 'Geography';
+                var subtitleGACity='';
+                var chartDounat = chartDonat('chart_dounat',titleGACity,subtitleGACity,'City',dataGACity);
 
-                    var dataGAGender = JSON.parse(response.chartGAGender.data);
+                var dataGAGender = JSON.parse(response.chartGAGender.data);
                     var titleGAGender = 'View by genders';
                     var subtitleGAGender='';
                     var chartDounatGender = chartDonat('chart_dounat_gender',titleGAGender,subtitleGAGender,'Gender',dataGAGender);
 
-                    console.log($('.totalView'));
-                    $('.totalView').html(response.total_view);
-                    $('.uniqUser').html(response.uniq_visitor);
-                    var avs = Math.floor(response.avg/3600);
-                    if(avs == 0)
-                    {
-                        $('.avgWatch').html(response.avg+' Second');
-                    }else{
-                        $('.avgWatch').html(Math.floor(response.avg/3600)+' Hours');
-                    }
-                }else{
-                    alert(response.message);
-                }
 
+                console.log($('.totalView'));
+                $('.totalView').html(response.total_view);
+                 $('.uniqUser').html(response.uniq_visitor);
+                 var avs = Math.floor(response.avg/3600);
+                 if(avs == 0)
+                 {
+                    $('.avgWatch').html(response.avg+' Second');
+                 }else{
+                    $('.avgWatch').html(Math.floor(response.avg/3600)+' Hours');
+                 }
 
 
 
@@ -524,12 +535,13 @@ Highcharts.exportCharts = function (charts, options) {
     $(document).on('click','.submit-shareurl',function(){
 
         var email = $('.emailsendurl').val();
-
+        console.log(base_url+'/cms/analitikshare/sendemail')
         $.ajax({
                 url:base_url+'/cms/analitikshare/sendemail',
                 type:'post',
                 data: {
                         'email': email,
+                        'video_id':id,
                         'link_id':link_id
                 },
                 dataType:'json'

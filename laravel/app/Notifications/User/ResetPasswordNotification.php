@@ -42,13 +42,9 @@ class ResetPasswordNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        // return (new MailMessage)
-        //     ->line('Kamu menerima email ini karena kami menerima permintaan pengaturan ulang password untuk akun Anda.')
-        //     ->action('Reset Password', route('frontend.password.reset-get', $this->token))
-        //     ->line('Jika Kamu tidak meminta pengaturan ulang kata sandi, mohon abaikan email ini.');
-
-        return (new MailMessage)->subject(' Atur Ulang Kata Sandi')->view(
-            'emails.forget', ['user' => $notifiable,'token'=>route('cms.password.reset-get', $this->token)]
+        // dd($notifiable);
+        return (new MailMessage)->from('aloysiuswahyudwo@gmail.com','CEO Okedeht')->subject(' Atur Ulang Kata Sandi')->view(
+            'emails.forget', ['user' => $notifiable,'token'=>route('dashboard.reset-password', $this->token)]
         );
             // ->bcc(config('custom.emails.bcc'));
     }

@@ -17,7 +17,7 @@ class Video extends Model
      */
     protected $fillable = [
          'title','description','brand','path', 'video', 'photo','target_view',
-         'background','start_publish','end_publish','status','client_id','video_name'
+         'background','start_publish','end_publish','status','client_id','video_name','urllanding'
     ];
 
     /**

@@ -69,6 +69,7 @@
 		$("#trigger_play").click(function(e){
 			e.preventDefault();
 
+
 			var base_url="https://dev.makan.club/api_videoads/api/";
             var token="";
 
@@ -88,6 +89,7 @@
                         $(".bg_play").hide();
 						$(".video_cover").hide();
                         $("#trigger_play").hide();
+                        $('#videoXl').attr('src',videourl);
                         videonya.play();
                         $('.idUnix').val(response.id);
                     }else{

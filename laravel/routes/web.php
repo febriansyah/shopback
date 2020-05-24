@@ -16,7 +16,6 @@
 // });
 
 Route::get('shopback.html', 'Frontend\HomeController@index')->name('home');
-Route::get('index5.html', 'Frontend\HomeController@index')->name('home');
 Route::get('test.html', 'Frontend\HomeController@test')->name('test');
 Route::get('analitik.html', 'Frontend\HomeController@analitik')->name('analitik');
 Route::post('setData', 'Frontend\HomeController@saveData')->name('setdata');

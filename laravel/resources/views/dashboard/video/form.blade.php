@@ -140,7 +140,13 @@
               </div><!--end.inline_form-->
             </div><!--end.group_line-->
 
-
+            <div class="group_line">
+                <label class="label_line" for="brand">
+                  <span> Insert URL background landing page</span>
+                  <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title="Insert the URL landing page for client ">
+                </label>
+                <input type="text" id="brand" class="input_noline"  name="urllanding" value="{{ ( old('urllanding') ? old('urllanding') : ( (isset($data['urllanding'])) ? $data['urllanding'] : '') ) }}"">
+              </div><!--end.group_line-->
 
 
             <div class="group_line">
@@ -366,18 +372,34 @@
     $( document ).tooltip();
 
     var dateToday = new Date();
-    var dates = $("#from, #to").datepicker({
-        defaultDate: "+1w",
-        changeMonth: true,
-        numberOfMonths: 3,
-        minDate: dateToday,
-        onSelect: function(selectedDate) {
-            var option = this.id == "from" ? "minDate" : "maxDate",
-                instance = $(this).data("datepicker"),
-                date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
-            dates.not(this).datepicker("option", option, date);
-        }
-    });
+    var title = $('#title').val();
+    if(title==''){
+        var dates = $("#from, #to").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 3,
+            minDate: dateToday,
+            onSelect: function(selectedDate) {
+                var option = this.id == "from" ? "minDate" : "maxDate",
+                    instance = $(this).data("datepicker"),
+                    date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+                dates.not(this).datepicker("option", option, date);
+            }
+        });
+    }else{
+        var dates = $("#from, #to").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 3,
+            onSelect: function(selectedDate) {
+                var option = this.id == "from" ? "minDate" : "maxDate",
+                    instance = $(this).data("datepicker"),
+                    date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+                dates.not(this).datepicker("option", option, date);
+            }
+        });
+    }
+
 
 
     $("#trigger_add_bg").click(function() {
@@ -497,30 +519,38 @@
                 },
                 dataType:'json'
         }).done(function(response){
-            var str='';
-            var strSleect =' <option>Choose client name</option>';
-                        var selected='';
-            $.each(response.data,function(k,v){
-                str +=' <div class="row_client">'
-                        +'<label class="container">'
-                        +'<input type="checkbox" value="'+v.id+'"  data-name="'+v.name+'" class="checkClient">'
-                        +'<span class="checkmark"></span>'
-                        +'</label>'
-                        +'<span class="clientName">'+v.name+'</span>'
-                        +'</div><!--end.row_client-->';
-                if(v.id==client_id){
-                    selected='selected';
-                }else{
-                    selected ='';
-                }
-                strSleect +=' <option value="'+v.id+'">'+v.name+'</option>';
+            if(response.status=='success')
+            {
+                var str='';
+                var strSleect =' <option>Choose client name</option>';
+                            var selected='';
+                $.each(response.data,function(k,v){
+                    str +=' <div class="row_client">'
+                            +'<label class="container">'
+                            +'<input type="checkbox" value="'+v.id+'"  data-name="'+v.name+'" class="checkClient">'
+                            +'<span class="checkmark"></span>'
+                            +'</label>'
+                            +'<span class="clientName">'+v.name+'</span>'
+                            +'</div><!--end.row_client-->';
+                    if(v.id==client_id){
+                        selected='selected';
+                    }else{
+                        selected ='';
+                    }
+                    strSleect +=' <option value="'+v.id+'">'+v.name+'</option>';
 
-            });
-            $('.list_clientnya').html(str);
-            $('#slct').html(strSleect);
-            $('.notif-confirm').html('Client Anda Berhasil Di edit?');
-            $(".popup_container").hide();
-            $('#confirmSucsess').show();
+                });
+                $('.list_clientnya').html(str);
+                $('#slct').html(strSleect);
+                $('.notif-confirm').html('Client Anda Berhasil Di edit?');
+                $(".popup_container").hide();
+                $('#confirmSucsess').show();
+            }else{
+                $('.client_add_name').val('');
+                $('.notif-confirm').html(response.message);
+                $(".popup_container").hide();
+                $('#confirmSucsess').show();
+            }
         });
 
     });

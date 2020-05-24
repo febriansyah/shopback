@@ -59,6 +59,7 @@
                 <th class="dateList">Created Date</th>
                 <th class="dateList">Start Date</th>
                 <th class="dateList">End Date</th>
+                <th>Status</th>
                 <th>Views</th>
                 <th>Unique Visitor</th>
                 <th>Target View</th>
@@ -158,6 +159,9 @@ $(document).ready(function() {
                 +'</td>'
                 +'<td>'
                   +'<p>'+v.end_publish+'</p>'
+                +'</td>'
+                +'<td>'
+                  +'<p>'+v.status+'</p>'
                 +'</td>'
                 +'<td>'
                   +'<p>'+v.total_view+'</p>'

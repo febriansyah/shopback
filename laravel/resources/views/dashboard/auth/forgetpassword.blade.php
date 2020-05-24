@@ -7,8 +7,8 @@
     <div class="section_login">
       <div class="right_login">
         <div class="login_inner">
-          <h3>Hello, have a good day</h3>
-          <p>Its a fresh new day so, lets sell some stuff, and get shopback for a good start.</p>
+          <h3>Forgot your password?</h3>
+          <p>Please input your email for rest the password.</p>
           <div class="login_form">
             <div class="row">
                 <div class="col-md-12">
@@ -25,29 +25,18 @@
                         @endif
                     </div>
                 </div>
-            <form action="{{ route('dashboard.auth.login') }}" method="POST">
+            </div>
+            <form action="{{ route('dashboard.forgetpassword') }}" method="POST">
                 @csrf
               <div class="group_form">
-                <input type="email" class="line_form" name="email" value="{{ old('email') }}"  placeholder="Email">
+                <input type="email" class="line_form" name="email" placeholder="Email">
               </div>
-              <div class="group_form">
-                <input type="password" class="line_form" name="password" value="{{ old('password') }}" placeholder="Password">
-                <div class="inner_group">
-                  <div class="left checkboxLeft">
-                      <input type="checkbox" value="1" name="remember_me" id="rememberMe">
-                     <span for="rememberMe">Remember me</span>
-                  </div>
-                  <div class="right">
-                    <a href="{{ url('cms/forgetpassword')}}" class="forgot">Forgot password? </a>
-                  </div>
-                </div><!--end.inner_group-->
-              </div><!--emd.group_form-->
 
               <div class="group_form bt_group">
-                <button type="submit" class="blue_bt">Login</button>
+                <button type="submit" class="blue_bt">Reset</button>
               </div><!--emd.group_form-->
               <div class="group_form">
-              <p> Want to join the force? You can <a href="{{ url('cms/register')}}" class="blue_text">register here</a></p>
+                <p> Already have an account? <a href="index.php" class="blue_text">login here</a></p>
               </div>
             </form>
           </div><!--end.login_form-->

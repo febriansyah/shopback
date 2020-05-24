@@ -21,7 +21,10 @@ Route::prefix('cms')->namespace('Dashboard')->name('dashboard.')->group(function
 	// logout
 	Route::get('logout', 'Auth\AuthController@logout')
         ->name('auth.logout');
-
+        Route::match(['get', 'post'], 'forgetpassword', 'ForgetPasswordController@index')
+        ->name('forgetpassword');
+        Route::post('password/reset', 'ResetPasswordController@reset')->name('reset-password-post');
+    Route::get('password/reset/{token}', 'ResetPasswordController@reset')->name('reset-password');
     	// logout
         Route::match(['get', 'post'], 'register', 'Auth\AuthController@signup')
 		->name('auth.register');

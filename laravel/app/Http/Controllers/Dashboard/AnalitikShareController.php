@@ -114,31 +114,28 @@ class AnalitikShareController extends Controller
                 $id = $getDataVideo->video_id;
                 $getVideo = $this->model_video->where('id', $getDataVideo->video_id)->first();
                 if ($getVideo) {
-                    $this->parse['video']        = $getVideo;
+                    $this->parse['video']  = $getVideo;
+                    $this->parse['total_view']  = $this->model_shopeback->where('video_id',$id)->get()->count();
 
-                    $this->parse['total_view']   = $this->model_shopeback->where('video_id', $id)
-                        ->get()->count();
-                    $this->parse['uniq_user']    = $this->model_shopeback->where('video_id', $id)
-                        ->groupBy('order_id')->get()->count();
-                    $this->parse['uniq_visitor'] = $this->model_shopeback->where('video_id', $id)
-                        ->groupBy('order_id')
-                        ->get()->count();
-                    $this->parse['avg']          = (int) $this->model_shopeback->selectRaw('AVG(TIME_TO_SEC(duration)) as avg')
-                        ->where('video_id', $id)->get()[0]['avg'];
+                    $this->parse['uniq_user']  = $this->model_shopeback->where('video_id',$id)->groupBy('order_id')->get()->count();
+                    $this->parse['uniq_visitor']  = $this->model_shopeback->where('video_id',$id)->groupBy('order_id')->get()->count();
+                    $this->parse['avg']  = (int) $this->model_shopeback ->selectRaw('AVG(TIME_TO_SEC(duration)) as avg')->where('video_id',$id)->get()[0]['avg'];
+                    $this->parse['url_data']       = route($this->prefix_routes. 'list');
+                    $nowDate = Carbon::now();
 
-                    $this->parse['url_data']     = route($this->prefix_routes. 'list');
-                    $nowDate                     = Carbon::now();
-                    $date                        = array();
-                    $data                        = array();
-                    for ($i=0;$i<=7;$i++) {
-                        if ($i==0) {
+
+
+                    $date = array();
+                    $data = array();
+                    for ($i=0;$i<=7;$i++)
+                    {
+                        if($i==0){
                             $date[$i] = $nowDate->toDateString();
-                        } else {
+                        }else{
                             $date[$i] = $nowDate->subDays()->toDateString();
                         }
 
-                        $data[]   = $this->model_shopeback->where('video_id', $id)
-                                    ->whereDate('created_at', $date[$i])->count();
+                        $data[]   = $this->model_shopeback->where('video_id',$id)->whereDate('created_at',$date[$i])->count();
 
                     }
                     $this->parse['chartViwer']['date'] = json_encode($date);
@@ -161,38 +158,45 @@ class AnalitikShareController extends Controller
                     $this->parse['chartPersentase']['series'] = 'viwer';
 
                     $city = Analytics::performQuery(
-                        Period::years(1),
-                        'ga:sessions',
-                        [
-                            'metrics' => 'ga:sessions',
-                            'dimensions' => 'ga:city'
-                        ]
-                    );
-                    $gaCity= collect($city['rows'] ?? [])->map(function (array $dateRow) {
-                        return [
-                            $dateRow[0],
-                            (int) $dateRow[1],
-                        ];
-                    });
-                    $gender = Analytics::performQuery(
-                        Period::years(1),
-                        'ga:sessions',
-                        [
-                            'metrics' => 'ga:sessions',
-                            'dimensions' => 'ga:userGender'
-                        ]
-                    );
-                    $gaGender= collect($gender['rows'] ?? [])->map(function (array $dateRow) {
-                        return [
-                            $dateRow[0],
-                            (int) $dateRow[1],
-                        ];
-                    });
+						Period::years(1),
+						'ga:sessions',
+						[
+							'metrics' => 'ga:pageviews',
+							'dimensions' => 'ga:city, ga:pageTitle',
+							'filters' => 'ga:pageTitle%3D~%5Evideo ads : '.$getVideo['title']
+						]
+					);
+					$gaCity= collect($city['rows'] ?? [])->map(function (array $dateRow) {
+						return [
+							$dateRow[0],
+							(int) $dateRow[2],
+						];
+					});
+					$this->parse['chartGACity']['data'] = json_encode($gaCity);
+					$this->parse['chartGACity']['series'] = 'viwer';
+
+					$gender = Analytics::performQuery(
+						Period::years(1),
+						'ga:sessions',
+						[
+							'metrics' => 'ga:pageviews',
+							'dimensions' => 'ga:userGender,ga:pageTitle',
+							'filters' => 'ga:pageTitle%3D~%5Evideo ads : '.$getVideo['title']
+						]
+					);
+					$gaGender= collect($gender['rows'] ?? [])->map(function (array $dateRow) {
+						return [
+							$dateRow[0],
+							(int) $dateRow[2],
+						];
+					});
+
                     $this->parse['chartGACity']['data'] = json_encode($gaCity);
                     $this->parse['chartGACity']['series'] = 'viwer';
 
                     $this->parse['chartGAGender']['data'] = json_encode($gaGender);
                     $this->parse['chartGAGender']['series'] = 'viwer';
+                    // dd(json_encode($gaCity));
 
                     $this->parse['link_id'] = $slug;
 
@@ -219,94 +223,108 @@ class AnalitikShareController extends Controller
         if ($post && $ajax) {
             if(isset($post['link_id']))
             {
-                $startDate = date('Y-m-d', strtotime($post['startDate']));
-                $startDate = Carbon::parse($startDate);
-                $endDate = date('Y-m-d', strtotime($post['endDate']));
-                $endDate = Carbon::parse($endDate);
-                $id = $post['id'];
-
-                $this->parse['total_view']  = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $endDate->toDateString().' 00:00:00'])->count();
-                $this->parse['uniq_visitor']  = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $endDate->toDateString().' 00:00:00'])->groupBy('order_id')->get()->count();
-                $this->parse['avg']  = (int) $this->model_shopeback ->selectRaw('AVG(TIME_TO_SEC(duration)) as avg')->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $endDate->toDateString().' 00:00:00'])->get()[0]['avg'];
-
-
-                $start = new DateTime($startDate->toDateString());
-                $end   = new DateTime($endDate->toDateString());
-
-                $array = array('25','50','70','100');
-                $category = array();
-                $data = array();
-                for ($i=0;$i<=3;$i++)
-                {
-                    $category[$i] = $array[$i].'%';
-
-                    $data[]   = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $endDate->toDateString().' 00:00:00'])->where('persentase',$array[$i])->get()->count();
-
-                }
-
-                $this->parse['chartPersentase']['category'] =json_encode($category);
-                $this->parse['chartPersentase']['data'] = json_encode($data);
-                $this->parse['chartPersentase']['series'] = 'viwer';
-
-                $city = Analytics::performQuery(
-                    Period::create($startDate, $endDate),
-                    'ga:sessions',
-                    [
-                        'metrics' => 'ga:sessions',
-                        'dimensions' => 'ga:city'
-                    ]
-                );
-                $gaCity= collect($city['rows'] ?? [])->map(function (array $dateRow) {
-                    return [
-                        $dateRow[0],
-                        (int) $dateRow[1],
-                    ];
-                });
-                $this->parse['chartGACity']['data'] = json_encode($gaCity);
-                $this->parse['chartGACity']['series'] = 'viwer';
+                 $getDataVideo =  $this->model_shareurl->where('link_id', $slug)->whereDate('timeout', '<', date('Y-m-d H:i:s'))->first();
+				// dd($getDataVideo);
+				if ($getDataVideo) {
+					$rangeDate = $post['rangeDate'];
+					$endDate = Carbon::now();
+					$nowDate = Carbon::now();
+					$startDate = $endDate->subDays($rangeDate );
+					$id = $post['id'];
+					$getVideo = $this->model_video->where('id', $getDataVideo->video_id)->first();
+					$this->parse['total_view']  = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->count();
+					$this->parse['uniq_visitor']  = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->groupBy('order_id')->get()->count();
+					$this->parse['avg']  = (int) $this->model_shopeback ->selectRaw('AVG(TIME_TO_SEC(duration)) as avg')->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->get()[0]['avg'];
 
 
-                $gender = Analytics::performQuery(
-                    Period::create($startDate, $endDate),
-                    'ga:sessions',
-                    [
-                        'metrics' => 'ga:sessions',
-                        'dimensions' => 'ga:userGender'
-                    ]
-                );
-                $gaGender= collect($gender['rows'] ?? [])->map(function (array $dateRow) {
-                    return [
-                        $dateRow[0],
-                        (int) $dateRow[1],
-                    ];
-                });
-                $this->parse['chartGAGender']['data'] = json_encode($gaGender);
-                $this->parse['chartGAGender']['series'] = 'viwer';
+					$start = new DateTime($startDate->toDateString());
+					$end   = new DateTime($endDate->toDateString());
 
-                $selisih =  $end->diff($start);
-                $date = array();
-                $data = array();
+					$array = array('25','50','70','100');
+					$category = array();
+					$data = array();
 
-                for ($i=0;$i<=$selisih->days;$i++)
-                {
-                    if($i==0){
-                        $date[$i] = $startDate->toDateString();
-                    }else{
-                        $date[$i] = $startDate->addDay()->toDateString();
-                    }
+					for ($i=0;$i<=3;$i++)
+					{
+						$category[$i] = $array[$i].'%';
+
+						$data[]   = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->where('persentase',$array[$i])->get()->count();
+
+					}
+
+					$this->parse['chartPersentase']['category'] =json_encode($category);
+					$this->parse['chartPersentase']['data'] = json_encode($data);
+					$this->parse['chartPersentase']['series'] = 'viwer';
+
+					 $city = Analytics::performQuery(
+                Period::create($startDate, $nowDate),
+                'ga:sessions',
+                [
+                     'metrics' => 'ga:pageviews',
+                    'dimensions' => 'ga:city, ga:pageTitle',
+                    'filters' => 'ga:pageTitle%3D~%5Evideo ads : '.$getVideo['title']
+                ]
+            );
+
+					$gaCity= collect($city['rows'] ?? [])->map(function (array $dateRow) {
+						return [
+							$dateRow[0],
+							(int) $dateRow[2],
+						];
+					});
+					$this->parse['chartGACity']['data'] = json_encode($gaCity);
+					$this->parse['chartGACity']['series'] = 'viwer';
 
 
-                    $data[]   = $this->model_shopeback->where('video_id',$id)->whereDate('created_at',$date[$i])->count();
+					$gender = Analytics::performQuery(
+						Period::create($startDate, $endDate),
+						'ga:sessions',
+						[
+							'metrics' => 'ga:pageviews',
+							'dimensions' => 'ga:userGender,ga:pageTitle',
+							'filters' => 'ga:pageTitle%3D~%5Evideo ads : '.$getVideo['title']
+						]
+					);
+					$gaGender= collect($gender['rows'] ?? [])->map(function (array $dateRow) {
+						return [
+							$dateRow[0],
+							(int) $dateRow[2],
+						];
+					});
+					$this->parse['chartGAGender']['data'] = json_encode($gaGender);
+					$this->parse['chartGAGender']['series'] = 'viwer';
 
-                }
-                $this->parse['chartViwer']['date'] = json_encode($date);
-                $this->parse['chartViwer']['data'] = json_encode($data);
-                $this->parse['chartViwer']['series'] = 'viwer';
-                $this->parse['status'] = 'sucsess';
-                $this->parse['message']= 'sucsess';
+
+					$data = array();
+					$date = array();
+					for ($i=0;$i<= $rangeDate;$i++)
+					{
+						if($i==0){
+							$date[$i] = $startDate->toDateString();
+						}else{
+							$date[$i] = $startDate->addDay()->toDateString();
+						}
 
 
-                return response()->json($this->parse);
+						$data[]   = $this->model_shopeback->where('video_id',$id)->whereDate('created_at',$date[$i])->count();
+
+					}
+
+					$this->parse['chartViwer']['date'] = json_encode($date);
+					$this->parse['chartViwer']['data'] = json_encode($data);
+					$this->parse['chartViwer']['series'] = 'viwer';
+						$this->parse['status'] = 'sucsess';
+						$this->parse['message']= 'sucsess';
+
+
+						return response()->json($this->parse);
+				}else{
+					$this->parse['status'] = 'error';
+						$this->parse['message']= 'error';
+
+
+						return response()->json($this->parse);
+				}
             }else{
                 $this->parse['status'] = 'error';
                 $this->parse['message']= 'not acsess';

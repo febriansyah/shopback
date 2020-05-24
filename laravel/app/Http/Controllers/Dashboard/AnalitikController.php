@@ -152,14 +152,15 @@ class AnalitikController extends Controller
                 Period::years(1),
                 'ga:sessions',
                 [
-                    'metrics' => 'ga:sessions',
-                    'dimensions' => 'ga:city'
+                    'metrics' => 'ga:pageviews',
+                    'dimensions' => 'ga:city, ga:pageTitle',
+                    'filters' => 'ga:pageTitle%3D~%5Evideo ads : '.$getVideo['title']
                 ]
             );
             $gaCity= collect($city['rows'] ?? [])->map(function (array $dateRow) {
                 return [
                     $dateRow[0],
-                    (int) $dateRow[1],
+                    (int) $dateRow[2],
                 ];
             });
             $this->parse['chartGACity']['data'] = json_encode($gaCity);
@@ -169,14 +170,15 @@ class AnalitikController extends Controller
                 Period::years(1),
                 'ga:sessions',
                 [
-                    'metrics' => 'ga:sessions',
-                    'dimensions' => 'ga:userGender'
+                    'metrics' => 'ga:pageviews',
+                    'dimensions' => 'ga:userGender,ga:pageTitle',
+                    'filters' => 'ga:pageTitle%3D~%5Evideo ads : '.$getVideo['title']
                 ]
             );
             $gaGender= collect($gender['rows'] ?? [])->map(function (array $dateRow) {
                 return [
                     $dateRow[0],
-                    (int) $dateRow[1],
+                    (int) $dateRow[2],
                 ];
             });
             $this->parse['chartGACity']['data'] = json_encode($gaCity);
@@ -213,7 +215,7 @@ class AnalitikController extends Controller
             $nowDate = Carbon::now();
             $startDate = $endDate->subDays($rangeDate );
             $id = $post['id'];
-
+			$getVideo = $this->model_video->where('id', $id)->first();
             $this->parse['total_view']  = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->count();
             $this->parse['uniq_visitor']  = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->groupBy('order_id')->get()->count();
             $this->parse['avg']  = (int) $this->model_shopeback ->selectRaw('AVG(TIME_TO_SEC(duration)) as avg')->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->get()[0]['avg'];
@@ -242,14 +244,16 @@ class AnalitikController extends Controller
                 Period::create($startDate, $nowDate),
                 'ga:sessions',
                 [
-                    'metrics' => 'ga:sessions',
-                    'dimensions' => 'ga:city'
+                     'metrics' => 'ga:pageviews',
+                    'dimensions' => 'ga:city, ga:pageTitle',
+                    'filters' => 'ga:pageTitle%3D~%5Evideo ads : '.$getVideo['title']
                 ]
             );
+
             $gaCity= collect($city['rows'] ?? [])->map(function (array $dateRow) {
                 return [
                     $dateRow[0],
-                    (int) $dateRow[1],
+                    (int) $dateRow[2],
                 ];
             });
             $this->parse['chartGACity']['data'] = json_encode($gaCity);
@@ -260,14 +264,15 @@ class AnalitikController extends Controller
                 Period::create($startDate, $endDate),
                 'ga:sessions',
                 [
-                    'metrics' => 'ga:sessions',
-                    'dimensions' => 'ga:userGender'
+                    'metrics' => 'ga:pageviews',
+                    'dimensions' => 'ga:userGender,ga:pageTitle',
+                    'filters' => 'ga:pageTitle%3D~%5Evideo ads : '.$getVideo['title']
                 ]
             );
             $gaGender= collect($gender['rows'] ?? [])->map(function (array $dateRow) {
                 return [
                     $dateRow[0],
-                    (int) $dateRow[1],
+                    (int) $dateRow[2],
                 ];
             });
             $this->parse['chartGAGender']['data'] = json_encode($gaGender);

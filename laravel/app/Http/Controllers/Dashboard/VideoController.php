@@ -136,7 +136,7 @@ class VideoController extends Controller
                 $return['data'][$row]['photo']        = '<img src="'.upload_url($this->destination_path.$record['photo']).'" style="width:150px;">';
                 $return['data'][$row]['title'] = $record['title'];
                 $return['data'][$row]['description'] = $record['description'];
-                $return['data'][$row]['status'] = ($record['status']==1)?'publish':'unpublish';
+                // $return['data'][$row]['status'] = ($record['status']==1)?'publish':'unpublish';
                 $return['data'][$row]['uniq_visitor'] = $this->model_shopeback->where('video_id',$record['id'])->groupBy('order_id')->get()->count();
                 $return['data'][$row]['target_view'] = $record['target_view'];
                 $return['data'][$row]['client'] = $record['client']['name'];
@@ -144,6 +144,7 @@ class VideoController extends Controller
                 $return['data'][$row]['date']   = date('d-m-Y H:i', strtotime($record['created_at']));
                 $return['data'][$row]['start_publish']   = date('d-m-Y', strtotime($record['start_publish']));
                 $return['data'][$row]['end_publish']   = date('d-m-Y', strtotime($record['end_publish']));
+                $return['data'][$row]['status']   = (strtotime($record['start_publish']) <= strtotime(date('Y-m-d')) && strtotime($record['end_publish']) >= strtotime(date('Y-m-d')))?'aktive':'tidak aktive';
             }
 
             return response()->json($return);
