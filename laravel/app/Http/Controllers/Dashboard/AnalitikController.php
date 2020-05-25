@@ -457,20 +457,56 @@ class AnalitikController extends Controller
             $data = $this->model_shareurl->create($param);
             $data->link_id = $permitted_chars.$data->id;
             $data->save();
+            
+            //SENDING EMAIL @PEPIPOST
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.pepipost.com/v2/sendEmail",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "{\"personalizations\":[{\"recipient\":\"".$param['email']."\"}],\"from\":{\"fromEmail\":\"admin@videoads.mfebriansyah.com\",\"fromName\":\"Admin Ceki\"},\"subject\":\"Hi gaes Lo dapet Link ni dari Shopback \",\"content\":\"Hi Gaes, Click Link ini dah ".$data->link_id." Buat Lanjutin Shopback Lo\"}",
+            CURLOPT_HTTPHEADER => array(
+              "api_key: 7121cb46e21d6e4b090e55767c745498",
+              "content-type: application/json"
+            ),
+          ));
 
-            Mail::send('emails.sendurl', compact('data'), function($message)  use ($data) {
-                $message->to($data['email'])->subject
-                   ('Link Dashboard Shoopy Back');
-                $message->from('aloysiuswahyudwo@gmail.com','CEO Okedeht');
-             });
+          $response = curl_exec($curl);
+          $err = curl_error($curl);
+          curl_close($curl);
+           
+            // Mail::send('emails.sendurl', compact('data'), function($message)  use ($data) {
+            //     $message->to($data['email'])->subject
+            //        ('Link Dashboard Shoopy Back');
+            //     $message->from('aloysiuswahyudwo@gmail.com','CEO Okedeht');
+            //  });
+
+
+          if ($err) {
+            
+            echo "cURL Error #:" . $err; 
+
+          } else {
+
             return response()->json([
                 'message' => 'Success',
                 'status'  => 'success',
                 'data'    => $data,
+                'Response' => $response
             ]);
+
+          }
+           
         }
 
     }
+
+  
+
      /**
      * Display a listing of the resource.
      *
