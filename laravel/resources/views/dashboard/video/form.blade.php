@@ -6,6 +6,7 @@
 <div id="middle-content" class="loginPage">
 	<div class="left_menu">
     <div class="menu_list">
+
         @if(isset($data))
             <a href="{{ url("cms/video")}}" class="row_menu">
             <img class="icon_menu" src="{{ asset('dashboard/images/material/icon_back.png') }}">
@@ -14,13 +15,13 @@
             @if($data['photo'] !='' )
             <div class="row_vid_info">
                 <div class="thumb_video">
-                  <img src="{{ upload_url('video/'.$data['photo'])}}">
+                <img src="{{ upload_url('video/'.$data['photo'])}}">
                 </div>
                 <div class="caption_video">
-                  <h3>Video</h3>
-                  <p>{{ $data['title'] }}</p>
+                <h3>Video</h3>
+                <p>{{ $data['title'] }}</p>
                 </div>
-              </div>
+            </div>
             @endif
             <a href="{{ url("cms/video/detail/".$data['id']) }}" class="row_menu active">
             <img class="icon_menu" src="{{ asset('dashboard/images/material/icon_detail.png') }}">
@@ -49,135 +50,168 @@
       <div class="section_titleSearch">
         <h3>Input Video</h3>
         <div class="right_upload">
+
+          <a href="#" class="cancel_bt btn-cancel-video">Cancel</a>
           <a href="#" class="blue_bt2 btn-submit-video">Publish</a>
         </div><!--end.right_upload-->
       </div>
 
       <div class="rows">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-message">
-                    @if (session('form_message'))
-                    <div class="alert alert-warning alert-rounded alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <?php
-                    $msg =session('form_message')['message'];
-                        $html = (is_array($msg)) ? implode('<br/ >', $msg) : $msg;
-                        $html .= '</div>';
-                        echo $html;
-                    ?>
-                    @endif
-                </div>
-            </div>
-        </div>
-        <form action="{{ $form_action }}" method="post" accept-charset="utf-8" id="form-data" role="form" enctype="multipart/form-data">
-            {!! csrf_field() !!}
         <div class="content_video_input">
           <div class="form_left">
-            <div class="group_line">
-              <label class="label_line" for="title">
-                <span> Title (required) </span>
-                <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title=" Title is for giving information what this ads is about. By giving title, your campaign will be easy to find and search, and give good presentation to your client.">
-              </label>
-              <input type="text" id="title" class="input_noline" value="{{ ( old('title') ? old('title') : ( (isset($data['title'])) ? $data['title'] : '') ) }}"  name="title">
-            </div><!--end.group_line-->
+            <form action="{{ $form_action }}" method="post" accept-charset="utf-8" id="form-data" role="form" enctype="multipart/form-data">
+                {!! csrf_field() !!}
+            <div class="outher_group_line">
+              <div class="group_line  @if (session('form_message')['message']['title']!='') error_line @endif ">
+                <label class="label_line" for="title">
+                  <span> Title (required) </span>
+                  <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title=" Title is for giving information what this ads is about. By giving title, your campaign will be easy to find and search, and give good presentation to your client.">
+                </label>
+                <input type="text" id="title" class="input_noline"  value="{{ ( old('title') ? old('title') : ( (isset($data['title'])) ? $data['title'] : '') ) }}"  name="title">
+              </div><!--end.group_line-->
+              @if (session('form_message'))
+                <span class="erorr_msg">{!! session('form_message')['message']['title'] !!}</span>
+              @endif
+            </div><!--end.outher_group_line-->
 
-            <div class="group_line">
-              <label class="label_line" for="description">
-                <span> Description</span>
-                <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title=" Description is to explain about what this campaign is about, and give clear information about the story of this campaign.">
-              </label>
-              <textarea id="description" rows="5" name="description" cols="50" class="input_noline">{{ ( old('description') ? old('description') : ( (isset($data['description'])) ? $data['description'] : '') ) }}</textarea>
-            </div><!--end.group_line-->
-
-            <div class="group_line">
-              <label class="label_line" for="brand">
-                <span> Brand</span>
-                <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title="Brand is to give an information about what brand is on this ads campaign, by giving this information it will make your report clear and easy to find">
-              </label>
-              <input type="text" id="brand" class="input_noline"  name="brand"  value="{{ ( old('brand') ? old('brand') : ( (isset($data['brand'])) ? $data['brand'] : '') ) }}"  >
-            </div><!--end.group_line-->
-
-            <div class="group_line">
-              <label class="label_line" for="brand">
-                <span> Client Name</span>
-                <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title="This is for input your clients name. For example the Agency name. 'ex - Ogilvy'">
-              </label>
-              <div class="inline_form">
-                <div class="custom-select">
-                  <select name="client_id" id="slct">
-                    <option selected>Choose client name</option>
-                    @foreach ($client as $row)
-                        <option value="{!! $row['id'] !!}"  {!! ( (old('client_id') && old('client_id') == $row['id']) ? 'selected="selected"' : (isset($data['client_id']) && $data['client_id'] == $row['id']) ? 'selected="selected"' : '') !!}>{!! $row['name'] !!}</option>
-                    @endforeach
-                  </select>
-                </div>
-                <span>Or</span>
-                <a href="#add_client" class="bt_white popupClient">Add Client</a>
-              </div><!--end.inline_form-->
-            </div><!--end.group_line-->
+            <div class="outher_group_line">
+              <div class="group_line @if ( session('form_message')['message']['description']!='') error_line @endif ">
+                <label class="label_line" for="description">
+                  <span> Description</span>
+                  <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title=" Description is to explain about what this campaign is about, and give clear information about the story of this campaign.">
+                </label>
+                <textarea id="description" rows="5" name="description" cols="50" class="input_noline">{{ ( old('description') ? old('description') : ( (isset($data['description'])) ? $data['description'] : '') ) }}</textarea>
+              </div><!--end.group_line-->
+              @if (session('form_message'))
+                <span class="erorr_msg">{!! session('form_message')['message']['description'] !!}</span>
+              @endif
+            </div><!--end.outher_group_line-->
 
 
+            <div class="outher_group_line">
+              <div class="group_line @if (session('form_message')['message']['brand']!='') error_line @endif ">
+                <label class="label_line" for="brand">
+                  <span> Brand</span>
+                  <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title="Brand is to give an information about what brand is on this ads campaign, by giving this information it will make your report clear and easy to find">
+                </label>
+                <input type="text" id="brand" class="input_noline" name="brand"  value="{{ ( old('brand') ? old('brand') : ( (isset($data['brand'])) ? $data['brand'] : '') ) }}"  >
+              </div><!--end.group_line-->
+              @if (session('form_message'))
+                <span class="erorr_msg">{!! session('form_message')['message']['brand'] !!}</span>
+              @endif
+            </div><!--end.outher_group_line-->
 
-            <div class="group_line"  style="display: none;">
+
+            <div class="outher_group_line">
+              <div class="group_line @if (session('form_message')['message']['client_id']!='') error_line @endif ">
+                <label class="label_line" for="brand">
+                  <span> Client Name</span>
+                  <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title="This is for input your clients name. For example the Agency name. 'ex - Ogilvy'">
+                </label>
+                <div class="inline_form">
+                  <div class="custom-select">
+                    <select name="client_id" id="slct">
+                        <option selected>Choose client name</option>
+                        @foreach ($client as $row)
+                            <option value="{!! $row['id'] !!}"  {!! ( (old('client_id') && old('client_id') == $row['id']) ? 'selected="selected"' : (isset($data['client_id']) && $data['client_id'] == $row['id']) ? 'selected="selected"' : '') !!}>{!! $row['name'] !!}</option>
+                        @endforeach
+                      </select>
+                  </div>
+                  <span>Or</span>
+                  <a href="#add_client" class="bt_white popupClient">Add Client</a>
+                </div><!--end.inline_form-->
+              </div><!--end.group_line-->
+              @if (session('form_message'))
+                <span class="erorr_msg">{!! session('form_message')['message']['client_id'] !!}</span>
+              @endif
+            </div><!--end.outher_group_line-->
+
+
+            <div class="group_line" style="display: none;">
               <label class="label_line" for="brand">
                 <span> Upload Background Template </span>
                 <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title="Background size must be 360 x 640">
               </label>
               <div class="inline_form">
-                <input type="file" id="bg_upload" name="background">
+                <input type="file" id="bg_upload" name="background" accept="image/*">
               </div><!--end.inline_form-->
             </div><!--end.group_line-->
 
 
-            <div class="group_line">
-              <label class="label_line" for="brand">
-                <span> Upload Thumbnail Video </span>
-                <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title="Select or upload a picture that shows what's in your video size must be 360 x 178">
-              </label>
-              <div class="inline_form">
-                <input type="file" id="cover_video" name="photo">
-              </div><!--end.inline_form-->
-            </div><!--end.group_line-->
+            <div class="outher_group_line">
+              <div class="group_line @if (session('form_message')['message']['photo']!='') error_line @endif ">
+                <label class="label_line" for="brand">
+                  <span> Upload Thumbnail Video </span>
+                  <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title="Select or upload a picture that shows what's in your video size must be 360 x 178">
+                </label>
+                <div class="inline_form">
+                  <input type="file" id="cover_video" name="photo" accept="image/*">
+                </div><!--end.inline_form-->
+              </div><!--end.group_line-->
+                @if (session('form_message'))
+                    <span class="erorr_msg">{!! session('form_message')['message']['photo'] !!}</span>
+                @endif
+            </div><!--end.outher_group_line-->
 
-            <div class="group_line">
+            <div class="outher_group_line">
+              <div class="group_line ">
                 <label class="label_line" for="brand">
                   <span> Insert URL background landing page</span>
-                  <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title="Insert the URL landing page for client ">
+                  <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title="Insert the URL landing page for client   ex: https://www.google.com/ ">
                 </label>
-                <input type="text" id="brand" class="input_noline"  name="urllanding" value="{{ ( old('urllanding') ? old('urllanding') : ( (isset($data['urllanding'])) ? $data['urllanding'] : '') ) }}"">
+                <input type="text" id="brand" class="input_noline"  name="urllanding" value="{{ ( old('urllanding') ? old('urllanding') : ( (isset($data['urllanding'])) ? $data['urllanding'] : '') ) }}">
               </div><!--end.group_line-->
 
+            </div><!--end.outher_group_line-->
 
-            <div class="group_line">
-              <label class="label_line" for="brand">
-                <span> Insert target views</span>
-                <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title="Insert the number that were given by your client that they spend off for this campaign ">
-              </label>
-              <input type="text" id="brand" class="input_noline" value="{{ ( old('target_view') ? old('target_view') : ( (isset($data['target_view'])) ? $data['target_view'] : '') ) }}"  name="target_view">
-            </div><!--end.group_line-->
-            <div class="group_line">
+
+            <div class="outher_group_line">
+              <div class="group_line @if (session('form_message')['message']['target_view']!='') error_line @endif ">
+                <label class="label_line" for="brand">
+                  <span> Insert target views</span>
+                  <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title="Insert the number that were given by your client that they spend off for this campaign ">
+                </label>
+                <input type="text" id="brand" class="input_noline"  value="{{ ( old('target_view') ? old('target_view') : ( (isset($data['target_view'])) ? $data['target_view'] : '') ) }}"  name="target_view">
+              </div><!--end.group_line-->
+              @if (session('form_message'))
+                    <span class="erorr_msg">{!! session('form_message')['message']['target_view'] !!}</span>
+                @endif
+            </div><!--end.outher_group_line-->
+
+
+            <div class="outher_group_line">
+              <div class="group_line @if (session('form_message')['message']['target_days']!='') error_line @endif ">
                 <label class="label_line" for="brand">
                   <span> Insert target views per day</span>
                   <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title="Insert the number that were given by your client that they spend off for this campaign each day of campaign ">
                 </label>
-                <input type="text" id="brand" class="input_noline" value="{{ ( old('target_days') ? old('target_days') : ( (isset($data['target_days'])) ? $data['target_days'] : '') ) }}"  name="target_days">
-            </div><!--end.group_line-->
-            <div class="group_line">
-              <label class="label_line" for="brand">
-                <span> Schedule</span>
-                <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}"  title=" Set time when your campaign will start to publish">
-              </label>
-              <p>Select a date to publish your video </p>
-              <div class="inline_form">
-                <input type="text" class="input_form"  value="{{ ( old('start_publish') ? old('start_publish') : ( (isset($data['start_publish'])) ? date('m/d/Y', strtotime($data['start_publish'])) : '') ) }}" name="start_publish" id="from">
-                <span>s/d</span>
-                <input type="text" class="input_form"  value="{{ ( old('end_publish') ? old('end_publish') : ( (isset($data['end_publish'])) ? date('m/d/Y', strtotime($data['end_publish'])) : '') ) }}" id="to" name="end_publish">
-              </div><!--end.inline_form-->
-            </div><!--end.group_line-->
+                <input type="text" id="brand" class="input_noline"  value="{{ ( old('target_days') ? old('target_days') : ( (isset($data['target_days'])) ? $data['target_days'] : '') ) }}"  name="target_days">
+              </div><!--end.group_line-->
+              @if (session('form_message'))
+                    <span class="erorr_msg">{!! session('form_message')['message']['target_days'] !!}</span>
+                @endif
+            </div><!--end.outher_group_line-->
+
+
+            <div class="outher_group_line">
+              <div class="group_line @if (session('form_message')['message']['start_publish']!='') error_line @endif ">
+                <label class="label_line" for="brand">
+                  <span> Schedule</span>
+                  <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title=" Set time when your campaign will start to publish">
+                </label>
+                <p>Select a date to publish your video </p>
+                <div class="inline_form">
+                  <input type="text" class="input_form"  value="{{ ( old('start_publish') ? old('start_publish') : ( (isset($data['start_publish'])) ? date('m/d/Y', strtotime($data['start_publish'])) : '') ) }}" name="start_publish" id="from">
+                  <span>s/d</span>
+                  <input type="text" class="input_form" id="to" value="{{ ( old('end_publish') ? old('end_publish') : ( (isset($data['end_publish'])) ? date('m/d/Y', strtotime($data['end_publish'])) : '') ) }}" id="to" name="end_publish">
+                </div><!--end.inline_form-->
+              </div><!--end.group_line-->
+              @if (session('form_message'))
+                    <span class="erorr_msg">@if( session('form_message')['message']['start_publish']!='' || session('form_message')['message']['end_publish']!=''  )  {!! session('form_message')['message']['start_publish'].' '.session('form_message')['message']['end_publish'] !!}  @endif</span>
+                @endif
+            </div><!--end.outher_group_line-->
         </form>
           </div><!--end.form_left-->
-
 
           <div class="form_right">
             <div class="preview_box">
@@ -190,6 +224,9 @@
               <div class="upload_bg_abs">
                 <button type="button" class="grey_bt" id="trigger_add_bg">Add Background </button>
                 <span>Background size must be 360 x 640</span>
+                @if (session('form_message'))
+                    <span class="erorr_msg">{!! session('form_message')['message']['background'] !!}</span>
+                @endif
               </div>
             </div>
           </div><!--end.form_right-->
@@ -318,7 +355,7 @@
           <div class="left">
             <h3> Edit Client Name</h3>
           </div>
-          <div class="right"><a href="#" class="close_popup"><img src="images/material/icon_close.png"></a></div>
+          <div class="right"><a href="#" class="close_popup"><img src="{{ asset('dashboard/images/material/icon_close.png') }}"></a></div>
         </div><!--end.title_popup-->
         <div class="content_popup">
           <div class="group_form">
@@ -372,6 +409,7 @@
 <script type="text/javascript">
     var url = '{{ url('') }}';
     var actionClient = '';
+    var videoId = "{{$data['id']}}";
     var client_id = "{{ ( old('client_id') ? old('client_id') : ( (isset($data['client_id'])) ? $data['client_id'] : '') ) }}";
   $( function() {
 
@@ -609,6 +647,19 @@
             $('#form-data').trigger('submit');
             $(this).prop('disabled', true);
     })
+    $(document).on('click','.btn-cancel-video',function(){
+        $.ajax({
+                type: "POST",
+                url : url + "/cms/video/batal",
+                data: {
+                        'id': videoId
+
+                },
+                dataType:'json'
+        }).done(function(response){
+            // window.location = url+'/cms/video';
+        });
+    });
     $(document).on('click','input[class="checkClient"]', function(){
         actionClient = $(this);
         var checkedNum = $('input[class="checkClient"]:checked').length;

@@ -17,7 +17,8 @@ class Video extends Model
      */
     protected $fillable = [
          'title','description','brand','path', 'video', 'photo','target_view',
-         'background','start_publish','end_publish','status','client_id','video_name','urllanding'
+         'background','start_publish','end_publish','status','client_id','video_name','urllanding',
+         'target_days'
     ];
 
     /**
@@ -92,7 +93,7 @@ class Video extends Model
      */
     public function getModelById($id)
     {
-        $data = $this->with('roadshow');
+        $data = $this;
         if (is_array($id)) {
             return $data->whereIn($this->getKeyName(), $id)->get();
         }

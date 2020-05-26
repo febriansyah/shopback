@@ -30,7 +30,7 @@ class Risize
         //
         $video = $event->video;
         FFMpeg::fromDisk('local')
-            ->open('public/uploads/video//video/cut_'.$video['video_name'].'.mp4')
+            ->open('public/uploads/video//video/'.$video['video_name'].'.mp4')
             ->addFilter(function ($filters) {
                 $filters->resize(new \FFMpeg\Coordinate\Dimension(640, 480));
             })
@@ -40,7 +40,7 @@ class Risize
             ->save('public/uploads/video//video/640_'.$video['video_name'].'.mp4');
 
         FFMpeg::fromDisk('local')
-            ->open('public/uploads/video//video/cut_'.$video['video_name'].'.mp4')
+            ->open('public/uploads/video//video/'.$video['video_name'].'.mp4')
             ->addFilter(function ($filters) {
                 $filters->resize(new \FFMpeg\Coordinate\Dimension(1280, 960));
             })

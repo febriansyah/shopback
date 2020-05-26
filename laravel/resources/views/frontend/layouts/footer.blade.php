@@ -97,7 +97,8 @@
                         videonya.play();
                         $('.idUnix').val(response.id);
                     }else{
-                        alert(response.message);
+                        // alert(response.message);
+                        $('#popup_limit_video').show();
                     }
 		         });
 

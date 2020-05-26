@@ -38,7 +38,7 @@
         <h3> Video Analytic </h3>
         <div class="right">
             <div class="period">
-              <span class="date_rangenya">24 - 30 April, 2020</span>
+              <span class="date_rangenya">{!! $ketDate !!}</span>
               <div class="custom-select">
                 <select name="slct" id="slct" class="range_date">
                   <option selected value="7"> Last 7 days</option>
@@ -71,7 +71,7 @@
                   </div><!--end.inline_row-->
                   <div class="inline_row">
                     <span class="text_num">100% View</span>
-                    <span class="numbering ">{{ number_format('0') }}</span>
+                     <span class="numbering persentview">{{ number_format($persent_view) }}</span>
                   </div><!--end.inline_row-->
                   <div class="inline_row">
                     <span class="text_num">Avg. Watch Time</span>
@@ -301,7 +301,8 @@ function getData(){
                  }else{
                     $('.avgWatch').html(Math.floor(response.avg/3600)+' Hours');
                  }
-
+				$('.date_rangenya').html(response.ketDate);
+				$('.persentview').html(response.persent_view);
 
 
              });

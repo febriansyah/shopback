@@ -59,6 +59,8 @@ Route::prefix('cms')->namespace('Dashboard')->name('dashboard.')->group(function
             ->name('video.list');
             Route::post('upload', 'VideoController@upload')
             ->name('video.upload');
+            Route::post('batal', 'VideoController@cancles')
+            ->name('video.batal');
             Route::match(['get', 'post'], 'detail/{id?}', 'VideoController@update')
             ->name('video.detail');
              Route::get('analitik/{id?}', 'VideoController@analitik')

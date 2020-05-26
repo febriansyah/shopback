@@ -54,7 +54,7 @@
                   </label>
                 </th>
                 <th>Video</th>
-                <th>Title</th>
+                <th class="dateList">Title</th>
                 <th>Client</th>
                 <th class="dateList">Created Date</th>
                 <th class="dateList">Start Date</th>
@@ -139,7 +139,7 @@ $(document).ready(function() {
                 +'<td>'
                   +'<div class="img_vid">'+v.photo+'</div>'
                 +'</td>'
-                +'<td>'
+                +'<td class="dateList">'
                   +'<h3 class="title_tab">'+v.title+'</h3>'
                   +v.description
                   +'<div class="abs_action">'

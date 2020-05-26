@@ -108,7 +108,6 @@ class ResetPasswordController extends Controller
             $validator = Validator::make($request->all(), [
                 'token'    => 'required',
                 'password' => 'required|confirmed|min:6',
-                'email'    => 'required|email|exists:' . $this->model->getConnectionName() . '.' . $this->model->getTable(),
             ]);
             if ($validator->fails()) {
 

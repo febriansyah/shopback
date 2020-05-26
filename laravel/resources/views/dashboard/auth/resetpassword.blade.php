@@ -28,11 +28,9 @@
             </div>
             <form action="{{ route('dashboard.reset-password-post') }}" method="POST">
                 @csrf
+
               <div class="group_form">
                 <input type="hidden" name="token" value="{{ $token }}">
-                <input type="email" class="line_form" name="email" placeholder="Email">
-              </div>
-              <div class="group_form">
                 <input type="password" class="line_form" name="password" placeholder="Password">
               </div>
               <div class="group_form">

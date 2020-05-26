@@ -114,7 +114,10 @@
         $(this).removeClass("activated");
       });
 
-
+    $(document).on('click','#trigger_next_upload',function(){
+        $('.popup_container').hide();
+        $('#loading_spinner').show();
+    })
     function ValidateVideoInput(oInput) {
         if (oInput.type == "file") {
             var _validFileExtensions = [".avi", ".mp4"];

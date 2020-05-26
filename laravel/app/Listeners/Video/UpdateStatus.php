@@ -32,7 +32,11 @@ class UpdateStatus
         //
         $video = $event->video;
         $getVideo = Video::where('id',$video['id'])->first();
-        $getVideo['status'] ='1';
+        if($getVideo['title']==''){
+            $getVideo['status'] ='0';
+        }else{
+                $getVideo['status'] ='1';
+        }
         $getVideo->save();
     }
 }

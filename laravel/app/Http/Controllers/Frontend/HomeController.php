@@ -111,8 +111,8 @@ class HomeController extends Controller
     public function checkData(Request $request){
        if ($request->isMethod('post') && $request->ajax()) {
             $post = $request->all();
-            $data = $this->model->where('status', '1')->where('video_id', $post['video_id'])->whereDate('created_at',date('Y-m-d'))->where('order_id', $post['shopbackid'])->get()->count();
-
+            $data = $this->model->where('status', '1')->whereDate('created_at',date('Y-m-d'))->where('order_id', $post['shopbackid'])->get()->count();
+            // dd($data);
             if($data >= 2){
                 return response()->json([
                     'status' => 'failed',

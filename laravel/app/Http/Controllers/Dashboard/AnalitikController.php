@@ -106,19 +106,40 @@ class AnalitikController extends Controller
         $getVideo = $this->model_video->where('id', $id)->first();
         if($getVideo){
             $this->parse['video']  = $getVideo;
-            $this->parse['total_view']  = $this->model_shopeback->where('video_id',$id)->get()->count();
+			$nowDate = Carbon::now()->addDay();
+			$startDate = Carbon::now()->addDay();
+			$startDate =$startDate->subDays(7);
+
+
+            $this->parse['total_view']  = $this->model_shopeback->where('status',1)->where('video_id',$id)->get()->count();
 
             $this->parse['uniq_user']  = $this->model_shopeback->where('video_id',$id)->groupBy('order_id')->get()->count();
+			$this->parse['persent_view']  = $this->model_shopeback->where('status',1)->where('persentase','100')->where('video_id',$id)->get()->count();
             $this->parse['uniq_visitor']  = $this->model_shopeback->where('video_id',$id)->groupBy('order_id')->get()->count();
             $this->parse['avg']  = (int) $this->model_shopeback ->selectRaw('AVG(TIME_TO_SEC(duration)) as avg')->where('video_id',$id)->get()[0]['avg'];
             $this->parse['url_data']       = route($this->prefix_routes. 'list');
-            $nowDate = Carbon::now();
 
+			$strKetStartDate ='';
+			$strKetEndDate ='';
+			if($startDate->format('m')==$nowDate->format('m')){
+				$strKetStartDate .=$startDate->format('d');
+				$strKetEndDate .=$nowDate->format('d F');
+			}else if($startDate->format('m')!=$nowDate->format('m')){
+				$strKetStartDate .=$startDate->format('d m');
+				$strKetEndDate .=$nowDate->format('d F');
+			}
 
+			if($startDate->format('y')==$nowDate->format('y')){
+				$strKetEndDate .=', '.$nowDate->format('Y');
+			}else if($startDate->format('y')!=$nowDate->format('y')){
+				$strKetStartDate .= ', '.$startDate->format('Y');
+				$strKetEndDate .=', '.$nowDate->format('Y');
+			}
+			$this->parse['ketDate'] = $strKetStartDate.' - ' .$strKetEndDate;
 
             $date = array();
             $data = array();
-            for ($i=0;$i<=7;$i++)
+            for ($i=0;$i< 7;$i++)
             {
                 if($i==0){
                     $date[$i] = $nowDate->toDateString();
@@ -126,21 +147,34 @@ class AnalitikController extends Controller
                     $date[$i] = $nowDate->subDays()->toDateString();
                 }
 
-                $data[]   = $this->model_shopeback->where('status','1')->where('video_id',$id)->whereDate('created_at',$date[$i])->count();
+                $data[]   = $this->model_shopeback->where('status',1)->where('video_id',$id)->whereDate('created_at',$date[$i])->count();
 
             }
             $this->parse['chartViwer']['date'] = json_encode($date);
             $this->parse['chartViwer']['data'] = json_encode($data);
             $this->parse['chartViwer']['series'] = 'viwer';
 
-            $array = array('25','50','75','100');
+            $array = array('0','25','50','70','100');
             $category = array();
             $data = array();
-            for ($i=0;$i<=3;$i++)
+            for ($i=0;$i<=4;$i++)
             {
                 $category[$i] = $array[$i].'%';
+				if($array[$i]<100){
 
-                $data[]   = $this->model_shopeback->where('status','1')->where('video_id',$id)->where('persentase',$array[$i])->get()->count();
+
+					$data[]   = $this->model_shopeback->where(function($query) use ($array,$i)  {
+
+								$startPersent = $array[$i];
+								$akhirPersent = $array[$i+1] - 1;
+								$query->whereRaw("persentase >=".$startPersent);
+								$query->whereRaw("persentase <".$akhirPersent);
+
+							})->where('status',1)->where('video_id',$id)->get()->count();
+				} else{
+					$data[]   = $this->model_shopeback->where('status',1)->where('video_id',$id)->where('persentase',$array[$i])->get()->count();
+				}
+
 
             }
 
@@ -211,28 +245,57 @@ class AnalitikController extends Controller
             // $endDate = date('Y-m-d', strtotime($post['endDate']));
             // $endDate = Carbon::parse($endDate);
             $rangeDate = $post['rangeDate'];
-            $endDate = Carbon::now();
-            $nowDate = Carbon::now();
+            $endDate = Carbon::now()->addDay();
+            $nowDate = Carbon::now()->addDay();
             $startDate = $endDate->subDays($rangeDate );
             $id = $post['id'];
 			$getVideo = $this->model_video->where('id', $id)->first();
-            $this->parse['total_view']  = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->count();
-            $this->parse['uniq_visitor']  = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->groupBy('order_id')->get()->count();
-            $this->parse['avg']  = (int) $this->model_shopeback ->selectRaw('AVG(TIME_TO_SEC(duration)) as avg')->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->get()[0]['avg'];
-
+            $this->parse['total_view']  = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 23:59:59'])->count();
+            $this->parse['uniq_visitor']  = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 23:59:59'])->groupBy('order_id')->get()->count();
+            $this->parse['avg']  = (int) $this->model_shopeback ->selectRaw('AVG(TIME_TO_SEC(duration)) as avg')->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 23:59:59'])->get()[0]['avg'];
+			$this->parse['persent_view']  = $this->model_shopeback->where('status',1)->where('persentase','100')->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 23:59:59'])->get()->count();
 
             $start = new DateTime($startDate->toDateString());
             $end   = new DateTime($endDate->toDateString());
 
-            $array = array('25','50','75','100');
+            $array = array('0','25','50','70','100');
             $category = array();
             $data = array();
+			$strKetStartDate ='';
+			$strKetEndDate ='';
+			if($startDate->format('m y')==$nowDate->format('m y')){
+				$strKetStartDate .=$startDate->format('d');
+				$strKetEndDate .=$nowDate->format('d F');
+			}else if($startDate->format('m y')!=$nowDate->format('m y')){
+				$strKetStartDate .=$startDate->format('d F');
+				$strKetEndDate .=$nowDate->format('d F');
+			}
 
-            for ($i=0;$i<=3;$i++)
+			if($startDate->format('y')==$nowDate->format('y')){
+				$strKetEndDate .=', '.$nowDate->format('Y');
+			}else if($startDate->format('y')!=$nowDate->format('y')){
+				$strKetStartDate .= ', '.$startDate->format('Y');
+				$strKetEndDate .=', '.$nowDate->format('Y');
+			}
+			$this->parse['ketDate'] = $strKetStartDate.' - '.$strKetEndDate;
+            for ($i=0;$i<=4;$i++)
             {
                 $category[$i] = $array[$i].'%';
+				if($array[$i]<100){
 
-                $data[]   = $this->model_shopeback->where('status','1')->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->where('persentase',$array[$i])->get()->count();
+
+					$data[]   = $this->model_shopeback->where(function($query) use ($array,$i)  {
+
+								$startPersent = $array[$i];
+								$akhirPersent = $array[$i+1] - 1;
+								$query->whereRaw("persentase >=".$startPersent);
+								$query->whereRaw("persentase <".$akhirPersent);
+
+							})->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 23:59:59'])->where('status',1)->where('video_id',$id)->get()->count();
+				} else{
+					$data[]   = $this->model_shopeback->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 23:59:59'])->where('status',1)->where('video_id',$id)->where('persentase',$array[$i])->get()->count();
+				}
+
 
             }
 
@@ -290,7 +353,7 @@ class AnalitikController extends Controller
                 }
 
 
-                $data[]   = $this->model_shopeback->where('status','1')->where('video_id',$id)->whereDate('created_at',$date[$i])->count();
+                $data[]   = $this->model_shopeback->where('video_id',$id)->whereDate('created_at',$date[$i])->count();
 
             }
 
@@ -457,55 +520,46 @@ class AnalitikController extends Controller
             $data = $this->model_shareurl->create($param);
             $data->link_id = $permitted_chars.$data->id;
             $data->save();
-            
+
             //SENDING EMAIL @PEPIPOST
-            $curl = curl_init();
-            curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.pepipost.com/v2/sendEmail",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => "{\"personalizations\":[{\"recipient\":\"".$param['email']."\"}],\"from\":{\"fromEmail\":\"admin@videoads.mfebriansyah.com\",\"fromName\":\"Admin Ceki\"},\"subject\":\"Hi gaes Lo dapet Link ni dari Shopback \",\"content\":\"Hi Gaes, Click Link ini dah ".$data->link_id." Buat Lanjutin Shopback Lo\"}",
-            CURLOPT_HTTPHEADER => array(
-              "api_key: 7121cb46e21d6e4b090e55767c745498",
-              "content-type: application/json"
-            ),
-          ));
+            //$curl = curl_init();
+            //curl_setopt_array($curl, array(
+            //CURLOPT_URL => "https://api.pepipost.com/v2/sendEmail",
+            //CURLOPT_RETURNTRANSFER => true,
+           // CURLOPT_ENCODING => "",
+           // CURLOPT_MAXREDIRS => 10,
+           // CURLOPT_TIMEOUT => 30,
+           // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+           // CURLOPT_CUSTOMREQUEST => "POST",
+            //CURLOPT_POSTFIELDS => "{\"personalizations\":[{\"recipient\":\"".$param['email']."\"}],\"from\":{\"fromEmail\":\"admin@videoads.mfebriansyah.com\",\"fromName\":\"Admin Ceki\"},\"subject\":\"Hi gaes Lo dapet Link ni dari Shopback \",\"content\":\"Hi Gaes, Click Link ini dah ".$data->link_id." Buat Lanjutin Shopback Lo\"}",
+           // CURLOPT_HTTPHEADER => array(
+             // "api_key: 7121cb46e21d6e4b090e55767c745498",
+             // "content-type: application/json"
+           // ),
+         // ));
 
-          $response = curl_exec($curl);
-          $err = curl_error($curl);
-          curl_close($curl);
-           
-            // Mail::send('emails.sendurl', compact('data'), function($message)  use ($data) {
-            //     $message->to($data['email'])->subject
-            //        ('Link Dashboard Shoopy Back');
-            //     $message->from('aloysiuswahyudwo@gmail.com','CEO Okedeht');
-            //  });
+          //$response = curl_exec($curl);
+          //$err = curl_error($curl);
+          //curl_close($curl);
 
+             Mail::send('emails.sendurl', compact('data'), function($message)  use ($data) {
+                 $message->to($data['email'])->subject
+                    ('Link Dashboard Shoopy Back');
+                 $message->from('testing@videoads.mfebriansyah.com','CEO Okedeht');
+              });
 
-          if ($err) {
-            
-            echo "cURL Error #:" . $err; 
-
-          } else {
 
             return response()->json([
                 'message' => 'Success',
                 'status'  => 'success',
-                'data'    => $data,
-                'Response' => $response
+                'data'    => $data
             ]);
 
-          }
-           
         }
 
     }
 
-  
+
 
      /**
      * Display a listing of the resource.
