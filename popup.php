@@ -1,3 +1,11 @@
+
+<div id="loading_spinner" class="popup_container" style="display: none;">
+  <div class="bg_popup"></div>
+  <div class="spanner">
+    <div class="loader"></div>
+    <p>Uploading file, please be patient..</p>
+  </div>
+</div>
 <div id="add_client" class="popup_container" style="display: none;">
   <div class="bg_popup"></div>
   <div class="inner_abs_popup">
