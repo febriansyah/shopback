@@ -4,26 +4,19 @@
 <div id="canvas_banner" class="fit_height" style="overflow: hidden;">
     <div class="abs_top">
         <div class="frame_video">
-            <div class="img_background">
-                @if($video->urllanding!='')
-                <a href="{!! $video->urllanding !!}" target="_blank">
-                    <img src="{{ upload_url('video/background/'.$video->background) }}">
-                </a>
-                @else
-                <img src="{{ upload_url('video/background/'.$video->background) }}">
-                @endif
-            </div>
+            <div class="img_background"><a href="#" target="_blank"><img src="{{ upload_url('video/background/'.$video->background) }}"></a></div>
             <div id="close_button" class="close_button" style="display: none;">x</div>
             <div id="closeEnded" style="display: none;" class="close_button trigger_close_all">x</div>
             <div class="abs_videos">
                 <div style="position: relative;">
                     <div class="video_wrapper">
-                        <video id="videoXl"   type="video/mp4" width="100%" height="300px" align="middle"
+                        <video id="videoXl" src="{{ upload_url('video/video/adaptive_'.$video->video_name.'250.m3u8') }}"  type="video/mp4" width="100%" height="300px" align="middle"
                         preload="auto"  playsinline>
                         </video>
                         <div class="icon_fullscreen">
-                            <button class="fullscreen" onclick="openFullscreen();"><img src="{{ asset('frontend/images/icon_fullscreen.png') }}"></button>
+                            <button class="fullscreen" onclick="openFullscreen();"><img src="icon_fullscreen.png"></button>
                         </div>
+						
                     </div>
                     <div class="video_cover">
                         <img src="{{ upload_url('video/'.$video->photo)}}" width="100%">
@@ -57,10 +50,10 @@
   </div>
 </div>
 <script>
-var videourl ="{{ upload_url('video/video/640_'.$video->video_name.'.mp4') }}";
+var videourl ="{{ asset('frontend/video/video_web.mp4 ') }}";
 var url ="{{url('')}}";
 var videoId = "{{ $video->id }}";
-
+var pageview = "{{ $pageview}}";
 var elemVid = document.getElementById("videoXl");
 function openFullscreen() {
   if (elemVid.requestFullscreen) {
