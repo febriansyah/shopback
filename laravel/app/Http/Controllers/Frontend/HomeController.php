@@ -26,13 +26,14 @@ class HomeController extends Controller
     {
         $this->model     = new ShoppyBack;
         $this->model_video     = new Video;
+
     }
      /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
         $this->parse['video'] = $this->model_video->where(function($query) {
@@ -41,7 +42,24 @@ class HomeController extends Controller
             $query->orwhereRaw("target_days >= (select count(*) as total from shoope_back where video_id = videos.id and DATE(created_at) = CURDATE() )  ");
 
         })->whereDate('start_publish','<=',date('Y-m-d'))->whereDate('end_publish','>=',date('Y-m-d'))->inRandomOrder()->first();
-        
+        $post = $request->all();
+        $this->parse['pageview'] = '0';
+        if (isset($post['shopbackid']) && isset($post['shopbackid2']) && isset($post['partner'])) {
+            $param = array(
+                        'video_id'         => $this->parse['video']['id'],
+                        'order_id'         => $post['shopbackid'],
+                        'patner_name'      => $post['partner'],
+                        'patner_parameter' => $post['shopbackid2'],
+                        'status' => '0'
+            );
+
+            $data = $this->model->create($param);
+            $this->parse['pageview'] = $data['id'];
+        }
+
+        // $data->uniq_id  =  'Shoopyback-'.$post['shopbackid'].'-'.$data->id;
+        // $data->save();
+
         return view('frontend.home', $this->parse);
     }
     public function test()
@@ -93,32 +111,32 @@ class HomeController extends Controller
     public function checkData(Request $request){
        if ($request->isMethod('post') && $request->ajax()) {
             $post = $request->all();
-            $data = $this->model->where('video_id', $post['video_id'])->where('order_id', $post['shopbackid'])->count();
+            $data = $this->model->where('status', '1')->where('video_id', $post['video_id'])->whereDate('created_at',date('Y-m-d'))->where('order_id', $post['shopbackid'])->get()->count();
+
             if($data >= 2){
                 return response()->json([
                     'status' => 'failed',
-                    'message' => 'anda sudah 2 kali menonton video nya'
+                    'message' => 'quota Anda untuk menonton video hari ini sudah habis'
                 ]);
             }else{
-                $param = array(
-                            'video_id'         => $post['video_id'],
-                            'order_id'         => $post['shopbackid'],
-                            'patner_name'      => $post['patner'],
-                            'patner_parameter' => $post['shopbackid2']
-                );
+                $checkData = $this->model->where('id', $post['pageview'])->first();
+                if ($checkData) {
+                    $checkData->uniq_id  = 'Shoopyback-'.$post['shopbackid'].'-'.$checkData->id;
+                    $checkData->status = '1';
+                    $checkData->save();
 
 
-                 $data = $this->model->create($param);
-                 $data->uniq_id  =  'Shoopyback-'.$post['shopbackid'].'-'.$data->id;
-                 $data->save();
-                 $client = new Client();
-                 $request = $client->get('http://shopback.go2cloud.org/aff_lsr?offer_id=2929&aff_id=1069&aff_sub='.$post['shopbackid'].'&adv_sub='.$data->uniq_id.'&security_token=a087b78e6787a59ee9c5424b396c4bc5');
-                 return response()->json([
-                    'id'    => $data->id,
-                    'test' => $request,
-                    'status' => 'success',
-                    'message' => 'success'
-                ]);
+                    $client = new Client();
+                    $request = $client->get('http://shopback.go2cloud.org/aff_lsr?offer_id=2929&aff_id=1069&aff_sub='.$post['shopbackid'].'&adv_sub='.$checkData->uniq_id.'&security_token=a087b78e6787a59ee9c5424b396c4bc5');
+                    return response()->json([
+                        'id'    => $checkData->id,
+                        'test' => $request,
+                        'status' => 'success',
+                        'message' => 'success'
+                    ]);
+                }
+
+
             }
        }
 

@@ -83,7 +83,8 @@
                             'shopbackid' : qs.shopbackid,
                             'shopbackid2' : qs.shopbackid2,
                             'patner': qs.partner,
-                            'video_id':videoId
+                            'video_id':videoId,
+                            'pageview':pageview
                         }
 		        }).done(function(response){
                     var videonya = document.getElementById('videoXl');

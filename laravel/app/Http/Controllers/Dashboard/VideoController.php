@@ -394,6 +394,13 @@ class VideoController extends Controller
                 'confirmed' => ':attribute tidak sama dengn Verify Password',
                 'dimensions' => ':attribute dimensions tidak sesuai',
                 'mimes' => 'format :attribute salah',
+                'photo.required' =>'Kolom Thumbnail Video ini wajib diisi.',
+                'photo.dimensions' =>'Thumbnail Video dimension tidak sesuai ( 360 X 178)',
+                'photo.mimes' =>'format Thumbnail Video salah (jpeg,jpg,png)',
+                'background.required' =>'Kolom Background ini wajib diisi.',
+                'background.dimensions' =>'Background dimension tidak sesuai ( 360 X 640)',
+                'background.mimes' =>'format Background salah (jpeg,jpg,png)',
+
 
             ];
             if ($data->photo =='' ||  $data->background =='') {

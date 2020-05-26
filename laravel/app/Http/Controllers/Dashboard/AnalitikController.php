@@ -126,7 +126,7 @@ class AnalitikController extends Controller
                     $date[$i] = $nowDate->subDays()->toDateString();
                 }
 
-                $data[]   = $this->model_shopeback->where('video_id',$id)->whereDate('created_at',$date[$i])->count();
+                $data[]   = $this->model_shopeback->where('status','1')->where('video_id',$id)->whereDate('created_at',$date[$i])->count();
 
             }
             $this->parse['chartViwer']['date'] = json_encode($date);
@@ -140,7 +140,7 @@ class AnalitikController extends Controller
             {
                 $category[$i] = $array[$i].'%';
 
-                $data[]   = $this->model_shopeback->where('video_id',$id)->where('persentase',$array[$i])->get()->count();
+                $data[]   = $this->model_shopeback->where('status','1')->where('video_id',$id)->where('persentase',$array[$i])->get()->count();
 
             }
 
@@ -232,7 +232,7 @@ class AnalitikController extends Controller
             {
                 $category[$i] = $array[$i].'%';
 
-                $data[]   = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->where('persentase',$array[$i])->get()->count();
+                $data[]   = $this->model_shopeback->where('status','1')->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->where('persentase',$array[$i])->get()->count();
 
             }
 
@@ -290,7 +290,7 @@ class AnalitikController extends Controller
                 }
 
 
-                $data[]   = $this->model_shopeback->where('video_id',$id)->whereDate('created_at',$date[$i])->count();
+                $data[]   = $this->model_shopeback->where('status','1')->where('video_id',$id)->whereDate('created_at',$date[$i])->count();
 
             }
 
