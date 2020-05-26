@@ -13,8 +13,6 @@
                 <img src="{{ upload_url('video/background/'.$video->background) }}">
                 @endif
             </div>
-            <div id="close_button" class="close_button" style="display: none;">x</div>
-            <div id="closeEnded" style="display: none;" class="close_button trigger_close_all">x</div>
             <div class="abs_videos">
                 <div style="position: relative;">
                     <div class="video_wrapper">
@@ -53,6 +51,20 @@
         <input type="hidden" name="statusupdate" value="0" class="statusupdate">
 			<input type="hidden" name="idUnix" value="0" class="idUnix">
       </div>
+    </div>
+  </div>
+</div>
+
+<div id="popup_limit_video" class="modalnya_popup popup_upload" style="display: none;">
+  <div class="bg-popup"></div>
+  <div class="content-popup">
+    <div class="inner_popup">
+        <div class="icon_men"><img src="{{ asset('frontend/images/icon_orang.png') }}"></div>
+        <div class="box_popup_white">
+          <a href="#" class="close_popupImg trigger_close_all_limit"><img src="{{ asset('frontend/images/close_popup.png') }}"></a>
+          <h3>Mohon Maaf,</h3>
+          <p>quota Anda untuk menonton video hari ini sudah habis</p>
+        </div>
     </div>
   </div>
 </div>

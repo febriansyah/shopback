@@ -7,6 +7,9 @@
         }
     });
 	$(document).ready(function(){
+		$(".trigger_close_all_limit").click(function(){
+			$("#popup_limit_video").hide();
+		})
         var idUnix = '';
 		$(window).bind("load resize",function(){
 			$(".fit_height").height($(window).height());

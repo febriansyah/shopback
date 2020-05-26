@@ -281,6 +281,37 @@
         background: #000;
         border:none;
     }
+    #popup_limit_video .inner_popup{
+        background: transparent;
+        text-align: center;
+    }
+    .icon_men{
+        display: inline-block;
+        clear: both;
+    }
+    .box_popup_white{
+        clear: both;
+        display: inline-block;
+        border-radius: 20px;
+        background: #fff;
+        text-align: center;
+        position: relative;
+        padding: 20px;
+        margin-top: -10px;
+    }
+    .box_popup_white h3{
+        margin: 0 0 10px 0;
+        font-size: 20px;
+    }
+    .box_popup_white p{
+        margin: 0;
+    }
+    .close_popupImg{
+        position: absolute;
+        width: 25px;
+        right: -10px;
+        top: -10px;
+    }
 </style>
 
 <script type="text/javascript">
