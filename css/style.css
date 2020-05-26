@@ -858,7 +858,23 @@ select {
 	border-radius: 8px;
 	border:1px solid #A0A0A0;
 	padding: 10px 20px;
+}
+.outher_group_line{
+	display: block;
 	margin-bottom: 20px;
+}
+.group_line.error_line{
+	border-color: #F44336;
+}
+.erorr_msg{
+	display: block;
+	text-align: left;
+	font-weight: bold;
+	font-size: 16px;
+	color: #F44336;
+}
+.upload_bg_abs .erorr_msg{
+	text-align: center;
 }
 .form_left{
 	display: inline-block;
@@ -871,6 +887,8 @@ select {
 	width: 38%;
 	padding-left: 20px;
 	padding-top: 5vh;
+}
+.form_left .erorr_msg{
 }
 .label_line{
 	width: 100%;

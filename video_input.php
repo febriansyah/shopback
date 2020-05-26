@@ -36,47 +36,61 @@
       <div class="rows">
         <div class="content_video_input">
           <div class="form_left">
-            <div class="group_line">
-              <label class="label_line" for="title">
-                <span> Title (required) </span>
-                <img src="images/material/icon_tanya.png" title=" Title is for giving information what this ads is about. By giving title, your campaign will be easy to find and search, and give good presentation to your client.">
-              </label>
-              <input type="text" id="title" class="input_noline"  name="">
-            </div><!--end.group_line-->
+            <div class="outher_group_line">
+              <div class="group_line error_line">
+                <label class="label_line" for="title">
+                  <span> Title (required) </span>
+                  <img src="images/material/icon_tanya.png" title=" Title is for giving information what this ads is about. By giving title, your campaign will be easy to find and search, and give good presentation to your client.">
+                </label>
+                <input type="text" id="title" class="input_noline"  name="">
+              </div><!--end.group_line-->
+              <span class="erorr_msg">Please insert title</span>
+            </div><!--end.outher_group_line-->
 
-            <div class="group_line">
-              <label class="label_line" for="description">
-                <span> Description</span>
-                <img src="images/material/icon_tanya.png" title=" Description is to explain about what this campaign is about, and give clear information about the story of this campaign.">
-              </label>
-              <textarea id="description" rows="5" cols="50" class="input_noline"></textarea>
-            </div><!--end.group_line-->
+            <div class="outher_group_line">
+              <div class="group_line error_line">
+                <label class="label_line" for="description">
+                  <span> Description</span>
+                  <img src="images/material/icon_tanya.png" title=" Description is to explain about what this campaign is about, and give clear information about the story of this campaign.">
+                </label>
+                <textarea id="description" rows="5" cols="50" class="input_noline"></textarea>
+              </div><!--end.group_line-->
+              <span class="erorr_msg">Please insert description</span>
+            </div><!--end.outher_group_line-->
 
-            <div class="group_line">
-              <label class="label_line" for="brand">
-                <span> Brand</span>
-                <img src="images/material/icon_tanya.png" title="Brand is to give an information about what brand is on this ads campaign, by giving this information it will make your report clear and easy to find">
-              </label>
-              <input type="text" id="brand" class="input_noline"  name="" >
-            </div><!--end.group_line-->
 
-            <div class="group_line">
-              <label class="label_line" for="brand">
-                <span> Client Name</span>
-                <img src="images/material/icon_tanya.png" title="This is for input your clients name. For example the Agency name. 'ex - Ogilvy'">
-              </label>
-              <div class="inline_form">
-                <div class="custom-select">
-                  <select name="slct" id="slct">
-                    <option selected>Choose client name</option>
-                    <option value="1">Dentsu</option>
-                    <option value="2">Tiket</option>
-                  </select>
-                </div>
-                <span>Or</span>
-                <a href="#add_client" class="bt_white popupShow">Add Client</a>
-              </div><!--end.inline_form-->
-            </div><!--end.group_line-->
+            <div class="outher_group_line">
+              <div class="group_line error_line">
+                <label class="label_line" for="brand">
+                  <span> Brand</span>
+                  <img src="images/material/icon_tanya.png" title="Brand is to give an information about what brand is on this ads campaign, by giving this information it will make your report clear and easy to find">
+                </label>
+                <input type="text" id="brand" class="input_noline"  name="" >
+              </div><!--end.group_line-->
+                <span class="erorr_msg">Please insert brand name</span>
+            </div><!--end.outher_group_line-->
+
+
+            <div class="outher_group_line">
+              <div class="group_line error_line">
+                <label class="label_line" for="brand">
+                  <span> Client Name</span>
+                  <img src="images/material/icon_tanya.png" title="This is for input your clients name. For example the Agency name. 'ex - Ogilvy'">
+                </label>
+                <div class="inline_form">
+                  <div class="custom-select">
+                    <select name="slct" id="slct">
+                      <option selected>Choose client name</option>
+                      <option value="1">Dentsu</option>
+                      <option value="2">Tiket</option>
+                    </select>
+                  </div>
+                  <span>Or</span>
+                  <a href="#add_client" class="bt_white popupShow">Add Client</a>
+                </div><!--end.inline_form-->
+              </div><!--end.group_line-->
+                <span class="erorr_msg"> Please choose client name</span>
+            </div><!--end.outher_group_line-->
 
 
             <div class="group_line" style="display: none;">
@@ -90,50 +104,70 @@
             </div><!--end.group_line-->
 
 
-            <div class="group_line">
-              <label class="label_line" for="brand">
-                <span> Upload Thumbnail Video </span>
-                <img src="images/material/icon_tanya.png" title="Select or upload a picture that shows what's in your video size must be 360 x 178">
-              </label>
-              <div class="inline_form">
-                <input type="file" id="cover_video" name="" accept="image/*">
-              </div><!--end.inline_form-->
-            </div><!--end.group_line-->
-            <div class="group_line">
-              <label class="label_line" for="brand">
-                <span> Insert URL background landing page</span>
-                <img src="images/material/icon_tanya.png" title="Insert the URL landing page for client ">
-              </label>
-              <input type="text" id="brand" class="input_noline"  name="">
-            </div><!--end.group_line-->
-            <div class="group_line">
-              <label class="label_line" for="brand">
-                <span> Insert target views</span>
-                <img src="images/material/icon_tanya.png" title="Insert the number that were given by your client that they spend off for this campaign ">
-              </label>
-              <input type="text" id="brand" class="input_noline"  name="">
-            </div><!--end.group_line-->
+            <div class="outher_group_line">
+              <div class="group_line error_line">
+                <label class="label_line" for="brand">
+                  <span> Upload Thumbnail Video </span>
+                  <img src="images/material/icon_tanya.png" title="Select or upload a picture that shows what's in your video size must be 360 x 178">
+                </label>
+                <div class="inline_form">
+                  <input type="file" id="cover_video" name="" accept="image/*">
+                </div><!--end.inline_form-->
+              </div><!--end.group_line-->
+                <span class="erorr_msg">Please insert title</span>
+            </div><!--end.outher_group_line-->
 
-            <div class="group_line">
-              <label class="label_line" for="brand">
-                <span> Insert target views per day</span>
-                <img src="images/material/icon_tanya.png" title="Insert the number that were given by your client that they spend off for this campaign each day of campaign ">
-              </label>
-              <input type="text" id="brand" class="input_noline"  name="">
-            </div><!--end.group_line-->
+            <div class="outher_group_line">
+              <div class="group_line error_line">
+                <label class="label_line" for="brand">
+                  <span> Insert URL background landing page</span>
+                  <img src="images/material/icon_tanya.png" title="Insert the URL landing page for client ">
+                </label>
+                <input type="text" id="brand" class="input_noline"  name="">
+              </div><!--end.group_line-->
+                <span class="erorr_msg">Thumbnail Video must ( 360 X 178)</span>
+            </div><!--end.outher_group_line-->
 
-            <div class="group_line">
-              <label class="label_line" for="brand">
-                <span> Schedule</span>
-                <img src="images/material/icon_tanya.png" title=" Set time when your campaign will start to publish">
-              </label>
-              <p>Select a date to publish your video </p>
-              <div class="inline_form">
-                <input type="text" class="input_form" name="from" id="from">
-                <span>s/d</span>
-                <input type="text" class="input_form" id="to" name="to">
-              </div><!--end.inline_form-->
-            </div><!--end.group_line-->
+
+            <div class="outher_group_line">
+              <div class="group_line error_line">
+                <label class="label_line" for="brand">
+                  <span> Insert target views</span>
+                  <img src="images/material/icon_tanya.png" title="Insert the number that were given by your client that they spend off for this campaign ">
+                </label>
+                <input type="text" id="brand" class="input_noline"  name="">
+              </div><!--end.group_line-->
+              <span class="erorr_msg">Please insert target views</span>
+            </div><!--end.outher_group_line-->
+
+
+            <div class="outher_group_line">
+              <div class="group_line error_line">
+                <label class="label_line" for="brand">
+                  <span> Insert target views per day</span>
+                  <img src="images/material/icon_tanya.png" title="Insert the number that were given by your client that they spend off for this campaign each day of campaign ">
+                </label>
+                <input type="text" id="brand" class="input_noline"  name="">
+              </div><!--end.group_line-->
+               <span class="erorr_msg">target views per day must lower than target views</span>
+            </div><!--end.outher_group_line-->
+
+
+            <div class="outher_group_line">
+              <div class="group_line error_line">
+                <label class="label_line" for="brand">
+                  <span> Schedule</span>
+                  <img src="images/material/icon_tanya.png" title=" Set time when your campaign will start to publish">
+                </label>
+                <p>Select a date to publish your video </p>
+                <div class="inline_form">
+                  <input type="text" class="input_form" name="from" id="from">
+                  <span>s/d</span>
+                  <input type="text" class="input_form" id="to" name="to">
+                </div><!--end.inline_form-->
+              </div><!--end.group_line-->
+              <span class="erorr_msg">Please insert schedule</span>
+            </div><!--end.outher_group_line-->
           </div><!--end.form_left-->
 
           <div class="form_right">
@@ -147,6 +181,7 @@
               <div class="upload_bg_abs">
                 <button type="button" class="grey_bt" id="trigger_add_bg">Add Background </button>
                 <span>Background size must be 360 x 640</span>
+                <span class="erorr_msg">Please background with equal size </span>
               </div>
             </div>
           </div><!--end.form_right-->

@@ -4,7 +4,6 @@
 <div id="canvas_banner" class="fit_height" style="overflow: hidden;">
     <div class="abs_top">
         <div class="frame_video">
-<<<<<<< HEAD
             <div class="img_background">
                 @if($video->urllanding!='')
                 <a href="{!! $video->urllanding !!}" target="_blank">
@@ -14,11 +13,6 @@
                 <img src="{{ upload_url('video/background/'.$video->background) }}">
                 @endif
             </div>
-=======
-            <div class="img_background"><a href="#" target="_blank"><img src="{{ upload_url('video/background/'.$video->background) }}"></a></div>
-            <div id="close_button" class="close_button" style="display: none;">x</div>
-            <div id="closeEnded" style="display: none;" class="close_button trigger_close_all">x</div>
->>>>>>> a2a8f92c15151bdb6154106cbf3df35fe3ea8a47
             <div class="abs_videos">
                 <div style="position: relative;">
                     <div class="video_wrapper">

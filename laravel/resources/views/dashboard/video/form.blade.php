@@ -93,9 +93,9 @@
             <div class="group_line">
               <label class="label_line" for="brand">
                 <span> Brand</span>
-                <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}">
+                <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title="Brand is to give an information about what brand is on this ads campaign, by giving this information it will make your report clear and easy to find">
               </label>
-              <input type="text" id="brand" class="input_noline"  name="brand"  value="{{ ( old('brand') ? old('brand') : ( (isset($data['brand'])) ? $data['brand'] : '') ) }}"  title="Brand is to give an information about what brand is on this ads campaign, by giving this information it will make your report clear and easy to find">
+              <input type="text" id="brand" class="input_noline"  name="brand"  value="{{ ( old('brand') ? old('brand') : ( (isset($data['brand'])) ? $data['brand'] : '') ) }}"  >
             </div><!--end.group_line-->
 
             <div class="group_line">
