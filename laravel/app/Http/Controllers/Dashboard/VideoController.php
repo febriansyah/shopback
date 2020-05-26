@@ -393,7 +393,8 @@ class VideoController extends Controller
                 'unique'   => ':attribute anda sudah terdaftar.',
                 'confirmed' => ':attribute tidak sama dengn Verify Password',
                 'dimensions' => ':attribute dimensions tidak sesuai',
-                'mimes' => 'format :attribute salah'
+                'mimes' => 'format :attribute salah',
+
             ];
             if ($data->photo =='' ||  $data->background =='') {
                 $validator = Validator::make($request->all(), [

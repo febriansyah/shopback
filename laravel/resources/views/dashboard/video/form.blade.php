@@ -156,7 +156,13 @@
               </label>
               <input type="text" id="brand" class="input_noline" value="{{ ( old('target_view') ? old('target_view') : ( (isset($data['target_view'])) ? $data['target_view'] : '') ) }}"  name="target_view">
             </div><!--end.group_line-->
-
+            <div class="group_line">
+                <label class="label_line" for="brand">
+                  <span> Insert target views per day</span>
+                  <img src="{{ asset('dashboard/images/material/icon_tanya.png') }}" title="Insert the number that were given by your client that they spend off for this campaign each day of campaign ">
+                </label>
+                <input type="text" id="brand" class="input_noline" value="{{ ( old('target_days') ? old('target_days') : ( (isset($data['target_days'])) ? $data['target_days'] : '') ) }}"  name="target_days">
+            </div><!--end.group_line-->
             <div class="group_line">
               <label class="label_line" for="brand">
                 <span> Schedule</span>

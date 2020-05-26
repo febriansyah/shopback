@@ -35,8 +35,13 @@ class HomeController extends Controller
     public function index()
     {
         //
-        $this->parse['video'] = $this->model_video->whereDate('start_publish','<=',date('Y-m-d'))->whereDate('end_publish','>=',date('Y-m-d'))->inRandomOrder()->first();
-        // dd( $this->parse['video']);
+        $this->parse['video'] = $this->model_video->where(function($query) {
+
+            $query->whereRaw("target_days = '0'");
+            $query->orwhereRaw("target_days >= (select count(*) as total from shoope_back where video_id = videos.id and DATE(created_at) = CURDATE() )  ");
+
+        })->whereDate('start_publish','<=',date('Y-m-d'))->whereDate('end_publish','>=',date('Y-m-d'))->inRandomOrder()->first();
+        
         return view('frontend.home', $this->parse);
     }
     public function test()
@@ -55,10 +60,10 @@ class HomeController extends Controller
                 $calculate = $calculate *10;
                 if($calculate >= 0 && $calculate < 50){
                     $persentase = '20';
-                } else if($calculate >= 50 && $calculate < 70){
+                } else if($calculate >= 50 && $calculate < 75){
                     $persentase = '50';
-                } else if($calculate >= 70 && $calculate < 100){
-                    $persentase = '70';
+                } else if($calculate >= 75 && $calculate < 100){
+                    $persentase = '75';
                 }else{
                     $persentase = '100';
                 }

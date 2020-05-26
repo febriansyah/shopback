@@ -142,7 +142,7 @@ class AnalitikShareController extends Controller
                     $this->parse['chartViwer']['data'] = json_encode($data);
                     $this->parse['chartViwer']['series'] = 'viwer';
 
-                    $array = array('25','50','70','100');
+                    $array = array('25','50','75','100');
                     $category = array();
                     $data = array();
                     for ($i=0;$i<=3;$i++)
@@ -240,7 +240,7 @@ class AnalitikShareController extends Controller
 					$start = new DateTime($startDate->toDateString());
 					$end   = new DateTime($endDate->toDateString());
 
-					$array = array('25','50','70','100');
+					$array = array('25','50','75','100');
 					$category = array();
 					$data = array();
 
