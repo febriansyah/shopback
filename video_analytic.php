@@ -86,7 +86,8 @@
                     
                       <a href="#sendUrl" class="popupShow"><img src="images/material/icon_sendlink.png"> <span>Send Link URL</span></a>
                     
-                      <a href="#"><img src="images/material/icon_copy.png"> <span>Copy Link URL </span></a>
+                      <a href="#" id="copyURl"><img src="images/material/icon_copy.png"> <span>Copy Link URL </span></a>
+                      
                     </div>
                   </div><!--end.dropdownMenu-->
                 </div>
@@ -141,8 +142,30 @@
     </div><!--end.inner_main-->
   </div><!--end.mainSection-->
 </div>
-
+<input type="hidden" id="input-url" value="Copied!">
 <script type="text/javascript">
+
+$(document).ready(function() {     
+var clipboard = new Clipboard('#copyURl', {
+    text: function() {
+        return document.querySelector('input[type=hidden]').value;
+    }
+});
+clipboard.on('success', function(e) {
+  alert("Link Copied!");
+  e.clearSelection();
+});
+$("#input-url").val(location.href);
+//safari
+if (navigator.vendor.indexOf("Apple")==0 && /\sSafari\//.test(navigator.userAgent)) {
+   $('#copyURl').on('click', function() {
+var msg = window.prompt("Copy this link", location.href);
+
+});
+  }
+
+} );
+  
 
 $( function() {
 

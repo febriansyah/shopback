@@ -9,6 +9,7 @@
 <!--CDN link for  TweenMax-->
 <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"></script>
 <script src="{{ asset('dashboard/js/wow.min.js') }}"></script>
+<script src='https://cdn.jsdelivr.net/clipboard.js/1.5.10/clipboard.min.js'></script>
 <script src="{{ asset('dashboard/js/js_lib.js') }}"></script>
 <script src="{{ asset('dashboard/js/js_run.js') }}"></script>
 <script src="{{ asset('dashboard/js/pagination.js') }}"></script>

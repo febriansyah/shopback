@@ -94,7 +94,7 @@
 
                       <a href="#sendUrl" class="popupShow shareurl"><img src="{{ asset('dashboard/images/material/icon_sendlink.png') }}"> <span>Send Link URL</span></a>
 
-                      <a href="#" class="copyUrl"><img src="{{ asset('dashboard/images/material/icon_copy.png') }}"> <span>Copy Link URL </span></a>
+                      <a href="#" class="copyUrl" id="copyURl"><img src="{{ asset('dashboard/images/material/icon_copy.png') }}"> <span>Copy Link URL </span></a>
                     </div>
                   </div><!--end.dropdownMenu-->
                 </div>
@@ -144,6 +144,8 @@
   </div><!--end.mainSection-->
 </div>
 
+<input type="hidden" id="input-url" value="Copied!">
+
 <div id="sendUrl" class="popup_container" style="display: none;">
     <div class="bg_popup"></div>
     <div class="inner_abs_popup">
@@ -185,6 +187,24 @@
 @endsection
 @section('javascript')
 <script>
+
+  var clipboard = new Clipboard('#copyURl', {
+    text: function() {
+        return document.querySelector('input[type=hidden]').value;
+    }
+});
+clipboard.on('success', function(e) {
+  alert("Link Copied!");
+  e.clearSelection();
+});
+$("#input-url").val(location.href);
+//safari
+if (navigator.vendor.indexOf("Apple")==0 && /\sSafari\//.test(navigator.userAgent)) {
+   $('#copyURl').on('click', function() {
+var msg = window.prompt("Copy this link", location.href);
+
+});
+  }
 var base_url = '{{ url("") }}';
 var id = '{{ $video->id }}';
 $( function() {
