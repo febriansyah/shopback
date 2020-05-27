@@ -168,7 +168,20 @@
   </div>
 
 
+<!-- end of middle -->
+<div id="confirmSendUrl" class="popup_container" style="display: none;">
+    <div class="bg_popup"></div>
+    <div class="inner_abs_popup">
+      <div class="inner_box">
+        <div class="content_popup">
+          <div class="group_form">
+            <h3 class="notif-remove">Proses Berhasil Url sudah di kirim ke email</h3>
+          </div>
 
+        </div>
+      </div>
+    </div><!--end.inner_abs_popup-->
+  </div>
 @endsection
 @section('javascript')
 <script>
@@ -177,7 +190,7 @@ var id = '{{ $video->id }}';
 $( function() {
 var date= <?php echo $chartViwer['date'] ?>;
 
-var data =  [{name: 'Viwers',data: <?php echo $chartViwer['data']?>}];
+var data =  [{name: 'Viewers',data: <?php echo $chartViwer['data']?>}];
 var title ='';
 var subtitle = '';
 var yAxis= 'total';
@@ -258,7 +271,7 @@ function getData(){
                 var date= response.chartViwer.date;
                 date = JSON.parse(date);
 
-                var data =  [{name: 'Viwers',data: JSON.parse(response.chartViwer.data)}];
+                var data =  [{name: 'Viewers',data: JSON.parse(response.chartViwer.data)}];
                 var title ='';
                 var subtitle = '';
                 var yAxis= 'total';
@@ -553,7 +566,7 @@ Highcharts.exportCharts = function (charts, options) {
             }).
             done(function(data) {
 
-
+                $('#confirmSendUrl').show();
              });
     })
 });

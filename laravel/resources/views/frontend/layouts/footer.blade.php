@@ -90,6 +90,7 @@
                     var videonya = document.getElementById('videoXl');
                     if(response.status=='success'){
                         $(this).hide();
+						$('#videoXl').attr('src',videourl);
                         $(".bg_play").hide();
 						$(".video_cover").hide();
                         $("#trigger_play").hide();
@@ -163,30 +164,33 @@
         var current = $('#current').text();
         var statusupdate = $('.statusupdate').val();
         var idUnix = $('.idUnix').val();
-        if(statusupdate==0){
-            $.ajax({
-                type: "POST",
-                url : url + "/setData",
-                contentType: 'application/x-www-form-urlencoded',
-                data: {
-                        'shopbackid' : qs.shopbackid,
-                        'shopbackid2': qs.shopbackid2,
-                        'patner'     : qs.partner,
-                        'duration'   : currentTime,
-                        'total_duration':duration,
-                        'video_id'   : videoId,
-                        'id'         : idUnix
-                    },
-                beforeSend:function() {
-							$('.statusupdate').val('1');
-				},
-            }).done(function(response){
-                $('.statusupdate').val('0');
+		console.log('total duration '+currentTime );
+		if(duration){
 
-            });
+			if(statusupdate==0 ){
+				$.ajax({
+					type: "POST",
+					url : url + "/setData",
+					contentType: 'application/x-www-form-urlencoded',
+					data: {
+							'shopbackid' : qs.shopbackid,
+							'shopbackid2': qs.shopbackid2,
+							'patner'     : qs.partner,
+							'duration'   : currentTime,
+							'total_duration':duration,
+							'video_id'   : videoId,
+							'id'         : idUnix
+						},
+					beforeSend:function() {
+								$('.statusupdate').val('1');
+					},
+				}).done(function(response){
+					$('.statusupdate').val('0');
 
-        }
+				});
 
+			}
+		}
 
 	}
 

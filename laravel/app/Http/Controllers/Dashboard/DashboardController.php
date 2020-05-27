@@ -56,7 +56,7 @@ class DashboardController extends Controller
         $this->parse['client'] = $this->model_client->count();
         $this->parse['ads'] = $this->model_video->where('status',1)->count();
         $this->parse['recent'] = $this->model_video->where(function($query) {
-                 $query->whereDate('end_publish','>',date('Y-m-d'));
+                 $query->whereDate('end_publish','>=',date('Y-m-d'));
             })->where('status',1)->count();
         $this->parse['video'] = $this->model_video->where('status',1)->orderBy('created_at','desc')->take(10)->get();
 

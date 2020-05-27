@@ -105,7 +105,10 @@ class ForgetPasswordController extends Controller
                         'message' => 'success'
                     ])->withInput();
                 }else{
-                    return redirect($redirectTo);
+                    return redirect()->route('dashboard.forgetpassword')->with('form_message', [
+                        'message' => 'success',
+                        'status' => 'success',
+                    ])->withInput();
                 }
             }else{
 

@@ -20,9 +20,9 @@
                         preload="auto"  playsinline>
                         </video>
                         <div class="icon_fullscreen">
-                            <button class="fullscreen" onclick="openFullscreen();"><img src="icon_fullscreen.png"></button>
+                            <button class="fullscreen" onclick="openFullscreen();"><img src="{{ asset('frontend/images/icon_fullscreen.png') }}"></button>
                         </div>
-						
+
                     </div>
                     <div class="video_cover">
                         <img src="{{ upload_url('video/'.$video->photo)}}" width="100%">
@@ -70,7 +70,7 @@
   </div>
 </div>
 <script>
-var videourl ="{{ asset('frontend/video/video_web.mp4 ') }}";
+var videourl ="{{ upload_url('video/video/640_'.$video->video_name.'.mp4') }}";
 var url ="{{url('')}}";
 var videoId = "{{ $video->id }}";
 var pageview = "{{ $pageview}}";
