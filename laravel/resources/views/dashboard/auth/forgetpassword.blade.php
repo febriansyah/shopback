@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-message">
-                        @if (session('form_message'))
+                        @if (session('form_message')['status']=='danger')
                         <div class="alert alert-warning alert-rounded alert-dismissible" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <?php

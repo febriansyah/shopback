@@ -70,7 +70,7 @@
   </div>
 </div>
 <script>
-var videourl ="{{ asset('frontend/video/video_web.mp4 ') }}";
+var videourl ="{{ upload_url('video/video/640_'.$video->video_name.'.mp4') }}";
 var url ="{{url('')}}";
 var videoId = "{{ $video->id }}";
 var pageview = "{{ $pageview}}";
