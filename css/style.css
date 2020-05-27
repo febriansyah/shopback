@@ -419,7 +419,7 @@ button:disabled, button[disabled] {
 	position: fixed;
 	left: 0;
 	top: 0;
-	width: 285px;
+	width: 215px;
 	height: 100%;
 	background: #FFFFFF;
 	/* Grey */
@@ -451,7 +451,7 @@ button:disabled, button[disabled] {
 .mainSection{
 	display:block;
 	width: 100%;
-	padding-left: 285px;
+	padding-left: 215px;
 	padding-top: 85px;
 	background: #E5E5E5;
 	min-height: 100vh;
@@ -744,6 +744,12 @@ select {
 }
 .table_video tr td{
 	vertical-align: top;
+}
+.table_video tr td:nth-child(3){
+	width: 40%;
+}
+.table_video tr td:nth-child(2){
+	width: 20%;
 }
 .table_video tr td:first-child,.table_video tr th:first-child{
 	width: 40px;
