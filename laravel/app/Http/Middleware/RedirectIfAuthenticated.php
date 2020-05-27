@@ -18,6 +18,9 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
+        if ($request->segment(1) == 'cms' && $guard == 'dashboard' &&  Auth::guard('dashboard')->check()) {
+            return redirect()->route('dashboard.index');
+        }
         if (Auth::guard($guard)->check()) {
             return redirect(RouteServiceProvider::HOME);
         }

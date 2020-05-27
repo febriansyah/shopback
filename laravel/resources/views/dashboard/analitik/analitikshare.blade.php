@@ -79,16 +79,7 @@
                 </div>
                 <div class="right">
                 <span class="info_update">Updated {{ date('F d, Y, H:i A')}} </span>
-                  <div class="dropdownMenu">
-                    <a href="#" class="trigger_dropdown blue_bt2">Share report  <img src="{{ asset('dashboard/images/material/arrow_bottom.png') }}"></a>
-                    <div class="dropdownMenu_expand" style="display: none;">
-                      <a href="#" id="export-pdf"><img src="{{ asset('dashboard/images/material/icon_download.png') }}"> <span>Download </span></a>
 
-                      <a href="#sendUrl" class="popupShow shareurl"><img src="{{ asset('dashboard/images/material/icon_sendlink.png') }}"> <span>Send Link URL</span></a>
-
-                      <a href="#" class="copyUrl"><img src="{{ asset('dashboard/images/material/icon_copy.png') }}"> <span>Copy Link URL </span></a>
-                    </div>
-                  </div><!--end.dropdownMenu-->
                 </div>
               </div><!--end.row_top-->
 
@@ -171,7 +162,7 @@ var link_id = '{{ $link_id }}';
 $( function() {
 var date= <?php echo $chartViwer['date'] ?>;
 
-var data =  [{name: 'Viwers',data: <?php echo $chartViwer['data']?>}];
+var data =  [{name: 'Viewers',data: <?php echo $chartViwer['data']?>}];
 var title ='';
 var subtitle = '';
 var yAxis= 'total';
@@ -253,7 +244,7 @@ function getData(){
                 var date= response.chartViwer.date;
                 date = JSON.parse(date);
 
-                var data =  [{name: 'Viwers',data: JSON.parse(response.chartViwer.data)}];
+                var data =  [{name: 'Viewers',data: JSON.parse(response.chartViwer.data)}];
                 var title ='';
                 var subtitle = '';
                 var yAxis= 'total';

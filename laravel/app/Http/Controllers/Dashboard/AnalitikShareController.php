@@ -119,7 +119,7 @@ class AnalitikShareController extends Controller
 					$this->parse['persent_view']  = $this->model_shopeback->where('status',1)->where('persentase','100')->where('video_id',$id)->get()->count();
 					$this->parse['uniq_user']  = $this->model_shopeback->where('video_id',$id)->groupBy('order_id')->get()->count();
 					$this->parse['uniq_visitor']  = $this->model_shopeback->where('video_id',$id)->groupBy('order_id')->get()->count();
-					$this->parse['avg']  = (int) $this->model_shopeback ->selectRaw('AVG(TIME_TO_SEC(duration)) as avg')->where('video_id',$id)->get()[0]['avg'];
+					$this->parse['avg']  = (int) $this->model_shopeback ->selectRaw('AVG(TIME_TO_SEC(duration)) as avg')->where('status',1)->where('video_id',$id)->get()[0]['avg'];
 					$this->parse['url_data']       = route($this->prefix_routes. 'list');
 					$nowDate = Carbon::now()->addDay();
 						$startDate = Carbon::now()->addDay();
@@ -261,9 +261,9 @@ class AnalitikShareController extends Controller
 					$startDate = $endDate->subDays($rangeDate );
 					$id = $post['id'];
 					$getVideo = $this->model_video->where('id', $id)->first();
-					$this->parse['total_view']  = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->count();
+					$this->parse['total_view']  = $this->model_shopeback->where('status',1)->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->count();
 					$this->parse['uniq_visitor']  = $this->model_shopeback->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->groupBy('order_id')->get()->count();
-					$this->parse['avg']  = (int) $this->model_shopeback ->selectRaw('AVG(TIME_TO_SEC(duration)) as avg')->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->get()[0]['avg'];
+					$this->parse['avg']  = (int) $this->model_shopeback ->selectRaw('AVG(TIME_TO_SEC(duration)) as avg')->where('status',1)->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 00:00:00'])->get()[0]['avg'];
 
 					$this->parse['persent_view']  = $this->model_shopeback->where('status',1)->where('persentase','100')->where('video_id',$id)->whereBetween('created_at', [ $startDate->toDateString().' 00:00:00', $nowDate->toDateString().' 23:59:59'])->get()->count();
 
@@ -365,7 +365,7 @@ class AnalitikShareController extends Controller
 						}
 
 
-						$data[]   = $this->model_shopeback->where('video_id',$id)->whereDate('created_at',$date[$i])->count();
+						$data[]   = $this->model_shopeback->where('status',1)->where('video_id',$id)->whereDate('created_at',$date[$i])->count();
 
 					}
 

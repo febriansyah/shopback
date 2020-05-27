@@ -36,7 +36,7 @@
                 <button type="submit" class="blue_bt">Reset</button>
               </div><!--emd.group_form-->
               <div class="group_form">
-                <p> Already have an account? <a href="index.php" class="blue_text">login here</a></p>
+                <p> Already have an account? <a href="{{url('cms')}}" class="blue_text">login here</a></p>
               </div>
             </form>
           </div><!--end.login_form-->
@@ -46,4 +46,25 @@
   </div><!--end.wrapper-->
 </div>
 <!-- end of middle -->
+<!-- end of middle -->
+<div id="confirmRemove" class="popup_container" style="display: none;">
+    <div class="bg_popup"></div>
+    <div class="inner_abs_popup">
+      <div class="inner_box">
+        <div class="content_popup">
+          <div class="group_form">
+            <h3 class="notif-remove">Proses Berhasil Coba cek email anda untuk reset password</h3>
+          </div>
+
+        </div>
+      </div>
+    </div><!--end.inner_abs_popup-->
+  </div>
+@endsection
+@section('javascript')
+<script type="text/javascript">
+@if (session('form_message')['status']=='success')
+    $('#confirmRemove').show();
+@endif
+</script>
 @endsection
